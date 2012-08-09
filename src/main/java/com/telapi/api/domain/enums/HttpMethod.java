@@ -7,24 +7,24 @@ import org.codehaus.jackson.annotate.JsonCreator;
 
 import com.telapi.api.domain.enums.util.EnumUtil;
 
-public enum SmsDirection {
-	OUTBOUND_API, UNKNOWN;
+public enum HttpMethod {
+	GET, POST;
 	
-	private static Map<SmsDirection, String> map;
+	private static Map<HttpMethod, String> map;
 	
 	static {
-		map = new HashMap<SmsDirection, String>();
-		map.put(OUTBOUND_API, "outbound-api");
+		map = new HashMap<HttpMethod, String>();
+		map.put(GET, "GET");
+		map.put(POST, "POST");
 	}
 	
 	@JsonCreator
-	public static SmsDirection forValue(String s) {
-		return EnumUtil.getValue(s, map, UNKNOWN);
+	public static HttpMethod forValue(String s) {
+		return EnumUtil.getValue(s, map, null);
 	}
 	
 	@Override
 	public String toString() {
 		return map.get(this);
 	}
-	
 }

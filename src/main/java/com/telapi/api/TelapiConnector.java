@@ -37,8 +37,6 @@ public class TelapiConnector {
 		
 		accountsProxy = createProxy(AccountsProxy.class);
 		smsProxy = createProxy(SmsProxy.class);
-		
-
 	}
 	
 	private <T> T createProxy(Class<T> clazz) {

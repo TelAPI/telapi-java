@@ -7,18 +7,19 @@ import org.codehaus.jackson.annotate.JsonCreator;
 
 import com.telapi.api.domain.enums.util.EnumUtil;
 
-public enum SmsDirection {
-	OUTBOUND_API, UNKNOWN;
+public enum PhoneNumberType {
+	LOCAL, INTERNATIONAL, UNKNOWN;
 	
-	private static Map<SmsDirection, String> map;
+	private static Map<PhoneNumberType, String> map;
 	
 	static {
-		map = new HashMap<SmsDirection, String>();
-		map.put(OUTBOUND_API, "outbound-api");
+		map = new HashMap<PhoneNumberType, String>();
+		map.put(LOCAL, "local");
+		map.put(INTERNATIONAL, "international");
 	}
 	
 	@JsonCreator
-	public static SmsDirection forValue(String s) {
+	public static PhoneNumberType forValue(String s) {
 		return EnumUtil.getValue(s, map, UNKNOWN);
 	}
 	
@@ -26,5 +27,4 @@ public enum SmsDirection {
 	public String toString() {
 		return map.get(this);
 	}
-	
 }

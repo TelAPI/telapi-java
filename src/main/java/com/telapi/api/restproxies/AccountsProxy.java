@@ -14,7 +14,7 @@ public interface AccountsProxy {
 	    @GET
 	    @Path("Accounts/{AccountSid}.json")
 	    @Produces("application/json")
-	    ClientResponse<Account> getAccount(@PathParam("AccountSid") String sid);
+	    ClientResponse<Account> getAccount(@PathParam("AccountSid") String accountSid);
 	    
 	    @GET
 	    @Path("Accounts.json")

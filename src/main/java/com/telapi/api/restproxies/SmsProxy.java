@@ -16,13 +16,13 @@ public interface SmsProxy {
 	    @GET
 	    @Path("Accounts/{AccountSid}/SMS/Messages/{SMSMessageSid}.json")
 	    @Produces("application/json")
-	    ClientResponse<SmsMessage> getSmsMessage(@PathParam("AccountSid") String sid, @PathParam("SMSMessageSid") String smsMessageSid);
+	    ClientResponse<SmsMessage> getSmsMessage(@PathParam("AccountSid") String accountSid, @PathParam("SMSMessageSid") String smsMessageSid);
 	    
 	    @GET
 	    @Path("Accounts/{AccountSid}/SMS/Messages.json")
 	    @Produces("application/json")
 	    ClientResponse<SmsMessageList> getSmsMessageList(
-	    		@PathParam("AccountSid") String sid,
+	    		@PathParam("AccountSid") String accountSid,
 	    		@QueryParam(value="To") String to,
 	    		@QueryParam(value="From") String from,
 	    		@QueryParam(value="DateSent>") String dateSentGte,
@@ -35,7 +35,7 @@ public interface SmsProxy {
 	    @Path("Accounts/{AccountSid}/SMS/Messages.json")
 	    @Produces("application/json")
 	    ClientResponse<SmsMessage> sendSmsMessage(
-	    		@PathParam("AccountSid") String sid,
+	    		@PathParam("AccountSid") String accountSid,
 	    		@QueryParam(value="To") String to,
 	    		@QueryParam(value="From") String from,
 	    		@QueryParam(value="Body") String body,

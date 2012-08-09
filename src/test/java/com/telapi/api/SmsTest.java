@@ -2,50 +2,28 @@ package com.telapi.api;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.telapi.api.configuration.PropertiesFileTelapiConfiguration;
 import com.telapi.api.domain.SmsMessage;
-import com.telapi.api.domain.list.SmsMessageList;
-import com.telapi.api.exceptions.TelapiException;
+import com.telapi.api.restproxies.SmsProxy;
 
 
-public class SmsTest {
+public class SmsTest extends BaseTelapiTest<SmsProxy>{
 	
-	PropertiesFileTelapiConfiguration tc = new PropertiesFileTelapiConfiguration();
-	
-	@Test
-	public void testGetSmsList(){
-		
-		TelapiConnector telc = new TelapiConnector(tc);
-		try {
-			SmsMessageList list = telc.getSmsMessageList(null, null, null, null, null, null);
-			
-			for (SmsMessage msg : list) {
-				System.out.println(msg.getDateSent());
-				System.out.println(msg.getStatus());
-				System.out.println(msg.getDirection());
-			}
-		} catch (TelapiException ex) {
-			ex.printStackTrace();
-			Assert.fail();
-		}
+	public SmsTest() {
+		super(SmsProxy.class);
 	}
 	
 	@Test
-	@Ignore
+	public void testGetSmsList(){
+		proxy.getSmsMessageList(conf.getSid(), null, null, null, null, null, null).getEntity();
+	}
+	
+	@Test
 	public void testSendAndGetSms(){
-		TelapiConnector telc = new TelapiConnector(tc);
-		try {
-			SmsMessage msg = telc.sendSmsMessage("(224) 632-1739", "(224) 632-1739", "test from java", null);
-			SmsMessage receivedMessage = telc.getSmsMessage(msg.getSid());
-			Assert.assertEquals(msg.getSid(), receivedMessage.getSid());
-		} catch (TelapiException ex) {
-			ex.printStackTrace();
-			Assert.fail();
-		}
-		
+		SmsMessage msg = proxy.sendSmsMessage(conf.getSid(), testParameters.getPhone1(), testParameters.getPhone2(), "test from java", null).getEntity();
+		SmsMessage receivedMessage = proxy.getSmsMessage(conf.getSid(), msg.getSid()).getEntity();
+		Assert.assertEquals(msg.getSid(), receivedMessage.getSid());
 	}
 	
 }
