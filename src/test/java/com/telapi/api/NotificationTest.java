@@ -19,7 +19,7 @@ public class NotificationTest extends BaseTelapiTest<NotificationProxy> {
 
 	@Test
 	public void testListNotifications(){
-		NotificationList list = proxy.listNotifications(conf.getSid(), LogLevel.INFO, 0L, 10L).getEntity();
+		proxy.listNotifications(conf.getSid(), LogLevel.INFO, 0L, 10L).getEntity();
 	}
 	
 	@Test
