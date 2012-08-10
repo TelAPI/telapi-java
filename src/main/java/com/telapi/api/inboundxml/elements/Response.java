@@ -7,6 +7,7 @@ import com.telapi.api.domain.enums.HttpMethod;
 import com.telapi.api.inboundxml.elements.enums.RecordingFileFormat;
 import com.telapi.api.inboundxml.elements.enums.RejectReason;
 import com.telapi.api.inboundxml.elements.enums.Voice;
+import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
@@ -14,6 +15,16 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 public class Response {
 	@XStreamImplicit
 	private List<ResponseElement> elements;
+	
+	private static XStream xstream;
+	
+	static {
+		xstream = new XStream();
+		xstream.processAnnotations(new Class[] { Response.class, Record.class,
+				Play.class, Say.class, Number.class, Dial.class,
+				Conference.class, Sip.class, Hangup.class, Redirect.class,
+				Reject.class, Gather.class, Sms.class, Pause.class });
+	}
 	
 	protected Response() {
 		elements = new ArrayList<ResponseElement>();
@@ -101,5 +112,9 @@ public class Response {
 	public Response gather(Gather gather) {
 		elements.add(gather);
 		return this;
+	}
+	
+	public String createXml() {
+		return xstream.toXML(this);
 	}
 }
