@@ -28,8 +28,16 @@ public class TestParameters extends Properties {
 		return getProperty("phone1");
 	}
 	
+	public String getArea1() {
+		return getProperty("area1");
+	}
+	
 	public String getPhone2() {
 		return getProperty("phone2");
+	}
+	
+	public String getArea2() {
+		return getProperty("area2");
 	}
 	
 	public String getMp3Url() {

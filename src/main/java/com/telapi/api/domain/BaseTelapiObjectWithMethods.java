@@ -30,10 +30,15 @@ public class BaseTelapiObjectWithMethods extends BaseTelapiObjectWithSid {
 	private String smsFallbackUrl;
 	@JsonProperty("sms_fallback_method")
 	private HttpMethod smsFallbackMethod;
-	@JsonProperty("sms_status_callback_url")
+	@JsonProperty("sms_status_callback")
 	private String smsStatusCallbackUrl;
-	@JsonProperty("sms_status_callback_method")
+	@JsonProperty("sms_status_callback_url")
 	private HttpMethod smsStatusCallbackMethod;
+	
+	@JsonProperty("hangup_callback")
+	private String hangupCallback;
+	@JsonProperty("hangup_callback_method")
+	private HttpMethod hangupCallbackMethod;
 	
 	public String getSmsUrl() {
 		return smsUrl;
@@ -118,6 +123,18 @@ public class BaseTelapiObjectWithMethods extends BaseTelapiObjectWithSid {
 	}
 	public void setSmsStatusCallbackMethod(HttpMethod smsStatusCallbackMethod) {
 		this.smsStatusCallbackMethod = smsStatusCallbackMethod;
+	}
+	public String getHangupCallback() {
+		return hangupCallback;
+	}
+	public void setHangupCallback(String hangupCallback) {
+		this.hangupCallback = hangupCallback;
+	}
+	public HttpMethod getHangupCallbackMethod() {
+		return hangupCallbackMethod;
+	}
+	public void setHangupCallbackMethod(HttpMethod hangupCallbackMethod) {
+		this.hangupCallbackMethod = hangupCallbackMethod;
 	}
 	
 	

@@ -32,6 +32,8 @@ public class TranscriptionTest extends BaseTelapiTest<TranscriptionProxy>{
 	
 	@Test
 	public void testListTranscriptions() {
+		String s = proxy.listTranscriptionsString(conf.getSid(), null, null).getEntity();
+		System.out.println(s);
 		TranscriptionList list = proxy.listTranscriptions(conf.getSid(), null, null).getEntity();
 		for (Transcription t : list) {
 			System.out.println(t.getSid());
