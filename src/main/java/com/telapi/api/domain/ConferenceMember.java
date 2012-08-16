@@ -30,12 +30,14 @@ public class ConferenceMember {
 	public Boolean getMuted() {
 		return muted;
 	}
+	@JsonDeserialize(using = JsonBooleanParser.class)
 	public void setMuted(Boolean muted) {
 		this.muted = muted;
 	}
 	public Boolean getDeaf() {
 		return deaf;
 	}
+	@JsonDeserialize(using = JsonBooleanParser.class)
 	public void setDeaf(Boolean deaf) {
 		this.deaf = deaf;
 	}

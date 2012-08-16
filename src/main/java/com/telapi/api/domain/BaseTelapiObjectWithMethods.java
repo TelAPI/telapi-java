@@ -32,7 +32,7 @@ public class BaseTelapiObjectWithMethods extends BaseTelapiObjectWithSid {
 	private HttpMethod smsFallbackMethod;
 	@JsonProperty("sms_status_callback")
 	private String smsStatusCallbackUrl;
-	@JsonProperty("sms_status_callback_url")
+	@JsonProperty("sms_status_callback_method")
 	private HttpMethod smsStatusCallbackMethod;
 	
 	@JsonProperty("hangup_callback")

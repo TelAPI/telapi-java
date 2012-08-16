@@ -21,6 +21,7 @@ public class ApplicationTest extends BaseTelapiTest<ApplicationProxy>{
 		
 		Assert.assertEquals("heartbeat.com", app.getHeartbeatUrl());
 		Assert.assertEquals("my_app", app.getFriendlyName());
+		proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
 	}
 	
 	@Test
@@ -50,6 +51,7 @@ public class ApplicationTest extends BaseTelapiTest<ApplicationProxy>{
 		Assert.assertEquals(app.getSid(), vApp.getSid());
 		Assert.assertEquals("heartbeat.com", vApp.getHeartbeatUrl());
 		Assert.assertEquals("my_app", vApp.getFriendlyName());
+		proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
 	}
 	
 	@Test
@@ -68,6 +70,7 @@ public class ApplicationTest extends BaseTelapiTest<ApplicationProxy>{
 		Assert.assertEquals(vApp.getSid(), app.getSid());
 		Assert.assertEquals("nobeat.com", vApp.getHeartbeatUrl());
 		Assert.assertEquals(HttpMethod.POST, vApp.getHeartbeatMethod());
+		proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
 	}
 	
 	@Test
@@ -83,6 +86,15 @@ public class ApplicationTest extends BaseTelapiTest<ApplicationProxy>{
 			if (lApp.getSid().equals(app.getSid())) {
 				Assert.fail("Application wasn't deleted.");
 			}
+		}
+	}
+	
+	@Test
+	public void testDeleteAllApplications() {
+		ApplicationList list = proxy.listApplications(conf.getSid(), null, null, null).getEntity();
+
+		for(Application app : list) {
+			proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
 		}
 	}
 }

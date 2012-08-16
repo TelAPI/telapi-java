@@ -19,7 +19,7 @@ public class CallTest extends BaseTelapiTest<CallProxy>{
 
 	@Test
 	public void testListCalls() {
-		proxy.listCalls(conf.getSid(), null, null, null, null, null, null, null).getEntity();
+		proxy.listCalls(conf.getSid(), null, null, null, null, null, 0L, 5L).getEntity();
 	}
 	
 	@Test

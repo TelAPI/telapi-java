@@ -12,6 +12,6 @@ public class AvailablePhoneNumbersTest extends BaseTelapiTest<AvailablePhoneNumb
 	
 	@Test
 	public void testListAvailablePhoneNumbers(){
-		proxy.listAvailablePhoneNumbers(conf.getSid(), "US", "420", "7", "US", "90210").getEntity();
+		proxy.listAvailablePhoneNumbers(conf.getSid(), "US", "425", "999", "KS", "66101").getEntity();
 	}
 }

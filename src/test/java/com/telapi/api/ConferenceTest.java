@@ -57,13 +57,6 @@ public class ConferenceTest extends BaseTelapiTest<ConferenceProxy>{
 	}
 
 	@Test
-	public void testKickMember() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
-		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.kickMember(conf.getSid(), c.getName(), member.getId()).getEntity();
-	}
-
-	@Test
 	public void testSpeakText() {
 		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
 		ConferenceMember member = c.getMembers().iterator().next();
@@ -87,6 +80,13 @@ public class ConferenceTest extends BaseTelapiTest<ConferenceProxy>{
 	public void testStopRecording() {
 		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
 		proxy.stopRecording(conf.getSid(), c.getName()).getEntity();
+	}
+	
+	@Test
+	public void testKickMember() {
+		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
+		ConferenceMember member = c.getMembers().iterator().next();
+		proxy.kickMember(conf.getSid(), c.getName(), member.getId()).getEntity();
 	}
 	
 }
