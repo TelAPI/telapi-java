@@ -22,6 +22,7 @@ public class IncomingPhoneNumberTest extends BaseTelapiTest<IncomingPhoneNumberP
 		}
 	}
 	
+	@Test
 	public void testViewPhoneNumber() {
 		IncomingPhoneNumberList list = proxy.listIncomingPhoneNumbers(conf.getSid(), null, null, null, null).getEntity();
 		for(IncomingPhoneNumber number : list) {
@@ -29,10 +30,15 @@ public class IncomingPhoneNumberTest extends BaseTelapiTest<IncomingPhoneNumberP
 		}
 	}
 	
+	public void addPhoneNumbers() {
+		proxy.addIncomingPhoneNumber(conf.getSid(), testParameters.getPhone1(), testParameters.getArea1());
+		proxy.addIncomingPhoneNumber(conf.getSid(), testParameters.getPhone2(), testParameters.getArea2());
+	}
+	
 	@Test
 	public void testDeleteAndAddPhoneNumber() {
 		
-		IncomingPhoneNumberList list = proxy.listIncomingPhoneNumbers(conf.getSid(), null, null, null, null).getEntity();
+		IncomingPhoneNumberList list = proxy.listIncomingPhoneNumbers(conf.getSid(), testParameters.getPhone1(), null, 0L, 1L).getEntity();
 		IncomingPhoneNumber number = list.iterator().next();
 		
 		proxy.deleteIncomingPhoneNumber(conf.getSid(), number.getSid()).getEntity();

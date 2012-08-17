@@ -16,6 +16,8 @@ public class Transcription extends BaseTelapiObjectWithSid {
 	private String audioUrl;
 	@JsonDeserialize(using = JsonDurationParser.class)
 	private Long duration;
+	@JsonProperty("recording_sid")
+	private String recordingSid;
 	@JsonProperty("transcription_text")
 	private String transcriptionText;
 	private BigDecimal price;
@@ -71,6 +73,12 @@ public class Transcription extends BaseTelapiObjectWithSid {
 	}
 	public void setCallbackMethod(HttpMethod callbackMethod) {
 		this.callbackMethod = callbackMethod;
+	}
+	public String getRecordingSid() {
+		return recordingSid;
+	}
+	public void setRecordingSid(String recordingSid) {
+		this.recordingSid = recordingSid;
 	}
 	
 	
