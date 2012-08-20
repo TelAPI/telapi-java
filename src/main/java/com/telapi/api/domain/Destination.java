@@ -34,6 +34,10 @@ public class Destination {
 	@JsonProperty("expiration_date")
 	private Date expirationDate;
 	
+	@JsonDeserialize(using = JsonBooleanParser.class)
+	@JsonProperty("is_lock")
+	private Boolean isLock;
+	
 	
 	public String getCountryName() {
 		return countryName;
@@ -88,6 +92,12 @@ public class Destination {
 	}
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
+	}
+	public Boolean getIsLock() {
+		return isLock;
+	}
+	public void setIsLock(Boolean isLock) {
+		this.isLock = isLock;
 	}
 	
 	

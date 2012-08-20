@@ -16,23 +16,23 @@ public class FraudControlTest extends BaseTelapiTest<FraudControlProxy>{
 	}
 	
 	@Test
-	public void testAuthorizeDestination() {
-		proxy.authorizeDestination(conf.getSid(), "HR", true, true, true).getEntity();
+	public void testBlockDestination() {
+		proxy.blockDestination(conf.getSid(), "US", true, true, true).getEntity();
 	}
 	
 	@Test
-	public void testBlockDestination() {
-		proxy.blockDestination(conf.getSid(), "HR", true, true, true).getEntity();
+	public void testAuthorizeDestination() {
+		proxy.authorizeDestination(conf.getSid(), "US", true, true, true).getEntity();
 	}
 	
 	@Test
 	public void testExtendDestination() {
-		proxy.extendDestinationAuth(conf.getSid(), "HR", true, true, true).getEntity();
+		proxy.extendDestinationAuth(conf.getSid(), "US", true, true, true).getEntity();
 	}
 	
 	@Test
 	public void testWhitelistDestination() {
-		proxy.whitelistDestination(conf.getSid(), "HR", true, true, true).getEntity();
+		proxy.whitelistDestination(conf.getSid(), "US", true, true, true).getEntity();
 	}
 
 }
