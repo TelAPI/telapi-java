@@ -2,6 +2,7 @@ package com.telapi.api;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.core.UriBuilder;
 
@@ -15,7 +16,6 @@ import com.telapi.api.domain.Account;
 import com.telapi.api.domain.Application;
 import com.telapi.api.domain.Call;
 import com.telapi.api.domain.CarrierLookup;
-import com.telapi.api.domain.CnamDip;
 import com.telapi.api.domain.Conference;
 import com.telapi.api.domain.IncomingPhoneNumber;
 import com.telapi.api.domain.Notification;
@@ -34,6 +34,7 @@ import com.telapi.api.domain.list.AccountsList;
 import com.telapi.api.domain.list.ApplicationList;
 import com.telapi.api.domain.list.AvailablePhoneNumberList;
 import com.telapi.api.domain.list.CallList;
+import com.telapi.api.domain.list.CnamDipList;
 import com.telapi.api.domain.list.ConferenceList;
 import com.telapi.api.domain.list.FraudList;
 import com.telapi.api.domain.list.IncomingPhoneNumberList;
@@ -304,13 +305,13 @@ public class TelapiConnector {
 				pitchSemiTones, pitchOctaves, rate);
 	}
 
-	public Call recordCall(String accountSid, String callSid, Boolean record,
+	public Recording recordCall(String accountSid, String callSid, Boolean record,
 			Long timeLimit, String callbackUrl) throws TelapiException {
 		return returnThrows(callProxy.recordCall(accountSid, callSid, record,
 				timeLimit, callbackUrl));
 	}
 
-	public Call recordCall(String callSid, Boolean record, Long timeLimit,
+	public Recording recordCall(String callSid, Boolean record, Long timeLimit,
 			String callbackUrl) throws TelapiException {
 		return recordCall(conf.getSid(), callSid, record, timeLimit,
 				callbackUrl);
@@ -318,11 +319,11 @@ public class TelapiConnector {
 	
 	//CONFERENCE
 	
-	public Conference viewConference(String accountSid, String conferenceName,
+	public Conference viewConference(String accountSid, String conferenceSid,
 			String memberId, Boolean muted, Boolean deafed)
 			throws TelapiException {
 		return returnThrows(conferenceProxy.viewConference(accountSid,
-				conferenceName, memberId, muted, deafed));
+				conferenceSid, memberId, muted, deafed));
 	}
 
 	public ConferenceList listConferences(String accountSid, String memberId,
@@ -332,69 +333,69 @@ public class TelapiConnector {
 				memberId, muted, deafed, page, pageSize));
 	}
 
-	public Conference muteMember(String accountSid, String conferenceName,
+	public Conference muteMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.muteMember(accountSid,
-				conferenceName, memberId));
+				conferenceSid, memberId));
 	}
 
-	public Conference unMuteMember(String accountSid, String conferenceName,
+	public Conference unMuteMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.unMuteMember(accountSid,
-				conferenceName, memberId));
+				conferenceSid, memberId));
 	}
 
-	public Conference deafMember(String accountSid, String conferenceName,
+	public Conference deafMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.deafMember(accountSid,
-				conferenceName, memberId));
+				conferenceSid, memberId));
 	}
 
-	public Conference unDeafMember(String accountSid, String conferenceName,
+	public Conference unDeafMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.unDeafMember(accountSid,
-				conferenceName, memberId));
+				conferenceSid, memberId));
 	}
 
-	public Conference hangupMember(String accountSid, String conferenceName,
+	public StatusResponse hangupMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.hangupMember(accountSid,
-				conferenceName, memberId));
+				conferenceSid, memberId));
 	}
 
-	public Conference kickMember(String accountSid, String conferenceName,
+	public Conference kickMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.kickMember(accountSid,
-				conferenceName, memberId));
+				conferenceSid, memberId));
 	}
 
-	public StatusResponse speakText(String accountSid, String conferenceName,
+	public StatusResponse speakText(String accountSid, String conferenceSid,
 			String memberId, String text) throws TelapiException {
 		return returnThrows(conferenceProxy.speakText(accountSid,
-				conferenceName, memberId, text));
+				conferenceSid, memberId, text));
 	}
 
-	public StatusResponse playAudio(String accountSid, String conferenceName,
+	public StatusResponse playAudio(String accountSid, String conferenceSid,
 			String memberId, String url) throws TelapiException {
 		return returnThrows(conferenceProxy.playAudio(accountSid,
-				conferenceName, memberId, url));
+				conferenceSid, memberId, url));
 	}
 
 	public StatusResponse startRecording(String accountSid,
-			String conferenceName) throws TelapiException {
+			String conferenceSid) throws TelapiException {
 		return returnThrows(conferenceProxy.startRecording(accountSid,
-				conferenceName));
+				conferenceSid));
 	}
 
-	public StatusResponse stopRecording(String accountSid, String conferenceName)
+	public StatusResponse stopRecording(String accountSid, String conferenceSid)
 			throws TelapiException {
 		return returnThrows(conferenceProxy.stopRecording(accountSid,
-				conferenceName));
+				conferenceSid));
 	}
 
-	public Conference viewConference(String conferenceName, String memberId,
+	public Conference viewConference(String conferenceSid, String memberId,
 			Boolean muted, Boolean deafed) throws TelapiException {
-		return viewConference(conf.getSid(), conferenceName, memberId, muted,
+		return viewConference(conf.getSid(), conferenceSid, memberId, muted,
 				deafed);
 	}
 
@@ -404,54 +405,54 @@ public class TelapiConnector {
 				pageSize);
 	}
 
-	public Conference muteMember(String conferenceName, String memberId)
+	public Conference muteMember(String conferenceSid, String memberId)
 			throws TelapiException {
-		return muteMember(conf.getSid(), conferenceName, memberId);
+		return muteMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	public Conference unMuteMember(String conferenceName, String memberId)
+	public Conference unMuteMember(String conferenceSid, String memberId)
 			throws TelapiException {
-		return unMuteMember(conf.getSid(), conferenceName, memberId);
+		return unMuteMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	public Conference deafMember(String conferenceName, String memberId)
+	public Conference deafMember(String conferenceSid, String memberId)
 			throws TelapiException {
-		return deafMember(conf.getSid(), conferenceName, memberId);
+		return deafMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	public Conference unDeafMember(String conferenceName, String memberId)
+	public Conference unDeafMember(String conferenceSid, String memberId)
 			throws TelapiException {
-		return unDeafMember(conf.getSid(), conferenceName, memberId);
+		return unDeafMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	public Conference hangupMember(String conferenceName, String memberId)
+	public StatusResponse hangupMember(String conferenceSid, String memberId)
 			throws TelapiException {
-		return hangupMember(conf.getSid(), conferenceName, memberId);
+		return hangupMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	public Conference kickMember(String conferenceName, String memberId)
+	public Conference kickMember(String conferenceSid, String memberId)
 			throws TelapiException {
-		return kickMember(conf.getSid(), conferenceName, memberId);
+		return kickMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	public StatusResponse speakText(String conferenceName, String memberId,
+	public StatusResponse speakText(String conferenceSid, String memberId,
 			String text) throws TelapiException {
-		return speakText(conf.getSid(), conferenceName, memberId, text);
+		return speakText(conf.getSid(), conferenceSid, memberId, text);
 	}
 
-	public StatusResponse playAudio(String conferenceName, String memberId,
+	public StatusResponse playAudio(String conferenceSid, String memberId,
 			String url) throws TelapiException {
-		return playAudio(conf.getSid(), conferenceName, memberId, url);
+		return playAudio(conf.getSid(), conferenceSid, memberId, url);
 	}
 
-	public StatusResponse startRecording(String conferenceName)
+	public StatusResponse startRecording(String conferenceSid)
 			throws TelapiException {
-		return startRecording(conf.getSid(), conferenceName);
+		return startRecording(conf.getSid(), conferenceSid);
 	}
 
-	public StatusResponse stopRecording(String conferenceName)
+	public StatusResponse stopRecording(String conferenceSid)
 			throws TelapiException {
-		return stopRecording(conf.getSid(), conferenceName);
+		return stopRecording(conf.getSid(), conferenceSid);
 	}
 	
 	
@@ -734,6 +735,14 @@ public class TelapiConnector {
 		return viewRecording(conf.getSid(), recordingSid);
 	}
 	
+	public String getRecordingUrl(String accountSid, String recordingSid) throws TelapiException {
+		return returnThrows(recordingProxy.getRecording(accountSid, recordingSid));
+	}
+	
+	public String getRecordingUrl(String recordingSid) throws TelapiException {
+		return getRecordingUrl(conf.getSid(), recordingSid);
+	}
+	
 	//NOTIFICATIONS
 	
 	public NotificationList listNotifications(String accountSid, LogLevel log, Long page, Long pageSize) throws TelapiException {
@@ -845,10 +854,16 @@ public class TelapiConnector {
 				phoneNumber));
 	}
 
-	public CnamDip cnamLookup(String accountSid, String phoneNumber)
+	public CnamDipList cnamLookup(String accountSid, String phoneNumber)
 			throws TelapiException {
 		return returnThrows(carrierLookupProxy.cnamLookup(accountSid,
 				phoneNumber));
+	}
+	
+	public CnamDipList cnamLookup(String accountSid, List<String> phoneNumbers)
+			throws TelapiException {
+		return returnThrows(carrierLookupProxy.cnamLookup(accountSid,
+				phoneNumbers));
 	}
 	
 	public CarrierLookup carrierLookup(String phoneNumber)
@@ -856,8 +871,12 @@ public class TelapiConnector {
 		return carrierLookup(conf.getSid(), phoneNumber);
 	}
 
-	public CnamDip cnamLookup(String phoneNumber) throws TelapiException {
+	public CnamDipList cnamLookup(String phoneNumber) throws TelapiException {
 		return cnamLookup(conf.getSid(), phoneNumber);
+	}
+	
+	public CnamDipList cnamLookup(List<String> phoneNumbers) throws TelapiException {
+		return cnamLookup(conf.getSid(), phoneNumbers);
 	}
 	
 	//FRAUD CONTROL

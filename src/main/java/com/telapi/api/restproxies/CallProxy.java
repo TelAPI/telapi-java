@@ -10,6 +10,7 @@ import javax.ws.rs.QueryParam;
 import org.jboss.resteasy.client.ClientResponse;
 
 import com.telapi.api.domain.Call;
+import com.telapi.api.domain.Recording;
 import com.telapi.api.domain.enums.AudioDirection;
 import com.telapi.api.domain.enums.CallInterruptStatus;
 import com.telapi.api.domain.enums.CallStatus;
@@ -117,7 +118,7 @@ public interface CallProxy {
 	@POST
 	@Path("Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json")
 	@Produces("application/json")
-	ClientResponse<Call> recordCall(
+	ClientResponse<Recording> recordCall(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("CallSid") String callSid,
 			@QueryParam("Record") Boolean record,

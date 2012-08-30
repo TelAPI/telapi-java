@@ -1,5 +1,6 @@
 package com.telapi.api;
 
+import org.jboss.resteasy.client.ClientResponse;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,5 +39,22 @@ public class RecordingsTest extends BaseTelapiTest<RecordingProxy>{
 		for(Recording r : list) {
 			System.out.println(r.getCallSid() + " " + r.getSid());
 		}
+	}
+	
+	@Test
+	public void testViewRecording(){
+		RecordingList list = proxy.listRecordings(conf.getSid(), null, null, null, null).getEntity();
+		Recording r = list.iterator().next();
+		proxy.viewRecording(conf.getSid(), r.getSid());
+	}
+	
+	@Test
+	public void testGetRecordingUrl(){
+		RecordingList list = proxy.listRecordings(conf.getSid(), null, null, null, null).getEntity();
+		Recording r = list.iterator().next();
+		ClientResponse<String> response = proxy.getRecording(conf.getSid(), r.getSid());
+		String url = response.getLocation().getHref();
+		response.getEntity();
+		System.out.println(url);
 	}
 }

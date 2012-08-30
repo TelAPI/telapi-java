@@ -19,6 +19,13 @@ public interface RecordingProxy {
     ClientResponse<Recording> viewRecording(
     		@PathParam("AccountSid") String accountSid, 
     		@PathParam("RecordingSid") String recordingSid);
+	
+	@GET
+    @Path("Accounts/{AccountSid}/Recordings/{RecordingSid}.mp3")
+    @Produces("application/json")
+    ClientResponse<String> getRecording(
+    		@PathParam("AccountSid") String accountSid, 
+    		@PathParam("RecordingSid") String recordingSid);
     
     @GET
     @Path("Accounts/{AccountSid}/Recordings.json")

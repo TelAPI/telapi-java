@@ -5,7 +5,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import com.telapi.api.json.JsonDurationParser;
 
-public class Recording extends BaseTelapiObjectWithSid {
+public class Recording extends BaseTelapiObject {
 	@JsonProperty("call_sid")
 	private String callSid;
 	@JsonDeserialize(using = JsonDurationParser.class)

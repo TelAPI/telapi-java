@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-public class CnamDip extends BaseTelapiObjectWithSid{
+public class CnamDip extends BaseTelapiObject{
 	@JsonProperty("phone_number")
 	private String phoneNumber;
 	private String body;

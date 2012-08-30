@@ -4,7 +4,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.telapi.api.domain.enums.HttpMethod;
 
-public class BaseTelapiObjectWithMethods extends BaseTelapiObjectWithSid {
+public class BaseTelapiObjectWithMethods extends BaseTelapiObject {
 	
 	@JsonProperty("voice_url")
 	private String voiceUrl;

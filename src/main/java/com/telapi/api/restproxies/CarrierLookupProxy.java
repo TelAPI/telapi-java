@@ -1,5 +1,7 @@
 package com.telapi.api.restproxies;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -9,7 +11,7 @@ import javax.ws.rs.QueryParam;
 import org.jboss.resteasy.client.ClientResponse;
 
 import com.telapi.api.domain.CarrierLookup;
-import com.telapi.api.domain.CnamDip;
+import com.telapi.api.domain.list.CnamDipList;
 
 public interface CarrierLookupProxy {
 
@@ -24,9 +26,17 @@ public interface CarrierLookupProxy {
 	@GET
     @Path("Accounts/{AccountSid}/CNAM.json")
     @Produces("application/json")
-    ClientResponse<CnamDip> cnamLookup(
+    ClientResponse<CnamDipList> cnamLookup(
     		@PathParam("AccountSid") String accountSid, 
     		@QueryParam("PhoneNumber") String phoneNumber
+    		);
+	
+	@GET
+    @Path("Accounts/{AccountSid}/CNAM.json")
+    @Produces("application/json")
+    ClientResponse<CnamDipList> cnamLookup(
+    		@PathParam("AccountSid") String accountSid, 
+    		@QueryParam("PhoneNumber") List<String> phoneNumbers
     		);
 
 }

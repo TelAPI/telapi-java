@@ -9,7 +9,7 @@ import com.telapi.api.domain.enums.HttpMethod;
 import com.telapi.api.domain.enums.TranscriptionType;
 import com.telapi.api.json.JsonDurationParser;
 
-public class Transcription extends BaseTelapiObjectWithSid {
+public class Transcription extends BaseTelapiObject {
 	private String status;
 	private TranscriptionType type;
 	@JsonProperty("audio_url")

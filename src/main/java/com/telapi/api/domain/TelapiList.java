@@ -24,8 +24,7 @@ public abstract class TelapiList<T> implements Iterable<T> {
 	String nextPageUri;
 	@JsonProperty(value="last_page_uri")
 	String lastPageUri;
-	
-	@JsonProperty(value="sms_messages")
+
 	List<T> elements;
 
 	public Long getPage() {

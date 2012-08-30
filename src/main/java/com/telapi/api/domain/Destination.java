@@ -16,11 +16,11 @@ public class Destination {
 	@JsonProperty("country_prefix")
 	private String countryPrefix;
 	@JsonDeserialize(using = JsonBooleanParser.class)
-	@JsonProperty("mobile_breakout")
-	private Boolean mobileBreakout;
+	@JsonProperty("mobile_enabled")
+	private Boolean mobileEnabled;
 	@JsonDeserialize(using = JsonBooleanParser.class)
-	@JsonProperty("landline_breakout")
-	private Boolean landlineBreakout;
+	@JsonProperty("landline_enabled")
+	private Boolean landlineEnabled;
 	@JsonDeserialize(using = JsonBooleanParser.class)
 	@JsonProperty("sms_enabled")
 	private Boolean smsEnabled;
@@ -57,17 +57,17 @@ public class Destination {
 	public void setCountryPrefix(String countryPrefix) {
 		this.countryPrefix = countryPrefix;
 	}
-	public Boolean getMobileBreakout() {
-		return mobileBreakout;
+	public Boolean getMobileEnabled() {
+		return mobileEnabled;
 	}
-	public void setMobileBreakout(Boolean mobileBreakout) {
-		this.mobileBreakout = mobileBreakout;
+	public void setMobileEnabled(Boolean mobileEnabled) {
+		this.mobileEnabled = mobileEnabled;
 	}
-	public Boolean getLandlineBreakout() {
-		return landlineBreakout;
+	public Boolean getLandlineEnabled() {
+		return landlineEnabled;
 	}
-	public void setLandlineBreakout(Boolean landlineBreakout) {
-		this.landlineBreakout = landlineBreakout;
+	public void setLandlineEnabled(Boolean landlineEnabled) {
+		this.landlineEnabled = landlineEnabled;
 	}
 	public Boolean getSmsEnabled() {
 		return smsEnabled;

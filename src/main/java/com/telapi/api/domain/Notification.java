@@ -9,7 +9,7 @@ import com.telapi.api.domain.enums.HttpMethod;
 import com.telapi.api.domain.enums.LogLevel;
 import com.telapi.api.json.JsonDateParser;
 
-public class Notification extends BaseTelapiObjectWithSid {
+public class Notification extends BaseTelapiObject {
 	@JsonProperty("call_sid")
 	private String callSid;
 	private LogLevel log;

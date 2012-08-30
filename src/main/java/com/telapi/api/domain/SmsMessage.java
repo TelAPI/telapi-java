@@ -9,7 +9,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import com.telapi.api.domain.enums.SmsDirection;
 import com.telapi.api.json.JsonDateParser;
 
-public class SmsMessage extends BaseTelapiObjectWithSid {
+public class SmsMessage extends BaseTelapiObject {
 	@JsonDeserialize(using = JsonDateParser.class)
 	@JsonProperty(value="date_sent")
 	private Date dateSent;

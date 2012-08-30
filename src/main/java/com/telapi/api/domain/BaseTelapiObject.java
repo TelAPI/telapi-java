@@ -8,7 +8,8 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import com.telapi.api.json.JsonDateParser;
 
 public class BaseTelapiObject {
-
+	
+	private String sid;
 	@JsonDeserialize(using = JsonDateParser.class)
 	@JsonProperty(value="date_created")
 	private Date dateCreated;
@@ -20,6 +21,13 @@ public class BaseTelapiObject {
 	@JsonProperty("api_version")
 	private String apiVersion;
 	private String uri;
+	
+	public String getSid() {
+		return sid;
+	}
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
 	
 	public Date getDateCreated() {
 		return dateCreated;

@@ -16,11 +16,11 @@ import com.telapi.api.domain.list.ConferenceList;
 public interface ConferenceProxy {
 
 	@GET
-    @Path("Accounts/{AccountSid}/Conferences/{ConferenceName}.json")
+    @Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}.json")
     @Produces("application/json")
     ClientResponse<Conference> viewConference(
     		@PathParam("AccountSid") String accountSid, 
-    		@PathParam("ConferenceName") String conferenceName,
+    		@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId,
     		@QueryParam("Muted") Boolean muted,
     		@QueryParam("Deafed") Boolean deafed
@@ -39,96 +39,96 @@ public interface ConferenceProxy {
 			);
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/Mute.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Mute.json")
 	@Produces("application/json")
 	ClientResponse<Conference> muteMember(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName,
+			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId
 	);
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/UnMute.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/UnMute.json")
 	@Produces("application/json")
 	ClientResponse<Conference> unMuteMember(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName,
+			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId
 	);
 	
 	
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/Deaf.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Deaf.json")
 	@Produces("application/json")
 	ClientResponse<Conference> deafMember(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName,
+			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId
 	);
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/UnDeaf.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/UnDeaf.json")
 	@Produces("application/json")
 	ClientResponse<Conference> unDeafMember(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName,
+			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId
 	);
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/Hangup.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Hangup.json")
 	@Produces("application/json")
-	ClientResponse<Conference> hangupMember(
+	ClientResponse<StatusResponse> hangupMember(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName,
+			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId
 	);
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/Kick.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Kick.json")
 	@Produces("application/json")
 	ClientResponse<Conference> kickMember(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName,
+			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId
 	);
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/Say.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Say.json")
 	@Produces("application/json")
 	ClientResponse<StatusResponse> speakText(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName,
+			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId,
     		@QueryParam("Text") String text
 	);
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/Play.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Play.json")
 	@Produces("application/json")
 	ClientResponse<StatusResponse> playAudio(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName,
+			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId,
     		@QueryParam("Url") String url
 	);
 	
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/RecordStart.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/RecordStart.json")
 	@Produces("application/json")
 	ClientResponse<StatusResponse> startRecording(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName
+			@PathParam("ConferenceSid") String conferenceSid
 	);
 	
 	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceName}/RecordStop.json")
+	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/RecordStop.json")
 	@Produces("application/json")
 	ClientResponse<StatusResponse> stopRecording(
 			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceName") String conferenceName
+			@PathParam("ConferenceSid") String conferenceSid
 	);
 	
 	

@@ -34,6 +34,9 @@ public class AvailablePhoneNumber {
 	@JsonProperty("monthly_cost")
 	private BigDecimal monthlyCost;
 	@JsonDeserialize(using=JsonBooleanParser.class)
+	@JsonProperty("unblock_support")
+	private Boolean unblockSupport;
+	@JsonDeserialize(using=JsonBooleanParser.class)
 	@JsonProperty("voice_enabled")
 	private Boolean voiceEnabled;
 	@JsonDeserialize(using=JsonBooleanParser.class)
@@ -156,6 +159,12 @@ public class AvailablePhoneNumber {
 	}
 	public void setSupportsForwardedFrom(Boolean supportsForwardedFrom) {
 		this.supportsForwardedFrom = supportsForwardedFrom;
+	}
+	public Boolean getUnblockSupport() {
+		return unblockSupport;
+	}
+	public void setUnblockSupport(Boolean unblockSupport) {
+		this.unblockSupport = unblockSupport;
 	}
 
 }

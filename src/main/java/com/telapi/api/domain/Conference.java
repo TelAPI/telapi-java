@@ -7,6 +7,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class Conference extends BaseTelapiObject{
 	private String name;
 	
+	private String status;
+	
 	@JsonProperty("member_count")
 	private Long memberCount;
 	@JsonProperty("run_time")
@@ -19,7 +21,12 @@ public class Conference extends BaseTelapiObject{
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public Long getMemberCount() {
 		return memberCount;
 	}

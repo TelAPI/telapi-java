@@ -13,7 +13,7 @@ import com.telapi.api.json.JsonBooleanParser;
 import com.telapi.api.json.JsonDateParser;
 import com.telapi.api.json.JsonDurationParser;
 
-public class Call extends BaseTelapiObjectWithSid{
+public class Call extends BaseTelapiObject{
 	
 	//delete these two when the time comes
 	@SuppressWarnings("unused")

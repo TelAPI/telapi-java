@@ -7,7 +7,7 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import com.telapi.api.json.JsonBooleanParser;
 
-public class CarrierLookup extends BaseTelapiObjectWithSid{
+public class CarrierLookup extends BaseTelapiObject{
 	@JsonProperty("phone_number")
 	private String phoneNumber;
 	private String carrier;
