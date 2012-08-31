@@ -3,7 +3,7 @@ package com.telapi.api.configuration;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class DefaultTelapiConfiguration {
+public class TelapiConstants {
 	public static final String BASE_URL = "https://api.telapi.com/";
 	public static final String API_VERSION = "2011-07-01";
 	

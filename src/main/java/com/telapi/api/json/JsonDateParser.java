@@ -9,7 +9,7 @@ import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.DeserializationContext;
 import org.codehaus.jackson.map.JsonDeserializer;
 
-import com.telapi.api.configuration.DefaultTelapiConfiguration;
+import com.telapi.api.configuration.TelapiConstants;
 
 public class JsonDateParser extends JsonDeserializer<Date> {
 	@Override
@@ -20,7 +20,7 @@ public class JsonDateParser extends JsonDeserializer<Date> {
 		if (date == null)
 			return null;
 		try {
-			return DefaultTelapiConfiguration.jsonDateFormat.parse(date);
+			return TelapiConstants.jsonDateFormat.parse(date);
 		} catch (ParseException e) {
 			return null;
 		}

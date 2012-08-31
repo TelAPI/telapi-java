@@ -7,7 +7,7 @@ import javax.ws.rs.core.UriBuilder;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 
-import com.telapi.api.configuration.DefaultTelapiConfiguration;
+import com.telapi.api.configuration.TelapiConstants;
 import com.telapi.api.configuration.PropertiesFileTelapiConfiguration;
 import com.telapi.api.configuration.TelapiConfiguration;
 import com.telapi.api.http.RestExecutor;
@@ -20,7 +20,7 @@ public class TestConnector {
 	public TestConnector() {
 		conf = new PropertiesFileTelapiConfiguration();
 		executor = RestExecutor.createExecutor(conf);
-		URI baseUrl = UriBuilder.fromUri(conf.getBaseUrl()).path(DefaultTelapiConfiguration.API_VERSION).build();
+		URI baseUrl = UriBuilder.fromUri(conf.getBaseUrl()).path(TelapiConstants.API_VERSION).build();
 		fullBaseUrl = baseUrl.toString();
 	}
 	

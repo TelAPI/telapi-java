@@ -1,2 +1,5 @@
 sid=YOURSIDGOESHERE
 authToken=YOURAUTHORIZATIONTOKENGOESHERE
+proxyHost=
+proxyPort=8080
+proxyProtocol=http

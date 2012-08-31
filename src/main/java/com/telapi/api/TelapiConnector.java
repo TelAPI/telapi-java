@@ -10,7 +10,7 @@ import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 
-import com.telapi.api.configuration.DefaultTelapiConfiguration;
+import com.telapi.api.configuration.TelapiConstants;
 import com.telapi.api.configuration.TelapiConfiguration;
 import com.telapi.api.domain.Account;
 import com.telapi.api.domain.Application;
@@ -60,6 +60,11 @@ import com.telapi.api.restproxies.RecordingProxy;
 import com.telapi.api.restproxies.SmsProxy;
 import com.telapi.api.restproxies.TranscriptionProxy;
 
+/**
+ * 
+ * The class used for all forms of communication with the Telapi REST API.
+ *
+ */
 public class TelapiConnector {
 
 	private ApacheHttpClient4Executor executor;
@@ -79,11 +84,18 @@ public class TelapiConnector {
 	private CarrierLookupProxy carrierLookupProxy;
 	private FraudControlProxy fraudControlProxy;
 
+	/**
+	 * Creates a new TelapiConnector based on the provided configuration.
+	 * 
+	 * @param conf
+	 *            The configuration based on which the TelapiConnector will be
+	 *            created.
+	 */
 	public TelapiConnector(TelapiConfiguration conf) {
 		this.conf = conf;
 		executor = RestExecutor.createExecutor(conf);
 		URI baseUrl = UriBuilder.fromUri(conf.getBaseUrl())
-				.path(DefaultTelapiConfiguration.API_VERSION).build();
+				.path(TelapiConstants.API_VERSION).build();
 		fullBaseUrl = baseUrl.toString();
 
 		accountsProxy = createProxy(AccountsProxy.class);
@@ -118,7 +130,7 @@ public class TelapiConnector {
 	private String getDateString(Date date) {
 		if (date == null)
 			return null;
-		return DefaultTelapiConfiguration.queryDateFormat.format(date);
+		return TelapiConstants.queryDateFormat.format(date);
 	}
 
 	// ACCOUNT
@@ -305,8 +317,9 @@ public class TelapiConnector {
 				pitchSemiTones, pitchOctaves, rate);
 	}
 
-	public Recording recordCall(String accountSid, String callSid, Boolean record,
-			Long timeLimit, String callbackUrl) throws TelapiException {
+	public Recording recordCall(String accountSid, String callSid,
+			Boolean record, Long timeLimit, String callbackUrl)
+			throws TelapiException {
 		return returnThrows(callProxy.recordCall(accountSid, callSid, record,
 				timeLimit, callbackUrl));
 	}
@@ -316,9 +329,9 @@ public class TelapiConnector {
 		return recordCall(conf.getSid(), callSid, record, timeLimit,
 				callbackUrl);
 	}
-	
-	//CONFERENCE
-	
+
+	// CONFERENCE
+
 	public Conference viewConference(String accountSid, String conferenceSid,
 			String memberId, Boolean muted, Boolean deafed)
 			throws TelapiException {
@@ -381,8 +394,8 @@ public class TelapiConnector {
 				conferenceSid, memberId, url));
 	}
 
-	public StatusResponse startRecording(String accountSid,
-			String conferenceSid) throws TelapiException {
+	public StatusResponse startRecording(String accountSid, String conferenceSid)
+			throws TelapiException {
 		return returnThrows(conferenceProxy.startRecording(accountSid,
 				conferenceSid));
 	}
@@ -454,10 +467,8 @@ public class TelapiConnector {
 			throws TelapiException {
 		return stopRecording(conf.getSid(), conferenceSid);
 	}
-	
-	
-	//APPLICATIONS
-	
+
+	// APPLICATIONS
 
 	public Application viewApplication(String accountSid, String applicationSid)
 			throws TelapiException {
@@ -465,26 +476,28 @@ public class TelapiConnector {
 				applicationSid));
 	}
 
-	public ApplicationList listApplications(String accountSid, String friendlyName,
-			Long page, Long pageSize) throws TelapiException {
+	public ApplicationList listApplications(String accountSid,
+			String friendlyName, Long page, Long pageSize)
+			throws TelapiException {
 		return returnThrows(applicationProxy.listApplications(accountSid,
 				friendlyName, page, pageSize));
 	}
 
-	public Application createApplication(String accountSid, String friendlyName,
-			String voiceUrl, HttpMethod voiceMethod, String voiceFallbackUrl,
-			HttpMethod voiceFallbackMethod, Boolean voiceCallerIdLookup,
-			String smsUrl, HttpMethod smsMethod, String smsFallbackUrl,
-			HttpMethod smsFallbackMethod, String heartbeatUrl,
-			HttpMethod heartbeatMethod, String statusCallback,
-			HttpMethod statusCallbackMethod) throws TelapiException {
+	public Application createApplication(String accountSid,
+			String friendlyName, String voiceUrl, HttpMethod voiceMethod,
+			String voiceFallbackUrl, HttpMethod voiceFallbackMethod,
+			Boolean voiceCallerIdLookup, String smsUrl, HttpMethod smsMethod,
+			String smsFallbackUrl, HttpMethod smsFallbackMethod,
+			String heartbeatUrl, HttpMethod heartbeatMethod,
+			String statusCallback, HttpMethod statusCallbackMethod)
+			throws TelapiException {
 		return returnThrows(applicationProxy.createApplication(accountSid,
 				friendlyName, voiceUrl, voiceMethod, voiceFallbackUrl,
 				voiceFallbackMethod, voiceCallerIdLookup, smsUrl, smsMethod,
 				smsFallbackUrl, smsFallbackMethod, heartbeatUrl,
 				heartbeatMethod, statusCallback, statusCallbackMethod));
 	}
-	
+
 	public Application createApplication(ApplicationRequest applicationRequest)
 			throws TelapiException {
 		String accountSid = conf.getSid();
@@ -508,14 +521,14 @@ public class TelapiConnector {
 				applicationRequest.getStatusCallbackMethod());
 	}
 
-	public Application updateApplication(String accountSid, String applicationSid,
-			String friendlyName, String voiceUrl, HttpMethod voiceMethod,
-			String voiceFallbackUrl, HttpMethod voiceFallbackMethod,
-			Boolean voiceCallerIdLookup, String smsUrl, HttpMethod smsMethod,
-			String smsFallbackUrl, HttpMethod smsFallbackMethod,
-			String heartbeatUrl, HttpMethod heartbeatMethod,
-			String statusCallback, HttpMethod statusCallbackMethod)
-			throws TelapiException {
+	public Application updateApplication(String accountSid,
+			String applicationSid, String friendlyName, String voiceUrl,
+			HttpMethod voiceMethod, String voiceFallbackUrl,
+			HttpMethod voiceFallbackMethod, Boolean voiceCallerIdLookup,
+			String smsUrl, HttpMethod smsMethod, String smsFallbackUrl,
+			HttpMethod smsFallbackMethod, String heartbeatUrl,
+			HttpMethod heartbeatMethod, String statusCallback,
+			HttpMethod statusCallbackMethod) throws TelapiException {
 		return returnThrows(applicationProxy.updateApplication(accountSid,
 				applicationSid, friendlyName, voiceUrl, voiceMethod,
 				voiceFallbackUrl, voiceFallbackMethod, voiceCallerIdLookup,
@@ -523,7 +536,7 @@ public class TelapiConnector {
 				heartbeatUrl, heartbeatMethod, statusCallback,
 				statusCallbackMethod));
 	}
-	
+
 	public Application updateApplication(ApplicationRequest applicationRequest)
 			throws TelapiException {
 		String accountSid = conf.getSid();
@@ -547,13 +560,14 @@ public class TelapiConnector {
 				applicationRequest.getStatusCallbackMethod());
 	}
 
-	public Application deleteApplication(String accountSid, String applicationSid)
-			throws TelapiException {
+	public Application deleteApplication(String accountSid,
+			String applicationSid) throws TelapiException {
 		return returnThrows(applicationProxy.deleteApplication(accountSid,
 				applicationSid));
 	}
 
-	public Application viewApplication(String applicationSid) throws TelapiException {
+	public Application viewApplication(String applicationSid)
+			throws TelapiException {
 		return viewApplication(conf.getSid(), applicationSid);
 	}
 
@@ -576,13 +590,14 @@ public class TelapiConnector {
 				statusCallback, statusCallbackMethod);
 	}
 
-	public Application updateApplication(String applicationSid, String friendlyName,
-			String voiceUrl, HttpMethod voiceMethod, String voiceFallbackUrl,
-			HttpMethod voiceFallbackMethod, Boolean voiceCallerIdLookup,
-			String smsUrl, HttpMethod smsMethod, String smsFallbackUrl,
-			HttpMethod smsFallbackMethod, String heartbeatUrl,
-			HttpMethod heartbeatMethod, String statusCallback,
-			HttpMethod statusCallbackMethod) throws TelapiException {
+	public Application updateApplication(String applicationSid,
+			String friendlyName, String voiceUrl, HttpMethod voiceMethod,
+			String voiceFallbackUrl, HttpMethod voiceFallbackMethod,
+			Boolean voiceCallerIdLookup, String smsUrl, HttpMethod smsMethod,
+			String smsFallbackUrl, HttpMethod smsFallbackMethod,
+			String heartbeatUrl, HttpMethod heartbeatMethod,
+			String statusCallback, HttpMethod statusCallbackMethod)
+			throws TelapiException {
 		return updateApplication(conf.getSid(), applicationSid, friendlyName,
 				voiceUrl, voiceMethod, voiceFallbackUrl, voiceFallbackMethod,
 				voiceCallerIdLookup, smsUrl, smsMethod, smsFallbackUrl,
@@ -590,12 +605,12 @@ public class TelapiConnector {
 				statusCallback, statusCallbackMethod);
 	}
 
-	public Application deleteApplication(String applicationSid) throws TelapiException {
+	public Application deleteApplication(String applicationSid)
+			throws TelapiException {
 		return deleteApplication(conf.getSid(), applicationSid);
 	}
 
-	
-	//INCOMING PHONE NUMBERS
+	// INCOMING PHONE NUMBERS
 
 	public IncomingPhoneNumber viewIncomingPhoneNumber(String accountSid,
 			String incomingPhoneNumberSid) throws TelapiException {
@@ -654,8 +669,8 @@ public class TelapiConnector {
 				ipnRequest.getStatusCallbackMethod());
 	}
 
-	public IncomingPhoneNumber viewIncomingPhoneNumber(String incomingPhoneNumberSid)
-			throws TelapiException {
+	public IncomingPhoneNumber viewIncomingPhoneNumber(
+			String incomingPhoneNumberSid) throws TelapiException {
 		return viewIncomingPhoneNumber(conf.getSid(), incomingPhoneNumberSid);
 	}
 
@@ -671,8 +686,8 @@ public class TelapiConnector {
 		return addIncomingPhoneNumber(conf.getSid(), phoneNumber, areaCode);
 	}
 
-	public IncomingPhoneNumber deleteIncomingPhoneNumber(String incomingPhoneNumberSid)
-			throws TelapiException {
+	public IncomingPhoneNumber deleteIncomingPhoneNumber(
+			String incomingPhoneNumberSid) throws TelapiException {
 		return deleteIncomingPhoneNumber(conf.getSid(), incomingPhoneNumberSid);
 	}
 
@@ -689,88 +704,117 @@ public class TelapiConnector {
 				smsFallbackUrl, smsFallbackMethod, statusCallback,
 				statusCallbackMethod);
 	}
-	
-	
-	//AVAILABLE PHONE NUMBERS
-	
-	public AvailablePhoneNumberList listAvailablePhoneNumbers(String accountSid,
-			String isoCountryCode, String areaCode, String contains,
-			String inRegion, String inPostalCode) throws TelapiException {
+
+	// AVAILABLE PHONE NUMBERS
+
+	public AvailablePhoneNumberList listAvailablePhoneNumbers(
+			String accountSid, String isoCountryCode, String areaCode,
+			String contains, String inRegion, String inPostalCode)
+			throws TelapiException {
 		return returnThrows(availablePhoneNumberProxy
 				.listAvailablePhoneNumbers(accountSid, isoCountryCode,
 						areaCode, contains, inRegion, inPostalCode));
 	}
-	
-	public AvailablePhoneNumberList listAvailablePhoneNumbers(String isoCountryCode,
-			String areaCode, String contains, String inRegion,
-			String inPostalCode) throws TelapiException {
+
+	public AvailablePhoneNumberList listAvailablePhoneNumbers(
+			String isoCountryCode, String areaCode, String contains,
+			String inRegion, String inPostalCode) throws TelapiException {
 		return returnThrows(availablePhoneNumberProxy
 				.listAvailablePhoneNumbers(conf.getSid(), isoCountryCode,
 						areaCode, contains, inRegion, inPostalCode));
 	}
-	
-	//RECORDINGS
-	
-	public RecordingList listRecordings(String accountSid, Date dateCreatedGte, Date dateCreatedLt, Long page, Long pageSize) throws TelapiException {
-		return returnThrows(recordingProxy.listRecordings(accountSid, getDateString(dateCreatedGte), getDateString(dateCreatedLt), page, pageSize));
+
+	// RECORDINGS
+
+	public RecordingList listRecordings(String accountSid, Date dateCreatedGte,
+			Date dateCreatedLt, Long page, Long pageSize)
+			throws TelapiException {
+		return returnThrows(recordingProxy.listRecordings(accountSid,
+				getDateString(dateCreatedGte), getDateString(dateCreatedLt),
+				page, pageSize));
 	}
-	
-	public RecordingList listRecordings(Date dateCreatedGte, Date dateCreatedLt, Long page, Long pageSize) throws TelapiException {
-		return listRecordings(conf.getSid(), dateCreatedGte, dateCreatedLt, page, pageSize);
+
+	public RecordingList listRecordings(Date dateCreatedGte,
+			Date dateCreatedLt, Long page, Long pageSize)
+			throws TelapiException {
+		return listRecordings(conf.getSid(), dateCreatedGte, dateCreatedLt,
+				page, pageSize);
 	}
-	
-	public RecordingList listCallRecordings(String accountSid, String callSid, Date dateCreatedGte, Date dateCreatedLt, Long page, Long pageSize) throws TelapiException {
-		return returnThrows(recordingProxy.listCallRecordings(accountSid, callSid, getDateString(dateCreatedGte), getDateString(dateCreatedLt), page, pageSize));
+
+	public RecordingList listCallRecordings(String accountSid, String callSid,
+			Date dateCreatedGte, Date dateCreatedLt, Long page, Long pageSize)
+			throws TelapiException {
+		return returnThrows(recordingProxy.listCallRecordings(accountSid,
+				callSid, getDateString(dateCreatedGte),
+				getDateString(dateCreatedLt), page, pageSize));
 	}
-	
-	public RecordingList listCallRecordings(String callSid, Date dateCreatedGte, Date dateCreatedLt, Long page, Long pageSize) throws TelapiException {
-		return listCallRecordings(conf.getSid(), callSid, dateCreatedGte, dateCreatedLt, page, pageSize);
+
+	public RecordingList listCallRecordings(String callSid,
+			Date dateCreatedGte, Date dateCreatedLt, Long page, Long pageSize)
+			throws TelapiException {
+		return listCallRecordings(conf.getSid(), callSid, dateCreatedGte,
+				dateCreatedLt, page, pageSize);
 	}
-	
-	public Recording viewRecording(String accountSid, String recordingSid) throws TelapiException {
-		return returnThrows(recordingProxy.viewRecording(accountSid, recordingSid));
+
+	public Recording viewRecording(String accountSid, String recordingSid)
+			throws TelapiException {
+		return returnThrows(recordingProxy.viewRecording(accountSid,
+				recordingSid));
 	}
-	
+
 	public Recording viewRecording(String recordingSid) throws TelapiException {
 		return viewRecording(conf.getSid(), recordingSid);
 	}
-	
-	public String getRecordingUrl(String accountSid, String recordingSid) throws TelapiException {
-		return returnThrows(recordingProxy.getRecording(accountSid, recordingSid));
+
+	public String getRecordingUrl(String accountSid, String recordingSid)
+			throws TelapiException {
+		return returnThrows(recordingProxy.getRecording(accountSid,
+				recordingSid));
 	}
-	
+
 	public String getRecordingUrl(String recordingSid) throws TelapiException {
 		return getRecordingUrl(conf.getSid(), recordingSid);
 	}
-	
-	//NOTIFICATIONS
-	
-	public NotificationList listNotifications(String accountSid, LogLevel log, Long page, Long pageSize) throws TelapiException {
-		return returnThrows(notificationProxy.listNotifications(accountSid, log, page, pageSize));
+
+	// NOTIFICATIONS
+
+	public NotificationList listNotifications(String accountSid, LogLevel log,
+			Long page, Long pageSize) throws TelapiException {
+		return returnThrows(notificationProxy.listNotifications(accountSid,
+				log, page, pageSize));
 	}
-	
-	public NotificationList listNotifications(LogLevel log, Long page, Long pageSize) throws TelapiException {
+
+	public NotificationList listNotifications(LogLevel log, Long page,
+			Long pageSize) throws TelapiException {
 		return listNotifications(conf.getSid(), log, page, pageSize);
 	}
-	
-	public NotificationList listCallNotifications(String accountSid, String callSid, LogLevel log, Long page, Long pageSize) throws TelapiException {
-		return returnThrows(notificationProxy.listCallNotifications(accountSid, callSid, log, page, pageSize));
+
+	public NotificationList listCallNotifications(String accountSid,
+			String callSid, LogLevel log, Long page, Long pageSize)
+			throws TelapiException {
+		return returnThrows(notificationProxy.listCallNotifications(accountSid,
+				callSid, log, page, pageSize));
 	}
-	
-	public NotificationList listCallNotifications(String callSid, LogLevel log, Long page, Long pageSize) throws TelapiException {
-		return listCallNotifications(conf.getSid(), callSid, log, page, pageSize);
+
+	public NotificationList listCallNotifications(String callSid, LogLevel log,
+			Long page, Long pageSize) throws TelapiException {
+		return listCallNotifications(conf.getSid(), callSid, log, page,
+				pageSize);
 	}
-	
-	public Notification viewNotification(String accountSid, String notificationSid) throws TelapiException {
-		return returnThrows(notificationProxy.viewNotification(accountSid, notificationSid));
+
+	public Notification viewNotification(String accountSid,
+			String notificationSid) throws TelapiException {
+		return returnThrows(notificationProxy.viewNotification(accountSid,
+				notificationSid));
 	}
-	
-	public Notification viewNotification(String notificationSid) throws TelapiException {
+
+	public Notification viewNotification(String notificationSid)
+			throws TelapiException {
 		return viewNotification(conf.getSid(), notificationSid);
 	}
-	
-	//TRANSCRIPTIONS
-	
+
+	// TRANSCRIPTIONS
+
 	public Transcription viewTranscription(String accountSid,
 			String transcriptionSid) throws TelapiException {
 		return returnThrows(transcriptionProxy.viewTranscription(accountSid,
@@ -845,9 +889,9 @@ public class TelapiConnector {
 		return transcribeAudioUrl(conf.getSid(), audioUrl, transcribeCallback,
 				callbackMethod, quality);
 	}
-	
-	//CARRIER SERVICES
-	
+
+	// CARRIER SERVICES
+
 	public CarrierLookup carrierLookup(String accountSid, String phoneNumber)
 			throws TelapiException {
 		return returnThrows(carrierLookupProxy.carrierLookup(accountSid,
@@ -859,13 +903,13 @@ public class TelapiConnector {
 		return returnThrows(carrierLookupProxy.cnamLookup(accountSid,
 				phoneNumber));
 	}
-	
+
 	public CnamDipList cnamLookup(String accountSid, List<String> phoneNumbers)
 			throws TelapiException {
 		return returnThrows(carrierLookupProxy.cnamLookup(accountSid,
 				phoneNumbers));
 	}
-	
+
 	public CarrierLookup carrierLookup(String phoneNumber)
 			throws TelapiException {
 		return carrierLookup(conf.getSid(), phoneNumber);
@@ -874,13 +918,14 @@ public class TelapiConnector {
 	public CnamDipList cnamLookup(String phoneNumber) throws TelapiException {
 		return cnamLookup(conf.getSid(), phoneNumber);
 	}
-	
-	public CnamDipList cnamLookup(List<String> phoneNumbers) throws TelapiException {
+
+	public CnamDipList cnamLookup(List<String> phoneNumbers)
+			throws TelapiException {
 		return cnamLookup(conf.getSid(), phoneNumbers);
 	}
-	
-	//FRAUD CONTROL
-	
+
+	// FRAUD CONTROL
+
 	public FraudList listFraudControlResources(String accountSid, Long page,
 			Long pageSize) throws TelapiException {
 		return returnThrows(fraudControlProxy.listFraudControlResources(
@@ -950,5 +995,5 @@ public class TelapiConnector {
 		return whitelistDestination(conf.getSid(), countryCode, mobileBreakout,
 				landlineBreakout, smsEnabled);
 	}
-	
+
 }
