@@ -1,5 +1,10 @@
 package com.telapi.api.domain;
 
+/**
+ * List of a calls various subresources and their URI path. Examples of call
+ * subresources are notifications, recordings, etc.
+ * 
+ */
 public class CallSubresourceUris {
 
 	private String notifications;

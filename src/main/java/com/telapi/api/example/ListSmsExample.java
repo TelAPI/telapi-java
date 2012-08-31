@@ -3,9 +3,10 @@ package com.telapi.api.example;
 import com.telapi.api.TelapiConnector;
 import com.telapi.api.configuration.BasicTelapiConfiguration;
 import com.telapi.api.domain.SmsMessage;
+import com.telapi.api.domain.list.SmsMessageList;
 import com.telapi.api.exceptions.TelapiException;
 
-public class SendSmsExample {
+public class ListSmsExample {
 
 	public static void main(String[] args) {
 		BasicTelapiConfiguration conf = new BasicTelapiConfiguration();
@@ -14,13 +15,10 @@ public class SendSmsExample {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			SmsMessage smsMessage = conn
-					.sendSmsMessage(
-							"(XXX) XXX-XXXX",
-							"(XXX) XXX-XXXX",
-							"This is an SMS message sent from the TelAPI Java wrapper! Easy as 1, 2, 3!",
-							null);
-			System.out.println(smsMessage.getSid());
+			SmsMessageList smsMessageList = conn.listSmsMessages();
+			for(SmsMessage smsMessage : smsMessageList) {
+				System.out.println(smsMessage.getSid());
+			}
 		} catch (TelapiException e) {
 			e.printStackTrace();
 		}

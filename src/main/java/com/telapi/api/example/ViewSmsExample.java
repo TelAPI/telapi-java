@@ -5,7 +5,7 @@ import com.telapi.api.configuration.BasicTelapiConfiguration;
 import com.telapi.api.domain.SmsMessage;
 import com.telapi.api.exceptions.TelapiException;
 
-public class SendSmsExample {
+public class ViewSmsExample {
 
 	public static void main(String[] args) {
 		BasicTelapiConfiguration conf = new BasicTelapiConfiguration();
@@ -14,12 +14,7 @@ public class SendSmsExample {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			SmsMessage smsMessage = conn
-					.sendSmsMessage(
-							"(XXX) XXX-XXXX",
-							"(XXX) XXX-XXXX",
-							"This is an SMS message sent from the TelAPI Java wrapper! Easy as 1, 2, 3!",
-							null);
+			SmsMessage smsMessage = conn.viewSmsMessage("your_sms_message_sid");
 			System.out.println(smsMessage.getSid());
 		} catch (TelapiException e) {
 			e.printStackTrace();

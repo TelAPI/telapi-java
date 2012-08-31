@@ -16,7 +16,7 @@ public class ConnectionTest {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			conn.getAccount(new PropertiesFileTelapiConfiguration().getSid());
+			conn.viewAccount(new PropertiesFileTelapiConfiguration().getSid());
 			Assert.fail();
 		} catch (TelapiException e) {
 

@@ -10,8 +10,8 @@ import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
 
-import com.telapi.api.configuration.TelapiConstants;
 import com.telapi.api.configuration.TelapiConfiguration;
+import com.telapi.api.configuration.TelapiConstants;
 import com.telapi.api.domain.Account;
 import com.telapi.api.domain.Application;
 import com.telapi.api.domain.Call;
@@ -90,6 +90,8 @@ public class TelapiConnector {
 	 * @param conf
 	 *            The configuration based on which the TelapiConnector will be
 	 *            created.
+	 * @see BasicTelapiConfiguration, PropertiesFileTelapiConfiguration,
+	 *      TelapiConfiguration
 	 */
 	public TelapiConnector(TelapiConfiguration conf) {
 		this.conf = conf;
@@ -135,58 +137,126 @@ public class TelapiConnector {
 
 	// ACCOUNT
 
-	public Account getAccount(String sid) throws TelapiException {
-		ClientResponse<Account> acc = accountsProxy.getAccount(sid);
+	/**
+	 * An account resource provides information about a single TelAPI account.
+	 * This methods gets the info of the account with the provided Sid.
+	 * @param accountSid
+	 * @return
+	 * @throws TelapiException
+	 */
+	public Account viewAccount(String accountSid) throws TelapiException {
+		ClientResponse<Account> acc = accountsProxy.getAccount(accountSid);
 		return returnThrows(acc);
 	}
 
-	public Account getAccount() throws TelapiException {
-		return getAccount(conf.getSid());
+	/**
+	 * @see #viewAccount(String)
+	 * @return The account with the Sid defined in the configuration.
+	 * @throws TelapiException
+	 */
+	public Account viewAccount() throws TelapiException {
+		return viewAccount(conf.getSid());
 	}
 
-	public AccountsList getAccounts() throws TelapiException {
+	
+	public AccountsList viewAccounts() throws TelapiException {
 		ClientResponse<AccountsList> accounts = accountsProxy.getAccounts();
 		return returnThrows(accounts);
 	}
 
 	// SMSMESSAGE
 
-	public SmsMessage getSmsMessage(String sid, String smsMessageSid)
+	/**
+	 * Used for specifying a different accountSid.
+	 * @see #viewSmsMessage(String)
+	 * @param sid The account sid (required).
+	 * @return An Sms Message resource.
+	 * @throws TelapiException
+	 */
+	public SmsMessage viewSmsMessage(String sid, String smsMessageSid)
 			throws TelapiException {
 		ClientResponse<SmsMessage> sms = smsProxy.getSmsMessage(sid,
 				smsMessageSid);
 		return returnThrows(sms);
 	}
 
-	public SmsMessage getSmsMessage(String smsMessageSid)
+	/**
+	 * Text messages sent to and from TelAPI phone numbers are represented with the Sms resource.
+	 * @param smsMessageSid The sms message sid (required).
+	 * @return An Sms Message resource.
+	 * @throws TelapiException
+	 */
+	public SmsMessage viewSmsMessage(String smsMessageSid)
 			throws TelapiException {
-		return getSmsMessage(conf.getSid(), smsMessageSid);
+		return viewSmsMessage(conf.getSid(), smsMessageSid);
 	}
 
-	public SmsMessageList getSmsMessageList(String sid, String to, String from,
+	/**
+	 * @see #listSmsMessages(String, String, Date, Date, Long, Long)
+	 * @param accountSid The account sid (required).
+	 * @return A list of SmsMessage resources.
+	 * @throws TelapiException
+	 */
+	public SmsMessageList listSmsMessages(String accountSid, String to, String from,
 			Date dateSentGte, Date dateSentLt, Long page, Long pageSize)
 			throws TelapiException {
 
 		ClientResponse<SmsMessageList> smsList = smsProxy.getSmsMessageList(
-				sid, to, from, getDateString(dateSentGte),
+				accountSid, to, from, getDateString(dateSentGte),
 				getDateString(dateSentLt), page, pageSize);
 		return returnThrows(smsList);
 	}
 
-	public SmsMessageList getSmsMessageList(String to, String from,
+	/**
+	 * Just as with calls, a list of all messages sent to and from a given TelAPI account's phone numbers can be requested via our REST API.
+	 * @param to Lists all SMS messages sent to this number.
+	 * @param from Lists all SMS messages sent from this number.
+	 * @param dateSentGte Lists all SMS messages beginning on or from a certain date. 
+	 * @param dateSentLt Lists all SMS messages before a certain date. 
+	 * @param page Used to return a particular page withing the list.
+	 * @param pageSize Used to specify the amount of list items to return per page.
+	 * @return A list of SmsMessage resources.
+	 * @throws TelapiException
+	 */
+	public SmsMessageList listSmsMessages(String to, String from,
 			Date dateSentGte, Date dateSentLt, Long page, Long pageSize)
 			throws TelapiException {
-		return getSmsMessageList(conf.getSid(), to, from, dateSentGte,
+		return listSmsMessages(conf.getSid(), to, from, dateSentGte,
 				dateSentLt, page, pageSize);
 	}
+	
+	/**
+	 * Lists all Sms Messages for the configured account.
+	 * @return A list of Sms Message.
+	 * @throws TelapiException
+	 */
+	public SmsMessageList listSmsMessages()
+			throws TelapiException {
+		return listSmsMessages(conf.getSid(), null, null, null,
+				null, null, null);
+	}
 
-	public SmsMessage sendSmsMessage(String sid, String to, String from,
+	/**
+	 * @see #sendSmsMessage(String, String, String, String)
+	 * @param accountSid The account sid (required).
+	 * @throws TelapiException
+	 */
+	public SmsMessage sendSmsMessage(String accountSid, String to, String from,
 			String body, String statusCallback) throws TelapiException {
-		ClientResponse<SmsMessage> smsMessage = smsProxy.sendSmsMessage(sid,
+		ClientResponse<SmsMessage> smsMessage = smsProxy.sendSmsMessage(accountSid,
 				to, from, body, statusCallback);
 		return returnThrows(smsMessage);
 	}
 
+	/**
+	 * Sends an SMS message.
+	 * @param to The number you want to send the SMS to (required).
+	 * @param from The number you want to display as sending the SMS. A subcharge will apply when sending via a custom From number (required). 
+	 * @param body Text of the SMS message to be sent. Plain text up to 160 characters in length (required).
+	 * @param statusCallback URL that a set of default parameters will be forwarded to once the SMS is complete.
+	 * @return The SMS message which was sent.
+	 * @throws TelapiException
+	 */
 	public SmsMessage sendSmsMessage(String to, String from, String body,
 			String statusCallback) throws TelapiException {
 		return sendSmsMessage(conf.getSid(), to, from, body, statusCallback);
@@ -194,15 +264,34 @@ public class TelapiConnector {
 
 	// CALLS
 
+	/**
+	 * @see #viewCall(String)
+	 * @param accountSid The account sid (required).
+	 * @throws TelapiException
+	 */
 	public Call viewCall(String accountSid, String callSid)
 			throws TelapiException {
 		return returnThrows(callProxy.viewCall(accountSid, callSid));
 	}
 
+	/**
+	 * Gets the specified call resource. A call resource provides information
+	 * about an individual call that has occurred through TelAPI. Both inbound
+	 * and outbound voice communication through TelAPI are categorized as calls.
+	 * 
+	 * @param callSid The sid of the requested Call resource (required).
+	 * @return The requested Call resource.
+	 * @throws TelapiException
+	 */
 	public Call viewCall(String callSid) throws TelapiException {
 		return viewCall(conf.getSid(), callSid);
 	}
 
+	/**
+	 * @see #listCalls(String, String, CallStatus, Date, Date, Long, Long)
+	 * @param accountSid The account sid (required).
+	 * @throws TelapiException
+	 */
 	public CallList listCalls(String accountSid, String to, String from,
 			CallStatus status, Date startTimeGte, Date startTimeLt, Long page,
 			Long pageSize) throws TelapiException {
@@ -211,6 +300,21 @@ public class TelapiConnector {
 				pageSize));
 	}
 
+	/**
+	 * To view a list of all inbound and outbound call resources associated with
+	 * a given account, use this method. The response returned lists the calls
+	 * in chronological order and also includes paging information.
+	 * 
+	 * @param to Lists all calls made to this number only.
+	 * @param from Lists all calls made from this number.
+	 * @param status Lists all calls with the specified status only.
+	 * @param startTimeGte Lists all calls beginning on or from a certain date.
+	 * @param startTimeLt Lists all calls beginning before a certain date.
+	 * @param page Used to return a particular page withing the list.
+	 * @param pageSize Used to specify the amount of list items to return per page.
+	 * @return A list of calls.
+	 * @throws TelapiException
+	 */
 	public CallList listCalls(String to, String from, CallStatus status,
 			Date startTimeGte, Date startTimeLt, Long page, Long pageSize)
 			throws TelapiException {
@@ -218,6 +322,10 @@ public class TelapiConnector {
 				startTimeLt, page, pageSize);
 	}
 
+	/**
+	 * @see #makeCall(String, String, String, String, HttpMethod, String, HttpMethod, String, HttpMethod, String, Long, Boolean)
+	 * @throws TelapiException
+	 */
 	public Call makeCall(String accountSid, String to, String from, String url,
 			String forwardedFrom, HttpMethod method, String fallbackUrl,
 			HttpMethod fallbackMethod, String statusCallback,
@@ -229,6 +337,48 @@ public class TelapiConnector {
 				hideCallerId));
 	}
 
+	/**
+	 * Makes a call.
+	 * 
+	 * @param to
+	 *            The number to call (required).
+	 * @param from
+	 *            The number to display as calling (required).
+	 * @param url
+	 *            The URL requested once the call connects. A set of default
+	 *            parameters will be sent here.
+	 * @param forwardedFrom
+	 *            Specifies the forwarding number to pass to the receiving
+	 *            carrier.
+	 * @param method
+	 *            Specifies the HTTP method used to request the required URL
+	 *            once call connects. Defaults to POST.
+	 * @param fallbackUrl
+	 *            URL used if any errors occur during execution of InboundXML or
+	 *            at initial request of the required Url provided with the POST.
+	 * @param fallbackMethod
+	 *            Specifies the HTTP method used to request FallbackUrl.
+	 *            Defaults to POST.
+	 * @param statusCallback
+	 *            URL that can be requested to receive notification when call
+	 *            has ended. A set of default parameters will be sent here once
+	 *            the call is finished.
+	 * @param statusCallbackMethod
+	 *            Specifies the HTTP method used to request StatusCallbackUrl.
+	 *            Defaults to POST.
+	 * @param sendDigits
+	 *            Dials digits once call connects. Can be used to forward
+	 *            callers to different extensions or numbers. Allowed values are
+	 *            numbers, # and *.
+	 * @param timeout
+	 *            Number of seconds call stays on the line while waiting for an
+	 *            answer. The max time limit is 999 and the default limit is 60
+	 *            seconds but lower times can be set. Defaults to 60.
+	 * @param hideCallerId
+	 *            Specifies if the caller id will be hidden.
+	 * @return The newly made call.
+	 * @throws TelapiException
+	 */
 	public Call makeCall(String to, String from, String url,
 			String forwardedFrom, HttpMethod method, String fallbackUrl,
 			HttpMethod fallbackMethod, String statusCallback,
@@ -239,6 +389,12 @@ public class TelapiConnector {
 				statusCallbackMethod, sendDigits, timeout, hideCallerId);
 	}
 
+	/**
+	 * Convenience method which accepts a CallRequest object containing parameters.
+	 * @see #makeCall(String, String, String, String, HttpMethod, String, HttpMethod, String, HttpMethod, String, Long, Boolean)
+	 * @return The newly made call.
+	 * @throws TelapiException
+	 */
 	public Call makeCall(CallRequest callRequest) throws TelapiException {
 		String accountSid = conf.getSid();
 		if (callRequest.getAccountSid() != null)
@@ -254,6 +410,7 @@ public class TelapiConnector {
 				callRequest.getHideCallerId());
 	}
 
+	
 	public Call interruptLiveCall(String accountSid, String callSid,
 			String fallbackUrl, HttpMethod statusCallbackMethod,
 			CallInterruptStatus status) throws TelapiException {
