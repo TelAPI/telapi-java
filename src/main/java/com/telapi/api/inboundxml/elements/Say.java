@@ -28,7 +28,6 @@ public class Say implements ResponseElement, GatherElement {
 		p.loop = loop;
 		p.text = text;
 		p.voice = voice == null ? null : voice.toString();
-		p.voice = voice.toString();
 		return p;
 	}
 
