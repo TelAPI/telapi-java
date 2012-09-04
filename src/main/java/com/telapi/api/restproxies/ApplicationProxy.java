@@ -53,8 +53,8 @@ public interface ApplicationProxy {
 			@QueryParam("SmsFallbackMethod") HttpMethod smsFallbackMethod,
 			@QueryParam("HeartbeatUrl") String heartbeatUrl,
 			@QueryParam("HeartbeatMethod") HttpMethod heartbeatMethod,
-			@QueryParam("StatusCallback") String statusCallback,
-			@QueryParam("StatusCallbackMethod") HttpMethod statusCallbackMethod
+			@QueryParam("HangupCallback") String hangupCallback,
+			@QueryParam("HangupCallbackMethod") HttpMethod hangupCallbackMethod
 	);
 	
 	
@@ -76,8 +76,8 @@ public interface ApplicationProxy {
 			@QueryParam("SmsFallbackMethod") HttpMethod smsFallbackMethod,
 			@QueryParam("HeartbeatUrl") String heartbeatUrl,
 			@QueryParam("HeartbeatMethod") HttpMethod heartbeatMethod,
-			@QueryParam("StatusCallback") String statusCallback,
-			@QueryParam("StatusCallbackMethod") HttpMethod statusCallbackMethod
+			@QueryParam("HangupCallback") String hangupCallback,
+			@QueryParam("HangupCallbackMethod") HttpMethod hangupCallbackMethod
 	);
 	
 	@DELETE

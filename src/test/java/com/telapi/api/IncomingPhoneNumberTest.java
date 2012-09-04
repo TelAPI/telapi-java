@@ -62,12 +62,12 @@ public class IncomingPhoneNumberTest extends BaseTelapiTest<IncomingPhoneNumberP
 		IncomingPhoneNumberList list = proxy.listIncomingPhoneNumbers(conf.getSid(), null, null, null, null).getEntity();
 		IncomingPhoneNumber number = list.iterator().next();
 		proxy.updateIncomingPhoneNumber(conf.getSid(), number.getSid(), "first_number", 
-				"voice.com", null, null, null, null, null, null, null, null, null, null).getEntity();
+				"voice.com", null, null, null, null, null, null, null, null, null, null, null, null).getEntity();
 		IncomingPhoneNumber nr = proxy.viewIncomingPhoneNumber(conf.getSid(), number.getSid()).getEntity();
 		Assert.assertEquals("voice.com", nr.getVoiceUrl().trim());
 		
 		proxy.updateIncomingPhoneNumber(conf.getSid(), number.getSid(), null, 
-				"", null, null, null, null, null, null, null, null, null, null).getEntity();
+				"", null, null, null, null, null, null, null, null, null, null, null, null).getEntity();
 		nr = proxy.viewIncomingPhoneNumber(conf.getSid(), number.getSid()).getEntity();
 		Assert.assertEquals("", nr.getVoiceUrl().trim());
 		

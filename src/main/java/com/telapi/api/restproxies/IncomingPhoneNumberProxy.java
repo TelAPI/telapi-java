@@ -69,8 +69,10 @@ public interface IncomingPhoneNumberProxy {
 			@QueryParam("SmsMethod") HttpMethod smsMethod,
 			@QueryParam("SmsFallbackUrl") String smsFallbackUrl,
 			@QueryParam("SmsFallbackMethod") HttpMethod smsFallbackMethod,
-			@QueryParam("StatusCallback") String statusCallback,
-			@QueryParam("StatusCallbackMethod") HttpMethod statusCallbackMethod
+			@QueryParam("HangupCallback") String hangupCallback,
+			@QueryParam("HangupCallbackMethod") HttpMethod hangupCallbackMethod,
+			@QueryParam("HeartbeatUrl") String heartbeatUrl,
+			@QueryParam("HeartbeatMethod") HttpMethod heartbeatMethod
 			);
 	
 	

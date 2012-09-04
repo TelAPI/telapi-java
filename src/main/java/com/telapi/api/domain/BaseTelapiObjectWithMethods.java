@@ -40,96 +40,144 @@ public class BaseTelapiObjectWithMethods extends BaseTelapiObject {
 	@JsonProperty("hangup_callback_method")
 	private HttpMethod hangupCallbackMethod;
 	
+	/**
+	 * @return The URL returning InboundXML incoming phone numbers should execute when receiving an sms.
+	 */
 	public String getSmsUrl() {
 		return smsUrl;
 	}
 	public void setSmsUrl(String smsUrl) {
 		this.smsUrl = smsUrl;
 	}
+	/**
+	 * @return The HTTP method used when making requests to the SmsUrl. Either GET or POST.
+	 */
 	public HttpMethod getSmsMethod() {
 		return smsMethod;
 	}
 	public void setSmsMethod(HttpMethod smsMethod) {
 		this.smsMethod = smsMethod;
 	}
+	/**
+	 * @return The URL returning InboundXML incoming calls should execute when connected.
+	 */
 	public String getVoiceUrl() {
 		return voiceUrl;
 	}
 	public void setVoiceUrl(String voiceUrl) {
 		this.voiceUrl = voiceUrl;
 	}
+	/**
+	 * @return Specifies the HTTP method (GET or POST) used to request the VoiceUrl once incoming call connects.
+	 */
 	public HttpMethod getVoiceMethod() {
 		return voiceMethod;
 	}
 	public void setVoiceMethod(HttpMethod voiceMethod) {
 		this.voiceMethod = voiceMethod;
 	}
+	/**
+	 * @return URL used if any errors occur during execution of InboundXML on a call or at initial request of the VoiceUrl.
+	 */
 	public String getVoiceFallbackUrl() {
 		return voiceFallbackUrl;
 	}
 	public void setVoiceFallbackUrl(String voiceFallbackUrl) {
 		this.voiceFallbackUrl = voiceFallbackUrl;
 	}
+	/**
+	 * @return Specifies the HTTP method (GET or POST) used to request the VoiceFallBackUrl if it is needed.
+	 */
 	public HttpMethod getVoiceFallbackMethod() {
 		return voiceFallbackMethod;
 	}
 	public void setVoiceFallbackMethod(HttpMethod voiceFallbackMethod) {
 		this.voiceFallbackMethod = voiceFallbackMethod;
 	}
+	/**
+	 * @return URL that can be used to monitor the phone number.
+	 */
 	public String getHeartbeatUrl() {
 		return heartbeatUrl;
 	}
 	public void setHeartbeatUrl(String heartbeatUrl) {
 		this.heartbeatUrl = heartbeatUrl;
 	}
+	/**
+	 * @return The HTTP method TelApi will use when requesting the HeartbeatURL. Either GET or POST.
+	 */
 	public HttpMethod getHeartbeatMethod() {
 		return heartbeatMethod;
 	}
 	public void setHeartbeatMethod(HttpMethod heartbeatMethod) {
 		this.heartbeatMethod = heartbeatMethod;
 	}
+	/**
+	 * @return
+	 */
 	public String getStatusCallback() {
 		return statusCallback;
 	}
 	public void setStatusCallback(String statusCallback) {
 		this.statusCallback = statusCallback;
 	}
+	/**
+	 * @return
+	 */
 	public HttpMethod getStatusCallbackMethod() {
 		return statusCallbackMethod;
 	}
 	public void setStatusCallbackMethod(HttpMethod statusCallbackMethod) {
 		this.statusCallbackMethod = statusCallbackMethod;
 	}
+	/**
+	 * @return URL used if any errors occur during execution of InboundXML from an sms or at initial request of the SmsUrl.
+	 */
 	public String getSmsFallbackUrl() {
 		return smsFallbackUrl;
 	}
 	public void setSmsFallbackUrl(String smsFallbackUrl) {
 		this.smsFallbackUrl = smsFallbackUrl;
 	}
+	/**
+	 * @return Specifies the HTTP method (GET or POST) used to request the SmsFallbackUrl.
+	 */
 	public HttpMethod getSmsFallbackMethod() {
 		return smsFallbackMethod;
 	}
 	public void setSmsFallbackMethod(HttpMethod smsFallbackMethod) {
 		this.smsFallbackMethod = smsFallbackMethod;
 	}
+	/**
+	 * @return 
+	 */
 	public String getSmsStatusCallbackUrl() {
 		return smsStatusCallbackUrl;
 	}
 	public void setSmsStatusCallbackUrl(String smsStatusCallbackUrl) {
 		this.smsStatusCallbackUrl = smsStatusCallbackUrl;
 	}
+	/**
+	 * @return
+	 */
 	public HttpMethod getSmsStatusCallbackMethod() {
 		return smsStatusCallbackMethod;
 	}
 	public void setSmsStatusCallbackMethod(HttpMethod smsStatusCallbackMethod) {
 		this.smsStatusCallbackMethod = smsStatusCallbackMethod;
 	}
+	/**
+	 * @return URL that can be requested to receive notification when and how incoming call has ended.
+	 */
 	public String getHangupCallback() {
 		return hangupCallback;
 	}
 	public void setHangupCallback(String hangupCallback) {
 		this.hangupCallback = hangupCallback;
 	}
+	/**
+	 * @return Specifies the HTTP method (GET or POST) used to request the HangupCallback URL.
+	 */
 	public HttpMethod getHangupCallbackMethod() {
 		return hangupCallbackMethod;
 	}

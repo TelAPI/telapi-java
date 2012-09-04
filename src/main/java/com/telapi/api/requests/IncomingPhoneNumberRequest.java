@@ -16,8 +16,10 @@ public class IncomingPhoneNumberRequest {
 	private HttpMethod smsMethod;
 	private String smsFallbackUrl;
 	private HttpMethod smsFallbackMethod;
-	private String statusCallback;
-	private HttpMethod statusCallbackMethod;
+	private String hangupCallback;
+	private HttpMethod hangupCallbackMethod;
+	private String heartbeatUrl;
+	private HttpMethod heartbeatMethod;
 	
 	public String getAccountSid() {
 		return accountSid;
@@ -91,17 +93,29 @@ public class IncomingPhoneNumberRequest {
 	public void setSmsFallbackMethod(HttpMethod smsFallbackMethod) {
 		this.smsFallbackMethod = smsFallbackMethod;
 	}
-	public String getStatusCallback() {
-		return statusCallback;
+	public String getHangupCallback() {
+		return hangupCallback;
 	}
-	public void setStatusCallback(String statusCallback) {
-		this.statusCallback = statusCallback;
+	public void setHangupCallback(String hangupCallback) {
+		this.hangupCallback = hangupCallback;
 	}
-	public HttpMethod getStatusCallbackMethod() {
-		return statusCallbackMethod;
+	public HttpMethod getHangupCallbackMethod() {
+		return hangupCallbackMethod;
 	}
-	public void setStatusCallbackMethod(HttpMethod statusCallbackMethod) {
-		this.statusCallbackMethod = statusCallbackMethod;
+	public void setHangupCallbackMethod(HttpMethod hangupCallbackMethod) {
+		this.hangupCallbackMethod = hangupCallbackMethod;
+	}
+	public String getHeartbeatUrl() {
+		return heartbeatUrl;
+	}
+	public void setHeartbeatUrl(String heartbeatUrl) {
+		this.heartbeatUrl = heartbeatUrl;
+	}
+	public HttpMethod getHeartbeatMethod() {
+		return heartbeatMethod;
+	}
+	public void setHeartbeatMethod(HttpMethod heartbeatMethod) {
+		this.heartbeatMethod = heartbeatMethod;
 	}
 	
 }

@@ -436,30 +436,85 @@ public class TelapiConnector {
 		return hangUpCall(conf.getSid(), callSid, url, method);
 	}
 
+	/**
+	 * @see #sendDigits(String, String, Legs)
+	 * @throws TelapiException
+	 */
 	public Call sendDigits(String accountSid, String callSid, String playDtfm,
 			Legs dtmfLeg) throws TelapiException {
 		return returnThrows(callProxy.sendDigits(accountSid, callSid, playDtfm,
 				dtmfLeg));
 	}
 
+	/**
+	 * DTMFs, aka touch tone signals, can be sent to a call.
+	 * 
+	 * @param callSid
+	 *            The call to which to send DTMF signals.
+	 * @param playDtfm
+	 *            Specifies which touch tone signals to send to a call. W or w
+	 *            can be used to include half second pauses within the digit
+	 *            transmission. For example: wwww1234 waits two seconds before
+	 *            sending the digits and 12wwww34 waits two seconds in between
+	 *            the sending of 12 and 34. Allowed values are digits, #, *, W
+	 *            or w.
+	 * @param dtmfLeg
+	 *            Specifies which leg of the call digits will be sent to. 'aleg'
+	 *            leg is the originator of the call, 'bleg' is the recipient of
+	 *            the call. Defaults to aleg.
+	 * @return The call to which DTMF signals are sent.
+	 * @throws TelapiException
+	 */
 	public Call sendDigits(String callSid, String playDtfm, Legs dtmfLeg)
 			throws TelapiException {
 		return sendDigits(conf.getSid(), callSid, playDtfm, dtmfLeg);
 	}
 
-	public Call playAudio(String accountSid, String callSid, String soundsUrl,
+	/**
+	 * @see #playAudioToCall(String, String, Long, Legs, Boolean, Boolean)
+	 * @throws TelapiException
+	 */
+	public Call playAudioToCall(String accountSid, String callSid, String soundsUrl,
 			Long length, Legs legs, Boolean loop, Boolean mix)
 			throws TelapiException {
 		return returnThrows(callProxy.playAudio(accountSid, callSid, soundsUrl,
 				length, legs, loop, mix));
 	}
 
-	public Call playAudio(String callSid, String soundsUrl, Long length,
+	/**
+	 * TelAPI allows you to play an audio file during a call. This is useful for
+	 * playing hold music, providing IVR prompts, etc.
+	 * 
+	 * @param callSid
+	 *            The call to which to play audio to.
+	 * @param soundsUrl
+	 *            URL containg the sound file to play during the call. If
+	 *            multiple sounds are to be played, separate each by a comma in
+	 *            the request.
+	 * @param length
+	 *            Time limit in seconds for audio play back.
+	 * @param legs
+	 *            Specifies which leg of the call sound will play on. 'aleg' is
+	 *            the originator of the call, 'bleg' is the recipient of the
+	 *            call. Defaults to both.
+	 * @param loop
+	 *            Specifies whether sound will loop. Set to true to play sound
+	 *            indefinitely. Defaults to false.
+	 * @param mix
+	 *            Specifies whether sound should mix with call audio.
+	 * @return The Call to which audio is played.
+	 * @throws TelapiException
+	 */
+	public Call playAudioToCall(String callSid, String soundsUrl, Long length,
 			Legs legs, Boolean loop, Boolean mix) throws TelapiException {
-		return playAudio(conf.getSid(), callSid, soundsUrl, length, legs, loop,
+		return playAudioToCall(conf.getSid(), callSid, soundsUrl, length, legs, loop,
 				mix);
 	}
 
+	/**
+	 * @see #voiceEffects(String, AudioDirection, Double, Long, Long, Double)
+	 * @throws TelapiException
+	 */
 	public Call voiceEffects(String accountSid, String callSid,
 			AudioDirection audioDirection, Double pitch, Long pitchSemiTones,
 			Long pitchOctaves, Double rate) throws TelapiException {
@@ -467,6 +522,17 @@ public class TelapiConnector {
 				audioDirection, pitch, pitchSemiTones, pitchOctaves, rate));
 	}
 
+	/**
+	 * With TelAPI you can modify the way a callers voice sounds by changing things such as speed and pitch of the audio.
+	 * @param callSid The call to which to apply voice effects.
+	 * @param audioDirection Specifies the stream of audio that effects will occur on. Set "in" to change incoming audio stream or "out" to change outgoing audio stream. Defaults to out.
+	 * @param pitch Manually sets the pitch. The lower the value, the lower the tone. Must be a value greater than 0. Defaults to 1.
+	 * @param pitchSemiTones Changes the pitch of audio in semitone intervals. Must be a value between -14 and 14. Defaults to 0.
+	 * @param pitchOctaves Changes the pitch of audio in octave intervals. Must be a value between -1 and 1. Defaults to 0.
+	 * @param rate Manually sets the rate starting from 1. The lower the value, the lower the rate. Defaults to 1.
+	 * @return The Call to which voice effects are applied.
+	 * @throws TelapiException
+	 */
 	public Call voiceEffects(String callSid, AudioDirection audioDirection,
 			Double pitch, Long pitchSemiTones, Long pitchOctaves, Double rate)
 			throws TelapiException {
@@ -474,6 +540,10 @@ public class TelapiConnector {
 				pitchSemiTones, pitchOctaves, rate);
 	}
 
+	/**
+	 * @see #recordCall(String, Boolean, Long, String)
+	 * @throws TelapiException
+	 */
 	public Recording recordCall(String accountSid, String callSid,
 			Boolean record, Long timeLimit, String callbackUrl)
 			throws TelapiException {
@@ -481,6 +551,19 @@ public class TelapiConnector {
 				timeLimit, callbackUrl));
 	}
 
+	/**
+	 * TelAPI offers a way to both initiate or end a call recording. Both
+	 * processes are achieved using the same method. The parameters sent are
+	 * what determines whether a recording will start or end if it is already
+	 * in-progress.
+	 * 
+	 * @param callSid The call which is to be recorded.
+	 * @param record Specifies if call recording should beging or end. To start recording a call, value must be true. To stop recording a call, value must be false.
+	 * @param timeLimit The time in seconds the duration a call recording should not exceed. If no value specified, recordings are 60 seconds by default.
+	 * @param callbackUrl URL where recording information will be relayed to after it has completed.
+	 * @return The created Recording.
+	 * @throws TelapiException
+	 */
 	public Recording recordCall(String callSid, Boolean record, Long timeLimit,
 			String callbackUrl) throws TelapiException {
 		return recordCall(conf.getSid(), callSid, record, timeLimit,
@@ -489,13 +572,20 @@ public class TelapiConnector {
 
 	// CONFERENCE
 
-	public Conference viewConference(String accountSid, String conferenceSid,
-			String memberId, Boolean muted, Boolean deafed)
+	/**
+	 * @see #viewConference(String)
+	 * @throws TelapiException
+	 */
+	public Conference viewConference(String accountSid, String conferenceSid)
 			throws TelapiException {
 		return returnThrows(conferenceProxy.viewConference(accountSid,
-				conferenceSid, memberId, muted, deafed));
+				conferenceSid, null, null, null));
 	}
 
+	/**
+	 * @see #listConferences(String, Boolean, Boolean, Long, Long)
+	 * @throws TelapiException
+	 */
 	public ConferenceList listConferences(String accountSid, String memberId,
 			Boolean muted, Boolean deafed, Long page, Long pageSize)
 			throws TelapiException {
@@ -503,136 +593,277 @@ public class TelapiConnector {
 				memberId, muted, deafed, page, pageSize));
 	}
 
+	/**
+	 * @see #muteMember(String, String)
+	 * @throws TelapiException
+	 */
 	public Conference muteMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.muteMember(accountSid,
 				conferenceSid, memberId));
 	}
 
+	/**
+	 * @see #unMuteMember(String, String)
+	 * @throws TelapiException
+	 */
 	public Conference unMuteMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.unMuteMember(accountSid,
 				conferenceSid, memberId));
 	}
 
+	/**
+	 * @see #deafMember(String, String)
+	 * @throws TelapiException
+	 */
 	public Conference deafMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.deafMember(accountSid,
 				conferenceSid, memberId));
 	}
 
+	/**
+	 * @see #unDeafMember(String, String)
+	 * @throws TelapiException
+	 */
 	public Conference unDeafMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.unDeafMember(accountSid,
 				conferenceSid, memberId));
 	}
 
-	public StatusResponse hangupMember(String accountSid, String conferenceSid,
+	/**
+	 * @see #hangupMember(String, String)
+	 * @throws TelapiException
+	 */
+	public Conference hangupMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.hangupMember(accountSid,
 				conferenceSid, memberId));
 	}
 
+	/**
+	 * @see #kickMember(String, String)
+	 * @throws TelapiException
+	 */
 	public Conference kickMember(String accountSid, String conferenceSid,
 			String memberId) throws TelapiException {
 		return returnThrows(conferenceProxy.kickMember(accountSid,
 				conferenceSid, memberId));
 	}
 
-	public StatusResponse speakText(String accountSid, String conferenceSid,
-			String memberId, String text) throws TelapiException {
-		return returnThrows(conferenceProxy.speakText(accountSid,
-				conferenceSid, memberId, text));
-	}
+//	public StatusResponse speakText(String accountSid, String conferenceSid,
+//			String memberId, String text) throws TelapiException {
+//		return returnThrows(conferenceProxy.speakText(accountSid,
+//				conferenceSid, memberId, text));
+//	}
 
-	public StatusResponse playAudio(String accountSid, String conferenceSid,
+	/**
+	 * @see #playAudioToConference(String, String, String)
+	 * @throws TelapiException
+	 */
+	public Conference playAudioToConference(String accountSid, String conferenceSid,
 			String memberId, String url) throws TelapiException {
 		return returnThrows(conferenceProxy.playAudio(accountSid,
 				conferenceSid, memberId, url));
 	}
 
+	/**
+	 * @see #startRecording(String)
+	 * @throws TelapiException
+	 */
 	public StatusResponse startRecording(String accountSid, String conferenceSid)
 			throws TelapiException {
 		return returnThrows(conferenceProxy.startRecording(accountSid,
 				conferenceSid));
 	}
 
+	/**
+	 * @see #stopRecording(String)
+	 * @throws TelapiException
+	 */
 	public StatusResponse stopRecording(String accountSid, String conferenceSid)
 			throws TelapiException {
 		return returnThrows(conferenceProxy.stopRecording(accountSid,
 				conferenceSid));
 	}
 
-	public Conference viewConference(String conferenceSid, String memberId,
-			Boolean muted, Boolean deafed) throws TelapiException {
-		return viewConference(conf.getSid(), conferenceSid, memberId, muted,
-				deafed);
+	/**
+	 * Resource properties about conference calls that occurred through a TelAPI
+	 * account can be requested using our API.
+	 * 
+	 * @param conferenceSid The sid of the requested Conference.
+	 * @return The requested conference.
+	 * @throws TelapiException
+	 */
+	public Conference viewConference(String conferenceSid) throws TelapiException {
+		return viewConference(conf.getSid(), conferenceSid);
 	}
 
+	/**
+	 * To view a list of all conference resources associated with a given
+	 * account, the URI below is provided. The response returned lists
+	 * conferences in chronological order and includes information on each
+	 * member of the conference.
+	 * 
+	 * @param memberId Used to identify and return conferences only specific members were involved in.
+	 * @param muted Specifies whether only conferences with muted members should be returned.
+	 * @param deafed Specifies whether only conferences with deafed members should be returned.
+	 * @param page Used to return a particular page withing the list.
+	 * @param pageSize Used to specify the amount of list items to return per page.
+	 * @return A list of Conferences accorded to the specified parameters.s
+	 * @throws TelapiException
+	 */
 	public ConferenceList listConferences(String memberId, Boolean muted,
 			Boolean deafed, Long page, Long pageSize) throws TelapiException {
 		return listConferences(conf.getSid(), memberId, muted, deafed, page,
 				pageSize);
 	}
 
+	/**
+	 * Members of a conference call can be muted through TelAPI using the HTTP
+	 * POST method. Muted members can hear other callers on the conference call
+	 * but can not speak to the other members themselves.
+	 * 
+	 * @param conferenceSid The sid of the requested Conference.
+	 * @param memberId Specifies the member to mute. If more than one member is to be muted, a comma is used to separate each memberID.
+	 * @return The Conference on which this method was called.
+	 * @throws TelapiException
+	 */
 	public Conference muteMember(String conferenceSid, String memberId)
 			throws TelapiException {
 		return muteMember(conf.getSid(), conferenceSid, memberId);
 	}
 
+	/**
+	 * Previously muted conference members can be unmuted just as easily using
+	 * our REST API. Simply specify the conference sid and memberID when calling
+	 * this method.
+	 * 
+	 * @param conferenceSid
+	 *            The sid of the requested Conference.
+	 * @param memberId
+	 *            Specifies the member to unmute. If more than one member is to
+	 *            be muted, a comma is used to separate each memberID.
+	 * @return The Conference on which this method was called.
+	 * @throws TelapiException
+	 */
 	public Conference unMuteMember(String conferenceSid, String memberId)
 			throws TelapiException {
 		return unMuteMember(conf.getSid(), conferenceSid, memberId);
 	}
 
+	/**
+	 * Members of a conference call can be made deaf through TelAPI using this
+	 * method. Deaf members can not hear any of the audio taking place in the
+	 * conference call while they are deaf.
+	 * 
+	 * @param conferenceSid
+	 *            The sid of the requested Conference.
+	 * @param memberId
+	 *            Specifies the member to make deaf. If more than one member is
+	 *            to be made deaf, a comma is used to separate each memberID.
+	 * @return The Conference on which this method was called.
+	 * @throws TelapiException
+	 */
 	public Conference deafMember(String conferenceSid, String memberId)
 			throws TelapiException {
 		return deafMember(conf.getSid(), conferenceSid, memberId);
 	}
 
+	/**
+	 * Previously deaf conference members can made undeaf just as easily using
+	 * our API. Simply specify the conference and memberID when calling this
+	 * method.
+	 * 
+	 * @param conferenceSid
+	 *            The sid of the requested Conference.
+	 * @param memberId
+	 *            Specifies the member to undeaf. If more than one member is to
+	 *            be made undeaf, a comma is used to separate each memberID.
+	 * @return The Conference on which this method was called.
+	 * @throws TelapiException
+	 */
 	public Conference unDeafMember(String conferenceSid, String memberId)
 			throws TelapiException {
 		return unDeafMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	public StatusResponse hangupMember(String conferenceSid, String memberId)
+	/**
+	 * Hangup conference members by conference sid. Conference as member/s must
+	 * be registered in order to be hanged up
+	 * 
+	 * @param conferenceSid
+	 *            The sid of the requested Conference.
+	 * @param memberId
+	 *            Specifies the member to hangup. If not set, the call will
+	 *            hangup for all conference members. To hangup on more than one
+	 *            member, a comma is used to separate each memberID.
+	 * @return The Conference on which this method was called.
+	 * @throws TelapiException
+	 */
+	public Conference hangupMember(String conferenceSid, String memberId)
 			throws TelapiException {
 		return hangupMember(conf.getSid(), conferenceSid, memberId);
 	}
 
+	/**
+	 * TelAPI allows you to remove individual conference members.
+	 * @param conferenceSid The sid of the requested Conference.
+	 * @param memberId Specifies the member to be kicked from the conference. To kick more than one member, a comma is used to separate each memberID.
+	 * @return The Conference on which this method was called.
+	 * @throws TelapiException
+	 */
 	public Conference kickMember(String conferenceSid, String memberId)
 			throws TelapiException {
 		return kickMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	public StatusResponse speakText(String conferenceSid, String memberId,
-			String text) throws TelapiException {
-		return speakText(conf.getSid(), conferenceSid, memberId, text);
-	}
+//	public StatusResponse speakText(String conferenceSid, String memberId,
+//			String text) throws TelapiException {
+//		return speakText(conf.getSid(), conferenceSid, memberId, text);
+//	}
 
-	public StatusResponse playAudio(String conferenceSid, String memberId,
+	/**
+	 * Pre-recorded sound from a file can be played to conference members.
+	 * @param conferenceSid The sid of the requested Conference.
+	 * @param memberId Specifies the conference member to be spoken to.
+	 * @param url URL containing the audio file to play.
+	 * @return The Conference on which this method was called.
+	 * @throws TelapiException
+	 */
+	public Conference playAudioToConference(String conferenceSid, String memberId,
 			String url) throws TelapiException {
-		return playAudio(conf.getSid(), conferenceSid, memberId, url);
+		return playAudioToConference(conf.getSid(), conferenceSid, memberId, url);
 	}
 
-	public StatusResponse startRecording(String conferenceSid)
-			throws TelapiException {
-		return startRecording(conf.getSid(), conferenceSid);
-	}
-
-	public StatusResponse stopRecording(String conferenceSid)
-			throws TelapiException {
-		return stopRecording(conf.getSid(), conferenceSid);
-	}
+//	public StatusResponse startRecording(String conferenceSid)
+//			throws TelapiException {
+//		return startRecording(conf.getSid(), conferenceSid);
+//	}
+//
+//	public StatusResponse stopRecording(String conferenceSid)
+//			throws TelapiException {
+//		return stopRecording(conf.getSid(), conferenceSid);
+//	}
 
 	// APPLICATIONS
 
+	/**
+	 * @see #viewApplication(String)
+	 * @throws TelapiException
+	 */
 	public Application viewApplication(String accountSid, String applicationSid)
 			throws TelapiException {
 		return returnThrows(applicationProxy.viewApplication(accountSid,
 				applicationSid));
 	}
 
+	/**
+	 * @see #listApplications(String, Long, Long)
+	 * @throws TelapiException
+	 */
 	public ApplicationList listApplications(String accountSid,
 			String friendlyName, Long page, Long pageSize)
 			throws TelapiException {
@@ -640,21 +871,29 @@ public class TelapiConnector {
 				friendlyName, page, pageSize));
 	}
 
+	/**
+	 * @see #createApplication(String, String, HttpMethod, String, HttpMethod, Boolean, String, HttpMethod, String, HttpMethod, String, HttpMethod, String, HttpMethod)
+	 * @throws TelapiException
+	 */
 	public Application createApplication(String accountSid,
 			String friendlyName, String voiceUrl, HttpMethod voiceMethod,
 			String voiceFallbackUrl, HttpMethod voiceFallbackMethod,
 			Boolean voiceCallerIdLookup, String smsUrl, HttpMethod smsMethod,
 			String smsFallbackUrl, HttpMethod smsFallbackMethod,
 			String heartbeatUrl, HttpMethod heartbeatMethod,
-			String statusCallback, HttpMethod statusCallbackMethod)
+			String hangupCallback, HttpMethod hangupCallbackMethod)
 			throws TelapiException {
 		return returnThrows(applicationProxy.createApplication(accountSid,
 				friendlyName, voiceUrl, voiceMethod, voiceFallbackUrl,
 				voiceFallbackMethod, voiceCallerIdLookup, smsUrl, smsMethod,
 				smsFallbackUrl, smsFallbackMethod, heartbeatUrl,
-				heartbeatMethod, statusCallback, statusCallbackMethod));
+				heartbeatMethod, hangupCallback, hangupCallbackMethod));
 	}
 
+	/**
+	 * @see #createApplication(String, String, HttpMethod, String, HttpMethod, Boolean, String, HttpMethod, String, HttpMethod, String, HttpMethod, String, HttpMethod)
+	 * @throws TelapiException
+	 */
 	public Application createApplication(ApplicationRequest applicationRequest)
 			throws TelapiException {
 		String accountSid = conf.getSid();
@@ -678,22 +917,30 @@ public class TelapiConnector {
 				applicationRequest.getStatusCallbackMethod());
 	}
 
+	/**
+	 * @see #updateApplication(String, String, String, HttpMethod, String, HttpMethod, Boolean, String, HttpMethod, String, HttpMethod, String, HttpMethod, String, HttpMethod)
+	 * @throws TelapiException
+	 */
 	public Application updateApplication(String accountSid,
 			String applicationSid, String friendlyName, String voiceUrl,
 			HttpMethod voiceMethod, String voiceFallbackUrl,
 			HttpMethod voiceFallbackMethod, Boolean voiceCallerIdLookup,
 			String smsUrl, HttpMethod smsMethod, String smsFallbackUrl,
 			HttpMethod smsFallbackMethod, String heartbeatUrl,
-			HttpMethod heartbeatMethod, String statusCallback,
-			HttpMethod statusCallbackMethod) throws TelapiException {
+			HttpMethod heartbeatMethod, String hangupCallback,
+			HttpMethod hangupCallbackMethod) throws TelapiException {
 		return returnThrows(applicationProxy.updateApplication(accountSid,
 				applicationSid, friendlyName, voiceUrl, voiceMethod,
 				voiceFallbackUrl, voiceFallbackMethod, voiceCallerIdLookup,
 				smsUrl, smsMethod, smsFallbackUrl, smsFallbackMethod,
-				heartbeatUrl, heartbeatMethod, statusCallback,
-				statusCallbackMethod));
+				heartbeatUrl, heartbeatMethod, hangupCallback,
+				hangupCallbackMethod));
 	}
 
+	/**
+	 * @see #updateApplication(String, String, String, HttpMethod, String, HttpMethod, Boolean, String, HttpMethod, String, HttpMethod, String, HttpMethod, String, HttpMethod)
+	 * @throws TelapiException
+	 */
 	public Application updateApplication(ApplicationRequest applicationRequest)
 			throws TelapiException {
 		String accountSid = conf.getSid();
@@ -717,51 +964,126 @@ public class TelapiConnector {
 				applicationRequest.getStatusCallbackMethod());
 	}
 
+	/**
+	 * @see #deleteApplication(String)
+	 * @throws TelapiException
+	 */
 	public Application deleteApplication(String accountSid,
 			String applicationSid) throws TelapiException {
 		return returnThrows(applicationProxy.deleteApplication(accountSid,
 				applicationSid));
 	}
 
+	/**
+	 * TelAPI offers the ability to preset all voice and sms urls for a given
+	 * application name. This application can then be assigned to multiple
+	 * numbers so you don't have to update all of their urls manually.
+	 * Application details can be accessed by using this method.
+	 * 
+	 * @param applicationSid
+	 *            The sid of the requested Application.
+	 * @return The requested application.
+	 * @throws TelapiException
+	 */
 	public Application viewApplication(String applicationSid)
 			throws TelapiException {
 		return viewApplication(conf.getSid(), applicationSid);
 	}
 
+	/**
+	 * Used to get a list of all application resources associated with a given
+	 * account.
+	 * 
+	 * @param friendlyName
+	 *            Specifies that only application resources matching the input
+	 *            FreindlyName should be returned in the list request.
+	 * @param page
+	 *            Used to return a particular page withing the list.
+	 * @param pageSize
+	 *            Used to specify the amount of list items to return per page.
+	 * @return A list of aplications.
+	 * @throws TelapiException
+	 */
 	public ApplicationList listApplications(String friendlyName, Long page,
 			Long pageSize) throws TelapiException {
 		return listApplications(conf.getSid(), friendlyName, page, pageSize);
 	}
 
+	/**
+	 * Creates a new application for managing TelAPI phone numbers,
+	 * 
+	 * @param friendlyName The name used to identify this application.
+	 * @param voiceUrl The URL returning InboundXML incoming calls should execute when connected.
+	 * @param voiceMethod Specifies the HTTP method used to request the VoiceUrl once incoming call connects. Defaults to POST.
+	 * @param voiceFallbackUrl URL used if any errors occur during execution of InboundXML on a call or at initial request of the VoiceUrl.
+	 * @param voiceFallbackMethod Specifies the HTTP method (GET or POST) used to request the VoiceFallBackUrl if it is needed. Defaults to POST.
+	 * @param voiceCallerIdLookup Look up the caller's caller ID name from the CNAM database (additional charges apply). Defaults to false.
+	 * @param smsUrl The URL returning InboundXML incoming phone numbers should execute when receiving an sms.
+	 * @param smsMethod The HTTP method used when making requests to the SmsUrl. Either GET or POST.
+	 * @param smsFallbackUrl URL used if any errors occur during execution of InboundXML from an sms or at initial request of the SmsUrl.
+	 * @param smsFallbackMethod Specifies the HTTP method (GET or POST) used to request the SmsFallbackUrl. Defaults to POST.
+	 * @param heartbeatUrl URL that can be used to monitor the phone number.
+	 * @param heartbeatMethod The HTTP method TelApi will use when requesting the HeartbeatURL. Either GET or POST. Defaults to POST.
+	 * @param hangupCallback URL that can be requested to receive notification when and how incoming call has ended.
+	 * @param hangupCallbackMethod Specifies the HTTP method (GET or POST) used to request the HangupCallback URL.
+	 * @return The created Application.
+	 * @throws TelapiException
+	 */
 	public Application createApplication(String friendlyName, String voiceUrl,
 			HttpMethod voiceMethod, String voiceFallbackUrl,
 			HttpMethod voiceFallbackMethod, Boolean voiceCallerIdLookup,
 			String smsUrl, HttpMethod smsMethod, String smsFallbackUrl,
 			HttpMethod smsFallbackMethod, String heartbeatUrl,
-			HttpMethod heartbeatMethod, String statusCallback,
-			HttpMethod statusCallbackMethod) throws TelapiException {
+			HttpMethod heartbeatMethod, String hangupCallback,
+			HttpMethod hangupCallbackMethod) throws TelapiException {
 		return createApplication(conf.getSid(), friendlyName, voiceUrl,
 				voiceMethod, voiceFallbackUrl, voiceFallbackMethod,
 				voiceCallerIdLookup, smsUrl, smsMethod, smsFallbackUrl,
 				smsFallbackMethod, heartbeatUrl, heartbeatMethod,
-				statusCallback, statusCallbackMethod);
+				hangupCallback, hangupCallbackMethod);
 	}
 
+	/**
+	 * Used to update an existing application.
+	 * @param applicationSid The sid of the application to update.
+	 * @param friendlyName The name used to identify this application.
+	 * @param voiceUrl The URL returning InboundXML incoming calls should execute when connected.
+	 * @param voiceMethod Specifies the HTTP method used to request the VoiceUrl once incoming call connects. Defaults to POST.
+	 * @param voiceFallbackUrl URL used if any errors occur during execution of InboundXML on a call or at initial request of the VoiceUrl.
+	 * @param voiceFallbackMethod Specifies the HTTP method (GET or POST) used to request the VoiceFallBackUrl if it is needed. Defaults to POST.
+	 * @param voiceCallerIdLookup Look up the caller's caller ID name from the CNAM database (additional charges apply). Defaults to false.
+	 * @param smsUrl The URL returning InboundXML incoming phone numbers should execute when receiving an sms.
+	 * @param smsMethod The HTTP method used when making requests to the SmsUrl. Either GET or POST.
+	 * @param smsFallbackUrl URL used if any errors occur during execution of InboundXML from an sms or at initial request of the SmsUrl.
+	 * @param smsFallbackMethod Specifies the HTTP method (GET or POST) used to request the SmsFallbackUrl. Defaults to POST.
+	 * @param heartbeatUrl URL that can be used to monitor the phone number.
+	 * @param heartbeatMethod The HTTP method TelApi will use when requesting the HeartbeatURL. Either GET or POST. Defaults to POST.
+	 * @param hangupCallback URL that can be requested to receive notification when and how incoming call has ended.
+	 * @param hangupCallbackMethod Specifies the HTTP method (GET or POST) used to request the HangupCallback URL.
+	 * @return The edited Application.
+	 * @throws TelapiException
+	 */
 	public Application updateApplication(String applicationSid,
 			String friendlyName, String voiceUrl, HttpMethod voiceMethod,
 			String voiceFallbackUrl, HttpMethod voiceFallbackMethod,
 			Boolean voiceCallerIdLookup, String smsUrl, HttpMethod smsMethod,
 			String smsFallbackUrl, HttpMethod smsFallbackMethod,
 			String heartbeatUrl, HttpMethod heartbeatMethod,
-			String statusCallback, HttpMethod statusCallbackMethod)
+			String hangupCallback, HttpMethod hangupCallbackMethod)
 			throws TelapiException {
 		return updateApplication(conf.getSid(), applicationSid, friendlyName,
 				voiceUrl, voiceMethod, voiceFallbackUrl, voiceFallbackMethod,
 				voiceCallerIdLookup, smsUrl, smsMethod, smsFallbackUrl,
 				smsFallbackMethod, heartbeatUrl, heartbeatMethod,
-				statusCallback, statusCallbackMethod);
+				hangupCallback, hangupCallbackMethod);
 	}
 
+	/**
+	 * Deletes an existing application.
+	 * @param applicationSid The sid of the Application to delete.
+	 * @return The deleted application.
+	 * @throws TelapiException
+	 */
 	public Application deleteApplication(String applicationSid)
 			throws TelapiException {
 		return deleteApplication(conf.getSid(), applicationSid);
@@ -769,12 +1091,21 @@ public class TelapiConnector {
 
 	// INCOMING PHONE NUMBERS
 
+
+	/**
+	 * @see #viewIncomingPhoneNumber(String)
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber viewIncomingPhoneNumber(String accountSid,
 			String incomingPhoneNumberSid) throws TelapiException {
 		return returnThrows(incomingPhoneNumberProxy.viewIncomingPhoneNumber(
 				accountSid, incomingPhoneNumberSid));
 	}
 
+	/**
+	 * @see #listIncomingPhoneNumbers(String, String, Long, Long)
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumberList listIncomingPhoneNumbers(String accountSid,
 			String phoneNumber, String friendlyName, Long page, Long pageSize)
 			throws TelapiException {
@@ -782,32 +1113,48 @@ public class TelapiConnector {
 				accountSid, phoneNumber, friendlyName, page, pageSize));
 	}
 
+	/**
+	 * @see #addIncomingPhoneNumber(String, String)
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber addIncomingPhoneNumber(String accountSid,
 			String phoneNumber, String areaCode) throws TelapiException {
 		return returnThrows(incomingPhoneNumberProxy.addIncomingPhoneNumber(
 				accountSid, phoneNumber, areaCode));
 	}
 
+	/**
+	 * @see #deleteIncomingPhoneNumber(String)
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber deleteIncomingPhoneNumber(String accountSid,
 			String incomingPhoneNumberSid) throws TelapiException {
 		return returnThrows(incomingPhoneNumberProxy.deleteIncomingPhoneNumber(
 				accountSid, incomingPhoneNumberSid));
 	}
 
+	/**
+	 * @see #updateIncomingPhoneNumber(String, String, String, HttpMethod, String, HttpMethod, Boolean, String, HttpMethod, String, HttpMethod, String, HttpMethod, String, HttpMethod)
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber updateIncomingPhoneNumber(String accountSid,
 			String incomingPhoneNumberSid, String friendlyName,
 			String voiceUrl, HttpMethod voiceMethod, String voiceFallbackUrl,
 			HttpMethod voiceFallbackMethod, Boolean voiceCallerIdLookup,
 			String smsUrl, HttpMethod smsMethod, String smsFallbackUrl,
-			HttpMethod smsFallbackMethod, String statusCallback,
-			HttpMethod statusCallbackMethod) throws TelapiException {
+			HttpMethod smsFallbackMethod, String hangupCallback,
+			HttpMethod hangupCallbackMethod, String heartbeatUrl, HttpMethod heartbeatMethod) throws TelapiException {
 		return returnThrows(incomingPhoneNumberProxy.updateIncomingPhoneNumber(
 				accountSid, incomingPhoneNumberSid, friendlyName, voiceUrl,
 				voiceMethod, voiceFallbackUrl, voiceFallbackMethod,
 				voiceCallerIdLookup, smsUrl, smsMethod, smsFallbackUrl,
-				smsFallbackMethod, statusCallback, statusCallbackMethod));
+				smsFallbackMethod, hangupCallback, hangupCallbackMethod, heartbeatUrl, heartbeatMethod));
 	}
 
+	/**
+	 * @see #updateIncomingPhoneNumber(String, String, String, HttpMethod, String, HttpMethod, Boolean, String, HttpMethod, String, HttpMethod, String, HttpMethod)
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber updateIncomingPhoneNumber(
 			IncomingPhoneNumberRequest ipnRequest) throws TelapiException {
 		String accountSid = conf.getSid();
@@ -822,15 +1169,33 @@ public class TelapiConnector {
 				ipnRequest.getVoiceCallerIdLookup(), ipnRequest.getSmsUrl(),
 				ipnRequest.getSmsMethod(), ipnRequest.getSmsFallbackUrl(),
 				ipnRequest.getSmsFallbackMethod(),
-				ipnRequest.getStatusCallback(),
-				ipnRequest.getStatusCallbackMethod());
+				ipnRequest.getHangupCallback(),
+				ipnRequest.getHangupCallbackMethod(),
+				ipnRequest.getHeartbeatUrl(),
+				ipnRequest.getHeartbeatMethod());
 	}
 
+	/**
+	 * TelAPI phone numbers associated with an account are represented with the IncomingPhoneNumber resource.
+	 * This method gets information about an IncomingPhoneNumber.
+	 * @param incomingPhoneNumberSid An alphanumeric string used for identification of incoming phone numbers.
+	 * @return The requested IncomingPhoneNumber.
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber viewIncomingPhoneNumber(
 			String incomingPhoneNumberSid) throws TelapiException {
 		return viewIncomingPhoneNumber(conf.getSid(), incomingPhoneNumberSid);
 	}
 
+	/**
+	 * Retrieves a list of all incoming phone number resources associated with a given account.
+	 * @param phoneNumber Specifies which IncomingPhoneNumber resources should be returned in the list request.
+	 * @param friendlyName Specifies that only IncomingPhoneNumber resources matching the input FreindlyName should be returned in the list request.
+	 * @param page Used to return a particular page withing the list.
+	 * @param pageSize Used to specify the amount of list items to return per page.
+	 * @return A list of IncomingPhoneNumber resources.
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumberList listIncomingPhoneNumbers(String phoneNumber,
 			String friendlyName, Long page, Long pageSize)
 			throws TelapiException {
@@ -838,32 +1203,82 @@ public class TelapiConnector {
 				friendlyName, page, pageSize);
 	}
 
+	/**
+	 * TelAPI incoming phone numbers can be added or removed from an account
+	 * through our REST API. Note that adding numbers to an account via the REST
+	 * API costs the same as purchasing them through your account dashboard on
+	 * telapi.com.
+	 * 
+	 * @param phoneNumber
+	 *            Desired phone number to add to the account (E.164 format).
+	 *            Must be a valid and available phone number (see
+	 *            {@link #listAvailablePhoneNumbers(String, String, String, String, String)}
+	 *            ).
+	 * @param areaCode Desired area code of phone number to add to the account.
+	 * @return The added IncomingPhoneNumber.s
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber addIncomingPhoneNumber(String phoneNumber,
 			String areaCode) throws TelapiException {
 		return addIncomingPhoneNumber(conf.getSid(), phoneNumber, areaCode);
 	}
 
+	/**
+	 * Deletes an IncomingPhoneNumber from your account. If the deletion is
+	 * successful the incoming phone number resource of the item you have
+	 * deleted will be returned. Please keep in mind that this resource item
+	 * will be visible only once after deletion in the return so note anything
+	 * about the resource you may need before it no longer exists.
+	 * 
+	 * @param incomingPhoneNumberSid The sid of the IncomingPhoneNumber which is to be deleted.
+	 * @return The deleted IncomingPhoneNumber
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber deleteIncomingPhoneNumber(
 			String incomingPhoneNumberSid) throws TelapiException {
 		return deleteIncomingPhoneNumber(conf.getSid(), incomingPhoneNumberSid);
 	}
 
+	/**
+	 * Updates properties of an IncomingPhoneNumber.
+	 * @param incomingPhoneNumberSid The sid of the IncomingPhoneNumber which is to be updated.
+	 * @param friendlyName The TelAPI phone number in an easier to read domestic format (e.g. 1234567890 to (123)-456-7890).
+	 * @param voiceUrl The URL returning InboundXML incoming phone numbers should execute when connected.
+	 * @param voiceMethod Specifies the HTTP method used to request the VoiceUrl once incoming call connects.
+	 * @param voiceFallbackUrl URL used if any errors occur during execution of InboundXML during a call or at initial request of the VoiceUrl.
+	 * @param voiceFallbackMethod Specifies the HTTP method used to request the VoiceFallBackUrl if it is needed.
+	 * @param voiceCallerIdLookup Specifies whether CNAM caller ID look up is enabled with a particular incoming number.
+	 * @param hangupCallback URL that can be requested to receive notification when and how incoming call has ended.
+	 * @param hangupCallbackMethod Specifies the HTTP method used to request the HangupCallback URL.
+	 * @param heartbeatUrl URL that can be requested every 60 seconds during the call to notify of elapsed time and pass other general information.
+	 * @param heartBeatMethod Specifies the HTTP method used to request the Heartbeat URL.
+	 * @param smsUrl The URL returning InboundXML incoming phone numbers should execute when receiving an sms.
+	 * @param smsMethod Specifies the HTTP method used to request the SmsUrl.
+	 * @param smsFallbackUrl URL used if any errors occur during execution of InboundXML from an sms or at initial request of the SmsUrl.
+	 * @param smsFallbackMethod Specifies the HTTP method used to request the SmsFallbackUrl.
+	 * @return The updated IncomingPhoneNumber.
+	 * @throws TelapiException
+	 */
 	public IncomingPhoneNumber updateIncomingPhoneNumber(
 			String incomingPhoneNumberSid, String friendlyName,
 			String voiceUrl, HttpMethod voiceMethod, String voiceFallbackUrl,
 			HttpMethod voiceFallbackMethod, Boolean voiceCallerIdLookup,
 			String smsUrl, HttpMethod smsMethod, String smsFallbackUrl,
-			HttpMethod smsFallbackMethod, String statusCallback,
-			HttpMethod statusCallbackMethod) throws TelapiException {
+			HttpMethod smsFallbackMethod, String hangupCallback,
+			HttpMethod hangupCallbackMethod, String heartbeatUrl, HttpMethod heartbeatMethod) throws TelapiException {
 		return updateIncomingPhoneNumber(conf.getSid(), incomingPhoneNumberSid,
 				friendlyName, voiceUrl, voiceMethod, voiceFallbackUrl,
 				voiceFallbackMethod, voiceCallerIdLookup, smsUrl, smsMethod,
-				smsFallbackUrl, smsFallbackMethod, statusCallback,
-				statusCallbackMethod);
+				smsFallbackUrl, smsFallbackMethod, hangupCallback,
+				hangupCallbackMethod, heartbeatUrl, heartbeatMethod);
 	}
 
 	// AVAILABLE PHONE NUMBERS
 
+	/**
+	 * @see #listAvailablePhoneNumbers(String, String, String, String, String)
+	 * @throws TelapiException
+	 */
 	public AvailablePhoneNumberList listAvailablePhoneNumbers(
 			String accountSid, String isoCountryCode, String areaCode,
 			String contains, String inRegion, String inPostalCode)
@@ -873,6 +1288,31 @@ public class TelapiConnector {
 						areaCode, contains, inRegion, inPostalCode));
 	}
 
+	/**
+	 * If you want to add a new TelAPI number, you need to know what ones are
+	 * available. Our REST API provides a way to request a list of available
+	 * numbers along with all of their resource properties so you know the
+	 * numbers you have to choose from.
+	 * 
+	 * @param isoCountryCode
+	 *            ISO country code used for search (required).
+	 * @param areaCode
+	 *            Specifies the area code that the returned list of available
+	 *            numbers should be in. Only available for North American
+	 *            numbers
+	 * @param contains
+	 *            Specifies the desired characters contained within the
+	 *            available numbers to list. Allowed values are 0-9, Aa-Zz and
+	 *            *.
+	 * @param inRegion
+	 *            Specifies the desired region of the available numbers to be
+	 *            listed.
+	 * @param inPostalCode
+	 *            Specifies the desired postal code of the available numbers to
+	 *            be listed.
+	 * @return A list of available phone numbers.
+	 * @throws TelapiException
+	 */
 	public AvailablePhoneNumberList listAvailablePhoneNumbers(
 			String isoCountryCode, String areaCode, String contains,
 			String inRegion, String inPostalCode) throws TelapiException {

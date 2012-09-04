@@ -5,6 +5,9 @@ import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import com.telapi.api.json.JsonBooleanParser;
 
+/**
+ * The features available with this incoming phone number. The voice and sms properties are either True or False depending on what the number is capable of.
+ */
 public class PhoneNumberCapabilities {
 	@JsonDeserialize(using = JsonBooleanParser.class)
 	@JsonProperty("voice")

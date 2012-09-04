@@ -79,7 +79,7 @@ public interface ConferenceProxy {
 	@POST
 	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Hangup.json")
 	@Produces("application/json")
-	ClientResponse<StatusResponse> hangupMember(
+	ClientResponse<Conference> hangupMember(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId
@@ -107,7 +107,7 @@ public interface ConferenceProxy {
 	@POST
 	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Play.json")
 	@Produces("application/json")
-	ClientResponse<StatusResponse> playAudio(
+	ClientResponse<Conference> playAudio(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("ConferenceSid") String conferenceSid,
     		@QueryParam("MemberID") String memberId,
