@@ -14,7 +14,7 @@ public class ViewAccountExample {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			Account account = conn.viewAccount("your_account_sid");
+			Account account = conn.viewAccount("{AccountSid}");
 			System.out.println(account.getSid());
 		} catch (TelapiException e) {
 			e.printStackTrace();

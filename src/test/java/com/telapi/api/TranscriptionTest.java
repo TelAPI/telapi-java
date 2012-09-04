@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import com.telapi.api.domain.Recording;
 import com.telapi.api.domain.Transcription;
+import com.telapi.api.domain.enums.TranscriptionStatus;
 import com.telapi.api.domain.enums.TranscriptionType;
 import com.telapi.api.domain.list.TranscriptionList;
 import com.telapi.api.restproxies.RecordingProxy;
@@ -34,7 +35,7 @@ public class TranscriptionTest extends BaseTelapiTest<TranscriptionProxy>{
 	public void testListTranscriptions() {
 		String s = proxy.listTranscriptionsString(conf.getSid(), null, null).getEntity();
 		System.out.println(s);
-		TranscriptionList list = proxy.listTranscriptions(conf.getSid(), null, null).getEntity();
+		TranscriptionList list = proxy.listTranscriptions(conf.getSid(), null, null, TranscriptionStatus.COMPLETED).getEntity();
 		for (Transcription t : list) {
 			System.out.println(t.getSid());
 		}
@@ -42,14 +43,14 @@ public class TranscriptionTest extends BaseTelapiTest<TranscriptionProxy>{
 	
 	@Test
 	public void testViewTranscription() {
-		TranscriptionList list = proxy.listTranscriptions(conf.getSid(), null, null).getEntity();
+		TranscriptionList list = proxy.listTranscriptions(conf.getSid(), null, null, null).getEntity();
 		Transcription t = list.iterator().next();
 		proxy.viewTranscription(conf.getSid(), t.getSid()).getEntity();
 	}
 	
 	@Test
 	public void testViewTranscriptionText() {
-		TranscriptionList list = proxy.listTranscriptions(conf.getSid(), null, null).getEntity();
+		TranscriptionList list = proxy.listTranscriptions(conf.getSid(), null, null, null).getEntity();
 		Transcription t = list.iterator().next();
 		String transcription = proxy.viewTranscriptionText(conf.getSid(), t.getSid()).getEntity();
 		System.out.println(transcription);

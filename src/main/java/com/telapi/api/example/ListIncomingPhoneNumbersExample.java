@@ -2,10 +2,11 @@ package com.telapi.api.example;
 
 import com.telapi.api.TelapiConnector;
 import com.telapi.api.configuration.BasicTelapiConfiguration;
-import com.telapi.api.domain.SmsMessage;
+import com.telapi.api.domain.IncomingPhoneNumber;
+import com.telapi.api.domain.list.IncomingPhoneNumberList;
 import com.telapi.api.exceptions.TelapiException;
 
-public class ViewSmsExample {
+public class ListIncomingPhoneNumbersExample {
 
 	public static void main(String[] args) {
 		BasicTelapiConfiguration conf = new BasicTelapiConfiguration();
@@ -14,8 +15,10 @@ public class ViewSmsExample {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			SmsMessage smsMessage = conn.viewSmsMessage("{SmsMessageSid}");
-			System.out.println(smsMessage.getSid());
+			IncomingPhoneNumberList incomingPhoneNumberList = conn.listIncomingPhoneNumbers();
+			for(IncomingPhoneNumber incomingPhoneNumber : incomingPhoneNumberList) {
+				System.out.println(incomingPhoneNumber.getSid());
+			}
 		} catch (TelapiException e) {
 			e.printStackTrace();
 		}

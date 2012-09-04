@@ -11,6 +11,7 @@ import org.jboss.resteasy.client.ClientResponse;
 
 import com.telapi.api.domain.Transcription;
 import com.telapi.api.domain.enums.HttpMethod;
+import com.telapi.api.domain.enums.TranscriptionStatus;
 import com.telapi.api.domain.enums.TranscriptionType;
 import com.telapi.api.domain.list.TranscriptionList;
 
@@ -38,7 +39,8 @@ public interface TranscriptionProxy {
 	ClientResponse<TranscriptionList> listTranscriptions(
 			@PathParam("AccountSid") String accountSid,
 			@QueryParam(value="Page") Long page,
-    		@QueryParam(value="PageSize") Long pageSize
+    		@QueryParam(value="PageSize") Long pageSize,
+    		@QueryParam(value="Status") TranscriptionStatus status
 			);
 	
 	@GET
@@ -57,7 +59,8 @@ public interface TranscriptionProxy {
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("RecordingSid") String recordingSid,
 			@QueryParam(value="Page") Long page,
-    		@QueryParam(value="PageSize") Long pageSize
+    		@QueryParam(value="PageSize") Long pageSize,
+    		@QueryParam(value="Status") TranscriptionStatus status
 			);
 	
 	@POST

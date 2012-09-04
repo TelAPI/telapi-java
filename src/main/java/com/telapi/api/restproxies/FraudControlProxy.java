@@ -26,8 +26,8 @@ public interface FraudControlProxy {
 	ClientResponse<FraudList> authorizeDestination(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("CountryCode") String countryCode,
-			@QueryParam(value="MobileBreakout") Boolean mobileBreakout,
-    		@QueryParam(value="LandlineBreakout") Boolean landlineBreakout,
+			@QueryParam(value="MobileEnabled") Boolean mobileEnabled,
+    		@QueryParam(value="LandlineEnabled") Boolean landlineEnabled,
     		@QueryParam(value="SmsEnabled") Boolean smsEnabled
 			);
 	
@@ -38,8 +38,8 @@ public interface FraudControlProxy {
 	ClientResponse<FraudList> blockDestination(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("CountryCode") String countryCode,
-			@QueryParam(value="MobileBreakout") Boolean mobileBreakout,
-    		@QueryParam(value="LandlineBreakout") Boolean landlineBreakout,
+			@QueryParam(value="MobileEnabled") Boolean mobileEnabled,
+    		@QueryParam(value="LandlineEnabled") Boolean landlineEnabled,
     		@QueryParam(value="SmsEnabled") Boolean smsEnabled
 			);
 	
@@ -48,8 +48,8 @@ public interface FraudControlProxy {
 	ClientResponse<FraudList> extendDestinationAuth(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("CountryCode") String countryCode,
-			@QueryParam(value="MobileBreakout") Boolean mobileBreakout,
-    		@QueryParam(value="LandlineBreakout") Boolean landlineBreakout,
+			@QueryParam(value="MobileEnabled") Boolean mobileEnabled,
+    		@QueryParam(value="LandlineEnabled") Boolean landlineEnabled,
     		@QueryParam(value="SmsEnabled") Boolean smsEnabled
 			);
 	
@@ -58,8 +58,8 @@ public interface FraudControlProxy {
 	ClientResponse<FraudList> whitelistDestination(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("CountryCode") String countryCode,
-			@QueryParam(value="MobileBreakout") Boolean mobileBreakout,
-    		@QueryParam(value="LandlineBreakout") Boolean landlineBreakout,
+			@QueryParam(value="MobileEnabled") Boolean mobileEnabled,
+    		@QueryParam(value="LandlineEnabled") Boolean landlineEnabled,
     		@QueryParam(value="SmsEnabled") Boolean smsEnabled
 			);
 }

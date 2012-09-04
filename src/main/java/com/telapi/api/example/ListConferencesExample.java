@@ -2,10 +2,11 @@ package com.telapi.api.example;
 
 import com.telapi.api.TelapiConnector;
 import com.telapi.api.configuration.BasicTelapiConfiguration;
-import com.telapi.api.domain.SmsMessage;
+import com.telapi.api.domain.Conference;
+import com.telapi.api.domain.list.ConferenceList;
 import com.telapi.api.exceptions.TelapiException;
 
-public class ViewSmsExample {
+public class ListConferencesExample {
 
 	public static void main(String[] args) {
 		BasicTelapiConfiguration conf = new BasicTelapiConfiguration();
@@ -14,8 +15,10 @@ public class ViewSmsExample {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			SmsMessage smsMessage = conn.viewSmsMessage("{SmsMessageSid}");
-			System.out.println(smsMessage.getSid());
+			ConferenceList conferenceList = conn.listConferences();
+			for(Conference conference : conferenceList) {
+				System.out.println(conference.getSid());
+			}
 		} catch (TelapiException e) {
 			e.printStackTrace();
 		}
