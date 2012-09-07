@@ -2,7 +2,7 @@ package com.telapi.api.example;
 
 import com.telapi.api.TelapiConnector;
 import com.telapi.api.configuration.BasicTelapiConfiguration;
-import com.telapi.api.domain.Recording;
+import com.telapi.api.domain.list.RecordingList;
 import com.telapi.api.exceptions.TelapiException;
 
 public class RecordCallExample {
@@ -14,8 +14,8 @@ public class RecordCallExample {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			Recording recording = conn.recordCall("{CallSid}", true, null, null);
-			System.out.println(recording.getSid());
+			RecordingList list = conn.recordCall("{CallSid}", true, null, null);
+			System.out.println(list.getPagesize());
 		} catch (TelapiException e) {
 			e.printStackTrace();
 		}

@@ -1,29 +1,19 @@
 package com.telapi.api;
 
-import org.junit.Before;
-
+import com.telapi.api.configuration.PropertiesFileTelapiConfiguration;
 import com.telapi.api.configuration.TelapiConfiguration;
-import com.telapi.api.testutil.TestConnector;
 import com.telapi.api.testutil.TestParameters;
 
-public abstract class BaseTelapiTest<T> {
+public abstract class BaseTelapiTest {
 	
-	protected T proxy;
-	private Class<T> className;
 	protected TelapiConfiguration conf;
-	protected TestConnector conn;
 	protected TestParameters testParameters;
+	protected TelapiConnector connector;
 	
-	public BaseTelapiTest(Class<T> className){
-		this.className = className;
+	public BaseTelapiTest(){
 		this.testParameters = new TestParameters();
-	}
-	
-	@Before
-	public void createProxy(){
-		conn = new TestConnector();
-		proxy = conn.createProxy(className);
-		conf = conn.getConfiguration();
+		conf = new PropertiesFileTelapiConfiguration();
+		connector = new TelapiConnector(conf);
 	}
 	
 }

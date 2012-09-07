@@ -6,30 +6,27 @@ import org.junit.Test;
 import com.telapi.api.domain.Application;
 import com.telapi.api.domain.enums.HttpMethod;
 import com.telapi.api.domain.list.ApplicationList;
-import com.telapi.api.restproxies.ApplicationProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class ApplicationTest extends BaseTelapiTest<ApplicationProxy>{
-
-	public ApplicationTest() {
-		super(ApplicationProxy.class);
-	}
+public class ApplicationTest extends BaseTelapiTest {
 	
 	@Test
-	public void testCreateApplication() {
-		Application app = proxy.createApplication(conf.getSid(), "my_app", "www.google.com", HttpMethod.GET, null, 
-				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null).getEntity();
+	public void testCreateApplication() throws TelapiException {
+		Application app = connector.createApplication("my_app", "www.google.com", HttpMethod.GET, "voicefallback.com", 
+				HttpMethod.POST, true, "smsurl.com", HttpMethod.GET, "smsfallback.com", HttpMethod.GET, "heartbeat.com", HttpMethod.GET, "hangupcallback.com", HttpMethod.POST);
 		
 		Assert.assertEquals("heartbeat.com", app.getHeartbeatUrl());
 		Assert.assertEquals("my_app", app.getFriendlyName());
-		proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
+		connector.deleteApplication(app.getSid());
 	}
 	
 	@Test
-	public void testListApplications() {
-		Application app = proxy.createApplication(conf.getSid(), "my_app", "www.google.com", HttpMethod.GET, null, 
-				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null).getEntity();
+	public void testListApplications() throws TelapiException {
+		Application app = connector.createApplication("my_app", "www.google.com", HttpMethod.GET, null, 
+				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null);
 		
-		ApplicationList list = proxy.listApplications(conf.getSid(), null, null, null).getEntity();
+		
+		ApplicationList list = connector.listApplications("my_app", 0L, 10L);
 		
 		boolean found = false;
 		for(Application lApp : list) {
@@ -42,45 +39,46 @@ public class ApplicationTest extends BaseTelapiTest<ApplicationProxy>{
 	}
 	
 	@Test
-	public void testViewApplication() {
-		Application app = proxy.createApplication(conf.getSid(), "my_app", "www.google.com", HttpMethod.GET, null, 
-				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null).getEntity();
+	public void testViewApplication() throws TelapiException {
+		Application app = connector.createApplication("my_app", "www.google.com", HttpMethod.GET, null, 
+				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null);
 		
-		Application vApp = proxy.viewApplication(conf.getSid(), app.getSid()).getEntity();
+		Application vApp = connector.viewApplication(app.getSid());
 		
 		Assert.assertEquals(app.getSid(), vApp.getSid());
 		Assert.assertEquals("heartbeat.com", vApp.getHeartbeatUrl());
 		Assert.assertEquals("my_app", vApp.getFriendlyName());
-		proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
+		connector.deleteApplication(app.getSid());
 	}
 	
 	@Test
-	public void testUpdateApplication() {
-		Application app = proxy.createApplication(conf.getSid(), "my_app", "www.google.com", HttpMethod.GET, null, 
-				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null).getEntity();
+	public void testUpdateApplication() throws TelapiException {
+		Application app = connector.createApplication("my_app", "www.google.com", HttpMethod.GET, null, 
+				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null);
 		
 		Assert.assertEquals("heartbeat.com", app.getHeartbeatUrl());
 		Assert.assertEquals(HttpMethod.GET, app.getHeartbeatMethod());
 		
-		Application uApp = proxy.updateApplication(conf.getSid(), app.getSid(), 
-				null, "voice.com", null, null, null, null, null, null, null, null, "nobeat.com", HttpMethod.POST, null, null).getEntity();
+		Application uApp = connector.updateApplication(app.getSid(), 
+				"my_app", "www.google.com", HttpMethod.GET, "voicefallback.com", 
+				HttpMethod.POST, true, "smsurl.com", HttpMethod.GET, "smsfallback.com", HttpMethod.GET, "nobeat.com", HttpMethod.POST, "hangupcallback.com", HttpMethod.POST);
 		
-		Application vApp = proxy.viewApplication(conf.getSid(), uApp.getSid()).getEntity();
+		Application vApp = connector.viewApplication(uApp.getSid());
 		
 		Assert.assertEquals(vApp.getSid(), app.getSid());
 		Assert.assertEquals("nobeat.com", vApp.getHeartbeatUrl());
 		Assert.assertEquals(HttpMethod.POST, vApp.getHeartbeatMethod());
-		proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
+		connector.deleteApplication(app.getSid());
 	}
 	
 	@Test
-	public void testDeleteApplication() {
-		Application app = proxy.createApplication(conf.getSid(), "my_app", "www.google.com", HttpMethod.GET, null, 
-				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null).getEntity();
+	public void testDeleteApplication() throws TelapiException {
+		Application app = connector.createApplication("my_app", "www.google.com", HttpMethod.GET, null, 
+				null, null, null, null, null, null, "heartbeat.com", HttpMethod.GET, null, null);
 		
-		proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
+		connector.deleteApplication(app.getSid());
 		
-		ApplicationList list = proxy.listApplications(conf.getSid(), null, null, null).getEntity();
+		ApplicationList list = connector.listApplications(null, null, null);
 
 		for(Application lApp : list) {
 			if (lApp.getSid().equals(app.getSid())) {
@@ -90,11 +88,11 @@ public class ApplicationTest extends BaseTelapiTest<ApplicationProxy>{
 	}
 	
 	@Test
-	public void testDeleteAllApplications() {
-		ApplicationList list = proxy.listApplications(conf.getSid(), null, null, null).getEntity();
+	public void testDeleteAllApplications() throws TelapiException {
+		ApplicationList list = connector.listApplications(null, null, null);
 
 		for(Application app : list) {
-			proxy.deleteApplication(conf.getSid(), app.getSid()).getEntity();
+			connector.deleteApplication(app.getSid());
 		}
 	}
 }

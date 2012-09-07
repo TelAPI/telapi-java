@@ -5,46 +5,40 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.telapi.api.domain.IncomingPhoneNumber;
+import com.telapi.api.domain.enums.HttpMethod;
 import com.telapi.api.domain.list.IncomingPhoneNumberList;
-import com.telapi.api.restproxies.IncomingPhoneNumberProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class IncomingPhoneNumberTest extends BaseTelapiTest<IncomingPhoneNumberProxy>{
-
-	public IncomingPhoneNumberTest() {
-		super(IncomingPhoneNumberProxy.class);
+public class IncomingPhoneNumberTest extends BaseTelapiTest {
+	
+	@Test
+	public void testListPhoneNumbers() throws TelapiException {
+		connector.listIncomingPhoneNumbers("1", "name", 0L, 10L);
 	}
 	
 	@Test
-	public void testListPhoneNumbers() {
-		IncomingPhoneNumberList list = proxy.listIncomingPhoneNumbers(conf.getSid(), null, null, null, null).getEntity();
+	public void testViewPhoneNumber() throws TelapiException {
+		IncomingPhoneNumberList list = connector.listIncomingPhoneNumbers(null, null, null, null);
 		for(IncomingPhoneNumber number : list) {
-			System.out.println(number.getPhoneNumber());
-		}
-	}
-	
-	@Test
-	public void testViewPhoneNumber() {
-		IncomingPhoneNumberList list = proxy.listIncomingPhoneNumbers(conf.getSid(), null, null, null, null).getEntity();
-		for(IncomingPhoneNumber number : list) {
-			proxy.viewIncomingPhoneNumber(conf.getSid(), number.getSid()).getEntity();
+			connector.viewIncomingPhoneNumber(number.getSid());
 		}
 	}
 	
 
-	public void addPhoneNumbers() {
-		proxy.addIncomingPhoneNumber(conf.getSid(), testParameters.getPhone1(), testParameters.getArea1()).getEntity();
-		proxy.addIncomingPhoneNumber(conf.getSid(), testParameters.getPhone2(), testParameters.getArea2()).getEntity();
+	public void addPhoneNumbers() throws TelapiException {
+		connector.addIncomingPhoneNumber(testParameters.getPhone1(), testParameters.getArea1());
+		connector.addIncomingPhoneNumber(testParameters.getPhone2(), testParameters.getArea2());
 	}
 	
 	@Test
-	public void testDeleteAndAddPhoneNumber() {
+	public void testDeleteAndAddPhoneNumber() throws TelapiException {
 		
-		IncomingPhoneNumberList list = proxy.listIncomingPhoneNumbers(conf.getSid(), null, null, 0L, 1L).getEntity();
+		IncomingPhoneNumberList list = connector.listIncomingPhoneNumbers(null, null, 0L, 1L);
 		IncomingPhoneNumber number = list.iterator().next();
 		
-		proxy.deleteIncomingPhoneNumber(conf.getSid(), number.getSid()).getEntity();
+		connector.deleteIncomingPhoneNumber(number.getSid());
 		
-		list = proxy.listIncomingPhoneNumbers(conf.getSid(), null, null, null, null).getEntity();
+		list = connector.listIncomingPhoneNumbers(null, null, null, null);
 		for(IncomingPhoneNumber lNumber : list) {
 			if (lNumber.getSid().equals(number.getSid())) {
 				Assert.fail("Number wasn't deleted!");
@@ -53,22 +47,23 @@ public class IncomingPhoneNumberTest extends BaseTelapiTest<IncomingPhoneNumberP
 		}
 		
 		String prefix = number.getPhoneNumber().substring(0, 5);
-		proxy.addIncomingPhoneNumber(conf.getSid(), number.getPhoneNumber(), prefix).getEntity();
+		connector.addIncomingPhoneNumber(number.getPhoneNumber(), prefix);
 		
 	}
 	
 	@Test
-	public void testUpdateNumber(){
-		IncomingPhoneNumberList list = proxy.listIncomingPhoneNumbers(conf.getSid(), null, null, null, null).getEntity();
+	public void testUpdateNumber() throws TelapiException{
+		IncomingPhoneNumberList list = connector.listIncomingPhoneNumbers(null, null, null, null);
 		IncomingPhoneNumber number = list.iterator().next();
-		proxy.updateIncomingPhoneNumber(conf.getSid(), number.getSid(), "first_number", 
-				"voice.com", null, null, null, null, null, null, null, null, null, null, null, null).getEntity();
-		IncomingPhoneNumber nr = proxy.viewIncomingPhoneNumber(conf.getSid(), number.getSid()).getEntity();
+		connector.updateIncomingPhoneNumber(number.getSid(), "first_number", 
+				"voice.com", HttpMethod.POST, "fallbackUrl.com", HttpMethod.GET, false, "smsurl.com", HttpMethod.POST, 
+				"smsfallbackurl.com", HttpMethod.GET, "hangup.com", HttpMethod.POST, "heartbeat.com", HttpMethod.GET);
+		IncomingPhoneNumber nr = connector.viewIncomingPhoneNumber(number.getSid());
 		Assert.assertEquals("voice.com", nr.getVoiceUrl().trim());
 		
-		proxy.updateIncomingPhoneNumber(conf.getSid(), number.getSid(), null, 
-				"", null, null, null, null, null, null, null, null, null, null, null, null).getEntity();
-		nr = proxy.viewIncomingPhoneNumber(conf.getSid(), number.getSid()).getEntity();
+		connector.updateIncomingPhoneNumber(number.getSid(), null, 
+				"", null, null, null, null, null, null, null, null, null, null, null, null);
+		nr = connector.viewIncomingPhoneNumber(number.getSid());
 		Assert.assertEquals("", nr.getVoiceUrl().trim());
 		
 	}

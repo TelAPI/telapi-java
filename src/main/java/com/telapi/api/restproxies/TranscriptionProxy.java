@@ -44,15 +44,6 @@ public interface TranscriptionProxy {
 			);
 	
 	@GET
-	@Path("Accounts/{AccountSid}/Transcriptions.json")
-	@Produces("application/json")
-	ClientResponse<String> listTranscriptionsString(
-			@PathParam("AccountSid") String accountSid,
-			@QueryParam(value="Page") Long page,
-    		@QueryParam(value="PageSize") Long pageSize
-			);
-	
-	@GET
 	@Path("Accounts/{AccountSid}/{RecordingSid}/Transcriptions.json")
 	@Produces("application/json")
 	ClientResponse<TranscriptionList> listRecordingTranscriptions(

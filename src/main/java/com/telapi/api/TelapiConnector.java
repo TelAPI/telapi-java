@@ -21,7 +21,6 @@ import com.telapi.api.domain.IncomingPhoneNumber;
 import com.telapi.api.domain.Notification;
 import com.telapi.api.domain.Recording;
 import com.telapi.api.domain.SmsMessage;
-import com.telapi.api.domain.StatusResponse;
 import com.telapi.api.domain.Transcription;
 import com.telapi.api.domain.enums.AudioDirection;
 import com.telapi.api.domain.enums.CallInterruptStatus;
@@ -628,7 +627,7 @@ public class TelapiConnector {
 	 * @see #recordCall(String, Boolean, Long, String)
 	 * @throws TelapiException
 	 */
-	public Recording recordCall(String accountSid, String callSid,
+	public RecordingList recordCall(String accountSid, String callSid,
 			Boolean record, Long timeLimit, String callbackUrl)
 			throws TelapiException {
 		return returnThrows(callProxy.recordCall(accountSid, callSid, record,
@@ -654,10 +653,10 @@ public class TelapiConnector {
 	 * @param callbackUrl
 	 *            URL where recording information will be relayed to after it
 	 *            has completed.
-	 * @return The created Recording.
+	 * @return A list of recordings.
 	 * @throws TelapiException
 	 */
-	public Recording recordCall(String callSid, Boolean record, Long timeLimit,
+	public RecordingList recordCall(String callSid, Boolean record, Long timeLimit,
 			String callbackUrl) throws TelapiException {
 		return recordCall(conf.getSid(), callSid, record, timeLimit,
 				callbackUrl);
@@ -746,12 +745,6 @@ public class TelapiConnector {
 				conferenceSid, memberId));
 	}
 
-	// public StatusResponse speakText(String accountSid, String conferenceSid,
-	// String memberId, String text) throws TelapiException {
-	// return returnThrows(conferenceProxy.speakText(accountSid,
-	// conferenceSid, memberId, text));
-	// }
-
 	/**
 	 * @see #playAudioToConference(String, String, String)
 	 * @throws TelapiException
@@ -761,26 +754,6 @@ public class TelapiConnector {
 			throws TelapiException {
 		return returnThrows(conferenceProxy.playAudio(accountSid,
 				conferenceSid, memberId, url));
-	}
-
-	/**
-	 * @see #startRecording(String)
-	 * @throws TelapiException
-	 */
-	public StatusResponse startRecording(String accountSid, String conferenceSid)
-			throws TelapiException {
-		return returnThrows(conferenceProxy.startRecording(accountSid,
-				conferenceSid));
-	}
-
-	/**
-	 * @see #stopRecording(String)
-	 * @throws TelapiException
-	 */
-	public StatusResponse stopRecording(String accountSid, String conferenceSid)
-			throws TelapiException {
-		return returnThrows(conferenceProxy.stopRecording(accountSid,
-				conferenceSid));
 	}
 
 	/**
@@ -946,11 +919,6 @@ public class TelapiConnector {
 		return kickMember(conf.getSid(), conferenceSid, memberId);
 	}
 
-	// public StatusResponse speakText(String conferenceSid, String memberId,
-	// String text) throws TelapiException {
-	// return speakText(conf.getSid(), conferenceSid, memberId, text);
-	// }
-
 	/**
 	 * Pre-recorded sound from a file can be played to conference members.
 	 * 
@@ -968,16 +936,6 @@ public class TelapiConnector {
 		return playAudioToConference(conf.getSid(), conferenceSid, memberId,
 				url);
 	}
-
-	// public StatusResponse startRecording(String conferenceSid)
-	// throws TelapiException {
-	// return startRecording(conf.getSid(), conferenceSid);
-	// }
-	//
-	// public StatusResponse stopRecording(String conferenceSid)
-	// throws TelapiException {
-	// return stopRecording(conf.getSid(), conferenceSid);
-	// }
 
 	// APPLICATIONS
 

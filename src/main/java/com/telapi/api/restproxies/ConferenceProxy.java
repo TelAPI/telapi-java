@@ -10,7 +10,6 @@ import javax.ws.rs.QueryParam;
 import org.jboss.resteasy.client.ClientResponse;
 
 import com.telapi.api.domain.Conference;
-import com.telapi.api.domain.StatusResponse;
 import com.telapi.api.domain.list.ConferenceList;
 
 public interface ConferenceProxy {
@@ -94,15 +93,15 @@ public interface ConferenceProxy {
     		@QueryParam("MemberID") String memberId
 	);
 	
-	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Say.json")
-	@Produces("application/json")
-	ClientResponse<StatusResponse> speakText(
-			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceSid") String conferenceSid,
-    		@QueryParam("MemberID") String memberId,
-    		@QueryParam("Text") String text
-	);
+//	@POST
+//	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Say.json")
+//	@Produces("application/json")
+//	ClientResponse<StatusResponse> speakText(
+//			@PathParam("AccountSid") String accountSid,
+//			@PathParam("ConferenceSid") String conferenceSid,
+//    		@QueryParam("MemberID") String memberId,
+//    		@QueryParam("Text") String text
+//	);
 	
 	@POST
 	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/Play.json")
@@ -115,21 +114,21 @@ public interface ConferenceProxy {
 	);
 	
 	
-	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/RecordStart.json")
-	@Produces("application/json")
-	ClientResponse<StatusResponse> startRecording(
-			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceSid") String conferenceSid
-	);
-	
-	@POST
-	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/RecordStop.json")
-	@Produces("application/json")
-	ClientResponse<StatusResponse> stopRecording(
-			@PathParam("AccountSid") String accountSid,
-			@PathParam("ConferenceSid") String conferenceSid
-	);
+//	@POST
+//	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/RecordStart.json")
+//	@Produces("application/json")
+//	ClientResponse<StatusResponse> startRecording(
+//			@PathParam("AccountSid") String accountSid,
+//			@PathParam("ConferenceSid") String conferenceSid
+//	);
+//	
+//	@POST
+//	@Path("Accounts/{AccountSid}/Conferences/{ConferenceSid}/RecordStop.json")
+//	@Produces("application/json")
+//	ClientResponse<StatusResponse> stopRecording(
+//			@PathParam("AccountSid") String accountSid,
+//			@PathParam("ConferenceSid") String conferenceSid
+//	);
 	
 	
 	

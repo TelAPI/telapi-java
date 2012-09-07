@@ -5,91 +5,69 @@ import org.junit.Test;
 import com.telapi.api.domain.Conference;
 import com.telapi.api.domain.ConferenceMember;
 import com.telapi.api.domain.list.ConferenceList;
-import com.telapi.api.restproxies.ConferenceProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class ConferenceTest extends BaseTelapiTest<ConferenceProxy>{
+public class ConferenceTest extends BaseTelapiTest {
 	
-	public ConferenceTest() {
-		super(ConferenceProxy.class);
-	}
 
 	@Test
-	public void testViewConference() {
-		ConferenceList conferences = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity();
+	public void testViewConference() throws TelapiException {
+		ConferenceList conferences = connector.listConferences(null, null, null, null, null);
 		Conference c = conferences.iterator().next();
-		proxy.viewConference(conf.getSid(), c.getSid(), null, null, null).getEntity();
+		connector.viewConference(c.getSid());
 	}
 
 	@Test
-	public void testListConferences() {
-		proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity();
+	public void testListConferences() throws TelapiException {
+		connector.listConferences("1", false, false, 0L, 10L);
 	}
 
 	@Test
-	public void testMuteMember() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
+	public void testMuteMember() throws TelapiException {
+		Conference c = connector.listConferences(null, null, null, null, null).iterator().next();
 		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.muteMember(conf.getSid(), c.getSid(), member.getId()).getEntity();
+		connector.muteMember(c.getSid(), member.getId());
 	}
 
 	@Test
-	public void testUnMuteMember() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
+	public void testUnMuteMember() throws TelapiException {
+		Conference c = connector.listConferences(null, null, null, null, null).iterator().next();
 		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.unMuteMember(conf.getSid(), c.getSid(), member.getId()).getEntity();
+		connector.unMuteMember(c.getSid(), member.getId());
 	}
 
 	@Test
-	public void testDeafMember() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
+	public void testDeafMember() throws TelapiException {
+		Conference c = connector.listConferences(null, null, null, null, null).iterator().next();
 		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.deafMember(conf.getSid(), c.getSid(), member.getId()).getEntity();
+		connector.deafMember(c.getSid(), member.getId());
 	}
 
 	@Test
-	public void testUnDeafMember() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
+	public void testUnDeafMember() throws TelapiException {
+		Conference c = connector.listConferences(null, null, null, null, null).iterator().next();
 		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.unDeafMember(conf.getSid(), c.getSid(), member.getId()).getEntity();
+		connector.unDeafMember(c.getSid(), member.getId());
 	}
 
 	@Test
-	public void testSpeakText() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
+	public void testPlayAudio() throws TelapiException {
+		Conference c = connector.listConferences(null, null, null, null, null).iterator().next();
 		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.speakText(conf.getSid(), c.getSid(), member.getId(), "Hello member.").getEntity();
-	}
-
-	@Test
-	public void testPlayAudio() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
-		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.playAudio(conf.getSid(), c.getSid(), member.getId(), testParameters.getMp3Url()).getEntity();
-	}
-
-	@Test
-	public void testStartRecording() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
-		proxy.startRecording(conf.getSid(), c.getSid()).getEntity();
-	}
-
-	@Test
-	public void testStopRecording() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
-		proxy.stopRecording(conf.getSid(), c.getSid()).getEntity();
+		connector.playAudioToConference(c.getSid(), member.getId(), testParameters.getMp3Url());
 	}
 	
 	@Test
-	public void testKickMember() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
+	public void testKickMember() throws TelapiException {
+		Conference c = connector.listConferences(null, null, null, null, null).iterator().next();
 		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.kickMember(conf.getSid(), c.getSid(), member.getId()).getEntity();
+		connector.kickMember(c.getSid(), member.getId());
 	}
 	
 	@Test
-	public void testHangupMember() {
-		Conference c = proxy.listConferences(conf.getSid(), null, null, null, null, null).getEntity().iterator().next();
+	public void testHangupMember() throws TelapiException {
+		Conference c = connector.listConferences(null, null, null, null, null).iterator().next();
 		ConferenceMember member = c.getMembers().iterator().next();
-		proxy.hangupMember(conf.getSid(), c.getSid(), member.getId()).getEntity();
+		connector.hangupMember(c.getSid(), member.getId());
 	}
 }

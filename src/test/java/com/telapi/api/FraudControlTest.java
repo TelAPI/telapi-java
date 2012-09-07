@@ -2,37 +2,33 @@ package com.telapi.api;
 
 import org.junit.Test;
 
-import com.telapi.api.restproxies.FraudControlProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class FraudControlTest extends BaseTelapiTest<FraudControlProxy>{
+public class FraudControlTest extends BaseTelapiTest {
 
-	public FraudControlTest() {
-		super(FraudControlProxy.class);
+	@Test
+	public void testListFraudControlResources() throws TelapiException {
+		connector.listFraudControlResources(0L, 15L);
 	}
 	
 	@Test
-	public void testListFraudControlResources() {
-		proxy.listFraudControlResources(conf.getSid(), null, null).getEntity();
+	public void testBlockDestination() throws TelapiException {
+		connector.blockDestination("US", true, true, true);
 	}
 	
 	@Test
-	public void testBlockDestination() {
-		proxy.blockDestination(conf.getSid(), "US", true, true, true).getEntity();
+	public void testAuthorizeDestination() throws TelapiException {
+		connector.authorizeDestination("US", true, true, true);
 	}
 	
 	@Test
-	public void testAuthorizeDestination() {
-		proxy.authorizeDestination(conf.getSid(), "US", true, true, true).getEntity();
+	public void testExtendDestination() throws TelapiException {
+		connector.extendDestinationAuth("US", true, true, true);
 	}
 	
 	@Test
-	public void testExtendDestination() {
-		proxy.extendDestinationAuth(conf.getSid(), "US", true, true, true).getEntity();
-	}
-	
-	@Test
-	public void testWhitelistDestination() {
-		proxy.whitelistDestination(conf.getSid(), "US", true, true, true).getEntity();
+	public void testWhitelistDestination() throws TelapiException {
+		connector.whitelistDestination("US", true, true, true);
 	}
 
 }

@@ -2,16 +2,12 @@ package com.telapi.api;
 
 import org.junit.Test;
 
-import com.telapi.api.restproxies.AvailablePhoneNumberProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class AvailablePhoneNumbersTest extends BaseTelapiTest<AvailablePhoneNumberProxy>{
-	
-	public AvailablePhoneNumbersTest() {
-		super(AvailablePhoneNumberProxy.class);
-	}
+public class AvailablePhoneNumbersTest extends BaseTelapiTest {
 	
 	@Test
-	public void testListAvailablePhoneNumbers(){
-		proxy.listAvailablePhoneNumbers(conf.getSid(), "US", "425", "999", "KS", "66101").getEntity();
+	public void testListAvailablePhoneNumbers() throws TelapiException{
+		connector.listAvailablePhoneNumbers("US", "425", "999", "KS", "66101");
 	}
 }

@@ -2,18 +2,14 @@ package com.telapi.api;
 
 import org.junit.Test;
 
-import com.telapi.api.restproxies.AccountsProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class AccountTest extends BaseTelapiTest<AccountsProxy>{
-
-	public AccountTest() {
-		super(AccountsProxy.class);
-	}
-
+public class AccountTest extends BaseTelapiTest{
+	
 	@Test
-	public void testGetAccount(){
-		proxy.getAccount(conf.getSid()).getEntity();
-		proxy.getAccounts().getEntity();
+	public void testGetAccount() throws TelapiException{
+		connector.viewAccount(conf.getSid());
+		connector.viewAccounts();
 	}
 	
 }

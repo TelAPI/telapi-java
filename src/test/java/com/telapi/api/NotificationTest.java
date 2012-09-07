@@ -4,42 +4,30 @@ import java.util.Iterator;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import com.telapi.api.domain.Call;
 import com.telapi.api.domain.Notification;
 import com.telapi.api.domain.enums.LogLevel;
 import com.telapi.api.domain.list.NotificationList;
-import com.telapi.api.restproxies.CallProxy;
-import com.telapi.api.restproxies.NotificationProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class NotificationTest extends BaseTelapiTest<NotificationProxy> {
+public class NotificationTest extends BaseTelapiTest  {
 
-	private CallProxy callProxy;
-	
-	public NotificationTest() {
-		super(NotificationProxy.class);
-	}
-	
-	@Before
-	public void before(){
-		callProxy = conn.createProxy(CallProxy.class);
-	}
 
 	@Test
-	public void testListNotifications(){
-		proxy.listNotifications(conf.getSid(), LogLevel.INFO, 0L, 10L).getEntity();
+	public void testListNotifications() throws TelapiException{
+		connector.listNotifications(LogLevel.INFO, 0L, 10L);
 	}
 	
 	@Test
-	public void testListCallNotifications(){
-		NotificationList list = proxy.listNotifications(conf.getSid(), LogLevel.INFO, null, null).getEntity();
+	public void testListCallNotifications() throws TelapiException {
+		NotificationList list = connector.listNotifications(LogLevel.INFO, 0L, 10L);
 		Notification n = null;
-		Call c = callProxy.listCalls(conf.getSid(), null, null, null, null, null, 0L, 1L).getEntity().iterator().next();
+		Call c = connector.listCalls(null, null, null, null, null, 0L, 1L).iterator().next();
 		Iterator<Notification> it = list.iterator();
 		while ((n = it.next()).getCallSid() == null);
-		NotificationList cList = proxy.listCallNotifications(conf.getSid(), c.getSid(), LogLevel.INFO, null, null).getEntity();
+		NotificationList cList = connector.listCallNotifications(c.getSid(), LogLevel.INFO, 0L, 10L);
 		
 		boolean found = false;
 		for(Notification n2 : cList) {
@@ -52,10 +40,10 @@ public class NotificationTest extends BaseTelapiTest<NotificationProxy> {
 	}
 	
 	@Test
-	public void testViewNotification() {
-		NotificationList list = proxy.listNotifications(conf.getSid(), LogLevel.INFO, null, null).getEntity();
+	public void testViewNotification() throws TelapiException {
+		NotificationList list = connector.listNotifications(LogLevel.INFO, null, null);
 		Notification n = list.iterator().next();
-		Notification vNot = proxy.viewNotification(conf.getSid(), n.getSid()).getEntity();
+		Notification vNot = connector.viewNotification(n.getSid());
 		Assert.assertEquals(vNot.getSid(), n.getSid());
 	}
 

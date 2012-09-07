@@ -1,80 +1,78 @@
 package com.telapi.api;
 
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.telapi.api.domain.Call;
 import com.telapi.api.domain.enums.AudioDirection;
 import com.telapi.api.domain.enums.CallInterruptStatus;
+import com.telapi.api.domain.enums.CallStatus;
 import com.telapi.api.domain.enums.HttpMethod;
 import com.telapi.api.domain.enums.Legs;
 import com.telapi.api.domain.list.CallList;
-import com.telapi.api.restproxies.CallProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class CallTest extends BaseTelapiTest<CallProxy>{
-	
-	public CallTest() {
-		super(CallProxy.class);
-	}
+public class CallTest extends BaseTelapiTest{
 
 	@Test
-	public void testListCalls() {
-		proxy.listCalls(conf.getSid(), null, null, null, null, null, 0L, 5L).getEntity();
+	public void testListCalls() throws TelapiException {
+		connector.listCalls("1", "1", CallStatus.COMPLETED, new Date(0L), new Date(), 0L, 5L);
 	}
 	
 	@Test
-	public void makeCall() {
-		Call call = proxy.makeCall(conf.getSid(), testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null).getEntity();
+	public void makeCall() throws TelapiException {
+		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", testParameters.getPhone2(), HttpMethod.POST, 
+				"fallbackurl.com", HttpMethod.GET, "statusCallback.com", HttpMethod.POST, "123", 15L, false);
 		Assert.assertNotNull(call);
-		Call receivedCall = proxy.viewCall(conf.getSid(), call.getSid()).getEntity();
+		Call receivedCall = connector.viewCall(call.getSid());
 		
-		Assert.assertEquals(call.getSid(), receivedCall.getSid());
-		
-		//proxy.hangupCall(conf.getSid(), call.getSid(), CallInterruptStatus.COMPLETED).getEntity();
+		Assert.assertEquals(call.getSid(), receivedCall.getSid());		
+		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
 		
 	}
 	
 	@Test
-	public void hangUpAll() {
-		CallList list = proxy.listCalls(conf.getSid(), null, null, null, null, null, null, null).getEntity();
+	public void hangUpAll() throws TelapiException {
+		CallList list = connector.listCalls(null, null, null, null, null, null, null);
 		for (Call c : list) {
-			proxy.hangupCall(c.getAccountSid(), c.getSid(), CallInterruptStatus.COMPLETED).getEntity();
+			connector.hangUpCall(c.getSid(), "hangupurl.com", HttpMethod.POST);
 		}
 	}
 	
 	@Test
-	public void testInterruptCall() {
-		Call call = proxy.makeCall(conf.getSid(), testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null).getEntity();
-		proxy.interruptLiveCall(conf.getSid(), call.getSid(), "http://www.telapi.com/ivr/welcome/call", HttpMethod.GET, CallInterruptStatus.CANCELED).getEntity();
-		proxy.hangupCall(conf.getSid(), call.getSid(), CallInterruptStatus.COMPLETED).getEntity();
+	public void testInterruptCall() throws TelapiException {
+		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
+		connector.interruptLiveCall(call.getSid(), "http://www.telapi.com/ivr/welcome/call", HttpMethod.GET, CallInterruptStatus.CANCELED);
+		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
 	}
 	
 	@Test
-	public void testSendDigits() {
-		Call call = proxy.makeCall(conf.getSid(), testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null).getEntity();
-		proxy.sendDigits(conf.getSid(), call.getSid(), "123123wwww123", Legs.BOTH).getEntity();
-		proxy.hangupCall(conf.getSid(), call.getSid(), CallInterruptStatus.COMPLETED).getEntity();	
+	public void testSendDigits() throws TelapiException {
+		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
+		connector.sendDigits(call.getSid(), "123123wwww123", Legs.BOTH);
+		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);	
 	}
 	
 	@Test
-	public void testPlaySound() {
-		Call call = proxy.makeCall(conf.getSid(), testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null).getEntity();
-		
-		proxy.playAudio(conf.getSid(), call.getSid(), "http://www.freeinfosociety.com/media/sounds/198.mp3", null, Legs.BOTH, false, true).getEntity();
-		proxy.hangupCall(conf.getSid(), call.getSid(), CallInterruptStatus.COMPLETED).getEntity();
+	public void testPlaySound() throws TelapiException {
+		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
+		connector.playAudioToCall(call.getSid(), "http://www.freeinfosociety.com/media/sounds/198.mp3", 15L, Legs.BOTH, false, true);
+		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
 	}
 	
 	@Test
-	public void testVoiceEffects() {
-		Call call = proxy.makeCall(conf.getSid(), testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null).getEntity();
-		proxy.voiceEffects(conf.getSid(), call.getSid(), AudioDirection.OUT, 0.7, 2L, 1L, 0.9).getEntity();
-		proxy.hangupCall(conf.getSid(), call.getSid(), CallInterruptStatus.COMPLETED).getEntity();
+	public void testVoiceEffects() throws TelapiException {
+		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
+		connector.voiceEffects(call.getSid(), AudioDirection.OUT, 0.7, 2L, 1L, 0.9);
+		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
 	}
 	
 	@Test
-	public void testRecordCalls() {
-		Call call = proxy.makeCall(conf.getSid(), testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null).getEntity();
-		proxy.recordCall(conf.getSid(), call.getSid(), true, 100L, null).getEntity();
-		proxy.hangupCall(conf.getSid(), call.getSid(), CallInterruptStatus.COMPLETED).getEntity();
+	public void testRecordCalls() throws TelapiException {
+		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
+		connector.recordCall(call.getSid(), true, 100L, "callback.url");
+		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
 	}
 }

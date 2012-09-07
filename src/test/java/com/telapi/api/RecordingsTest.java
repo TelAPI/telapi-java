@@ -1,40 +1,28 @@
 package com.telapi.api;
 
-import org.jboss.resteasy.client.ClientResponse;
-import org.junit.Before;
+import java.util.Date;
+
 import org.junit.Test;
 
 import com.telapi.api.domain.Call;
 import com.telapi.api.domain.Recording;
 import com.telapi.api.domain.list.RecordingList;
-import com.telapi.api.restproxies.CallProxy;
-import com.telapi.api.restproxies.RecordingProxy;
+import com.telapi.api.exceptions.TelapiException;
 
-public class RecordingsTest extends BaseTelapiTest<RecordingProxy>{
+public class RecordingsTest extends BaseTelapiTest {
 
-	public RecordingsTest() {
-		super(RecordingProxy.class);
-	}
-
-	@Before
-	public void createCallProxy(){
-		callProxy = conn.createProxy(CallProxy.class);
-	}
-	
-	private CallProxy callProxy;
-	
 	@Test
-	public void testListRecordings(){
-		RecordingList list = proxy.listRecordings(conf.getSid(), null, null, null, null).getEntity();
+	public void testListRecordings() throws TelapiException {
+		RecordingList list = connector.listRecordings(new Date(0), new Date(), 0L, 10L);
 		for(Recording r : list) {
 			System.out.println(r.getCallSid() + " " + r.getSid());
 		}
 	}
 	
 	@Test
-	public void testListCallRecordings(){
-		Call c = callProxy.listCalls(conf.getSid(), null, null, null, null, null, null, null).getEntity().iterator().next();
-		RecordingList list = proxy.listCallRecordings(conf.getSid(), c.getSid(), null, null, null, null).getEntity();
+	public void testListCallRecordings() throws TelapiException {
+		Call c = connector.listCalls(null, null, null, null, null, null, null).iterator().next();
+		RecordingList list = connector.listCallRecordings(c.getSid(), new Date(0), new Date(), 0L, 10L);
 		
 		for(Recording r : list) {
 			System.out.println(r.getCallSid() + " " + r.getSid());
@@ -42,19 +30,17 @@ public class RecordingsTest extends BaseTelapiTest<RecordingProxy>{
 	}
 	
 	@Test
-	public void testViewRecording(){
-		RecordingList list = proxy.listRecordings(conf.getSid(), null, null, null, null).getEntity();
+	public void testViewRecording() throws TelapiException {
+		RecordingList list = connector.listRecordings(null, null, null, null);
 		Recording r = list.iterator().next();
-		proxy.viewRecording(conf.getSid(), r.getSid());
+		connector.viewRecording(r.getSid());
 	}
 	
 	@Test
-	public void testGetRecordingUrl(){
-		RecordingList list = proxy.listRecordings(conf.getSid(), null, null, null, null).getEntity();
+	public void testGetRecordingUrl() throws TelapiException {
+		RecordingList list = connector.listRecordings(null, null, null, null);
 		Recording r = list.iterator().next();
-		ClientResponse<String> response = proxy.getRecording(conf.getSid(), r.getSid());
-		String url = response.getLocation().getHref();
-		response.getEntity();
+		String url = connector.getRecordingUrl(r.getSid());
 		System.out.println(url);
 	}
 }
