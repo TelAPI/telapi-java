@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import com.telapi.api.domain.Call;
 import com.telapi.api.domain.enums.AudioDirection;
-import com.telapi.api.domain.enums.CallInterruptStatus;
 import com.telapi.api.domain.enums.CallStatus;
 import com.telapi.api.domain.enums.HttpMethod;
 import com.telapi.api.domain.enums.Legs;
@@ -29,7 +28,7 @@ public class CallTest extends BaseTelapiTest{
 		Call receivedCall = connector.viewCall(call.getSid());
 		
 		Assert.assertEquals(call.getSid(), receivedCall.getSid());		
-		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
+		connector.hangUpCall(call.getSid());
 		
 	}
 	
@@ -37,42 +36,35 @@ public class CallTest extends BaseTelapiTest{
 	public void hangUpAll() throws TelapiException {
 		CallList list = connector.listCalls(null, null, null, null, null, null, null);
 		for (Call c : list) {
-			connector.hangUpCall(c.getSid(), "hangupurl.com", HttpMethod.POST);
+			connector.hangUpCall(c.getSid());
 		}
-	}
-	
-	@Test
-	public void testInterruptCall() throws TelapiException {
-		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
-		connector.interruptLiveCall(call.getSid(), "http://www.telapi.com/ivr/welcome/call", HttpMethod.GET, CallInterruptStatus.CANCELED);
-		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
 	}
 	
 	@Test
 	public void testSendDigits() throws TelapiException {
 		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
 		connector.sendDigits(call.getSid(), "123123wwww123", Legs.BOTH);
-		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);	
+		connector.hangUpCall(call.getSid());
 	}
 	
 	@Test
 	public void testPlaySound() throws TelapiException {
 		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
 		connector.playAudioToCall(call.getSid(), "http://www.freeinfosociety.com/media/sounds/198.mp3", 15L, Legs.BOTH, false, true);
-		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
+		connector.hangUpCall(call.getSid());
 	}
 	
 	@Test
 	public void testVoiceEffects() throws TelapiException {
 		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
 		connector.voiceEffects(call.getSid(), AudioDirection.OUT, 0.7, 2L, 1L, 0.9);
-		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
+		connector.hangUpCall(call.getSid());
 	}
 	
 	@Test
 	public void testRecordCalls() throws TelapiException {
 		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", null, null, null, null, null, null, null, 15L, null);
 		connector.recordCall(call.getSid(), true, 100L, "callback.url");
-		connector.hangUpCall(call.getSid(), "hangupurl.com", HttpMethod.POST);
+		connector.hangUpCall(call.getSid());
 	}
 }

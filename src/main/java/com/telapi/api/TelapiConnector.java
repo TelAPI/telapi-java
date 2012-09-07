@@ -461,29 +461,24 @@ public class TelapiConnector {
 				callRequest.getHideCallerId());
 	}
 
-	public Call interruptLiveCall(String accountSid, String callSid,
-			String fallbackUrl, HttpMethod statusCallbackMethod,
-			CallInterruptStatus status) throws TelapiException {
-		return returnThrows(callProxy.interruptLiveCall(accountSid, callSid,
-				fallbackUrl, statusCallbackMethod, status));
+	/**
+	 * @see #hangUpCall(String)
+	 * @throws TelapiException
+	 */
+	public Call hangUpCall(String accountSid, String callSid) throws TelapiException {
+		return returnThrows(callProxy.hangupCall(accountSid, callSid, CallInterruptStatus.COMPLETED));
 	}
 
-	public Call interruptLiveCall(String callSid, String fallbackUrl,
-			HttpMethod statusCallbackMethod, CallInterruptStatus status)
+	/**
+	 * Hangs up a call.
+	 * 
+	 * @param callSid The sid of the Call to hang up.
+	 * @return The hung up call.
+	 * @throws TelapiException
+	 */
+	public Call hangUpCall(String callSid)
 			throws TelapiException {
-		return interruptLiveCall(conf.getSid(), callSid, fallbackUrl,
-				statusCallbackMethod, status);
-	}
-
-	public Call hangUpCall(String accountSid, String callSid, String url,
-			HttpMethod method) throws TelapiException {
-		return returnThrows(callProxy.interruptLiveCall(accountSid, callSid,
-				url, method, CallInterruptStatus.COMPLETED));
-	}
-
-	public Call hangUpCall(String callSid, String url, HttpMethod method)
-			throws TelapiException {
-		return hangUpCall(conf.getSid(), callSid, url, method);
+		return hangUpCall(conf.getSid(), callSid);
 	}
 
 	/**
