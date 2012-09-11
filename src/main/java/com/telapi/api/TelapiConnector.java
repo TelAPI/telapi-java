@@ -15,10 +15,10 @@ import com.telapi.api.configuration.TelapiConstants;
 import com.telapi.api.domain.Account;
 import com.telapi.api.domain.Application;
 import com.telapi.api.domain.Call;
-import com.telapi.api.domain.CarrierLookup;
 import com.telapi.api.domain.Conference;
 import com.telapi.api.domain.IncomingPhoneNumber;
 import com.telapi.api.domain.Notification;
+import com.telapi.api.domain.Participant;
 import com.telapi.api.domain.Recording;
 import com.telapi.api.domain.SmsMessage;
 import com.telapi.api.domain.Transcription;
@@ -34,6 +34,7 @@ import com.telapi.api.domain.list.AccountsList;
 import com.telapi.api.domain.list.ApplicationList;
 import com.telapi.api.domain.list.AvailablePhoneNumberList;
 import com.telapi.api.domain.list.CallList;
+import com.telapi.api.domain.list.CarrierLookupList;
 import com.telapi.api.domain.list.CnamDipList;
 import com.telapi.api.domain.list.ConferenceList;
 import com.telapi.api.domain.list.FraudList;
@@ -666,89 +667,158 @@ public class TelapiConnector {
 	public Conference viewConference(String accountSid, String conferenceSid)
 			throws TelapiException {
 		return returnThrows(conferenceProxy.viewConference(accountSid,
-				conferenceSid, null, null, null));
+				conferenceSid));
 	}
 
 	/**
 	 * @see #listConferences(String, Boolean, Boolean, Long, Long)
 	 * @throws TelapiException
 	 */
-	public ConferenceList listConferences(String accountSid, String memberId,
-			Boolean muted, Boolean deafed, Long page, Long pageSize)
-			throws TelapiException {
+	public ConferenceList listConferences(String accountSid,
+			String friendlyName, String status, Date dateCreatedGte,
+			Date dateCreatedLt, Date dateUpdatedGte, Date dateUpdatedLt,
+			Long page, Long pageSize) throws TelapiException {
 		return returnThrows(conferenceProxy.listConferences(accountSid,
-				memberId, muted, deafed, page, pageSize));
+				friendlyName, status, getDateString(dateCreatedGte),
+				getDateString(dateCreatedLt), getDateString(dateUpdatedGte),
+				getDateString(dateUpdatedLt), page, pageSize));
 	}
 
-	/**
-	 * @see #muteMember(String, String)
-	 * @throws TelapiException
-	 */
-	public Conference muteMember(String accountSid, String conferenceSid,
-			String memberId) throws TelapiException {
-		return returnThrows(conferenceProxy.muteMember(accountSid,
-				conferenceSid, memberId));
-	}
 
 	/**
-	 * @see #unMuteMember(String, String)
+	 * @see #viewParticipant(String, String)
 	 * @throws TelapiException
 	 */
-	public Conference unMuteMember(String accountSid, String conferenceSid,
-			String memberId) throws TelapiException {
-		return returnThrows(conferenceProxy.unMuteMember(accountSid,
-				conferenceSid, memberId));
+	public Participant viewParticipant(String accountSid, String conferenceSid,
+			String callSid) throws TelapiException {
+		return returnThrows(conferenceProxy.viewParticipant(accountSid,
+				conferenceSid, callSid));
 	}
-
+	
 	/**
-	 * @see #deafMember(String, String)
+	 * Participants of a conference are identified by the CallSid created when
+	 * they dial into the conference. To access individual conference
+	 * participants, use this method.
+	 * 
+	 * @param conferenceSid
+	 *            The conference the participant is part of.
+	 * @param callSid
+	 *            The call with which the participant participates in the
+	 *            conference.
+	 * @return The selected participant.
 	 * @throws TelapiException
 	 */
-	public Conference deafMember(String accountSid, String conferenceSid,
-			String memberId) throws TelapiException {
-		return returnThrows(conferenceProxy.deafMember(accountSid,
-				conferenceSid, memberId));
+	public Participant viewParticipant(String conferenceSid, String callSid)
+			throws TelapiException {
+		return returnThrows(conferenceProxy.viewParticipant(conf.getSid(),
+				conferenceSid, callSid));
 	}
-
+	
 	/**
-	 * @see #unDeafMember(String, String)
+	 * @see #listParticipants(String, Boolean, Boolean, Long, Long)
 	 * @throws TelapiException
 	 */
-	public Conference unDeafMember(String accountSid, String conferenceSid,
-			String memberId) throws TelapiException {
-		return returnThrows(conferenceProxy.unDeafMember(accountSid,
-				conferenceSid, memberId));
+	public List<Participant> listParticipants(String accountSid,
+			String conferenceSid, Boolean muted, Boolean deaf, Long page,
+			Long pageSize) throws TelapiException {
+		return returnThrows(conferenceProxy.listParticipants(accountSid,
+				conferenceSid, muted, deaf, page, pageSize));
 	}
+	
+	
+	/**
+	 * Used to get a list of participants currently connected to a particular
+	 * conference.
+	 * 
+	 * @param conferenceSid
+	 *            The sid of the Conference for which participants are
+	 *            requested.
+	 * @param muted
+	 *            Only list participants that are muted. Defaults to false.
+	 * @param deaf
+	 *            Only list participants that are deaf. Defaults to false.
+	 * @param page
+	 *            Used to return a particular page within the list.
+	 * @param pageSize
+	 *            Used to specify the amount of list items to return per page.
+	 * @return A list of participants currently connected to a particular
+	 *         conference.
+	 * @throws TelapiException
+	 */
+	public List<Participant> listParticipants(
+			String conferenceSid, Boolean muted, Boolean deaf, Long page,
+			Long pageSize) throws TelapiException {
+		return listParticipants(conf.getSid(), conferenceSid, muted, deaf, page, pageSize);
+	}
+	
+	/**
+	 * Convenience method.
+	 * @see #listParticipants(String, Boolean, Boolean, Long, Long)
+	 * @throws TelapiException
+	 */
+	public List<Participant> listParticipants(String conferenceSid) throws TelapiException {
+		return listParticipants(conferenceSid, null, null, null, null);
+	}
+	
+	
+	/**
+	 * @see #deafOrMuteParticipant(String, String, Boolean, Boolean)
+	 * @throws TelapiException
+	 */
+	public Participant deafOrMuteParticipant(String accountSid, String conferenceSid, String callSid, Boolean muted, Boolean deaf) throws TelapiException {
+		return returnThrows(conferenceProxy.muteDeafParticipant(accountSid, conferenceSid, callSid, muted, deaf));
+	}
+	
+	/**
+	 * Conference participants can be muted or deafed by calling this method.
+	 * 
+	 * @param conferenceSid The Conference the participant is a part of.
+	 * @param callSid The Call used to identify the participant.
+	 * @param muted Specifies whether the participant should be muted.
+	 * @param deaf Specifies whether the participant should be deaf.
+	 * @return The participant which was muted/unmuted/deafened/undeafened.
+	 * @throws TelapiException
+	 */
+	public Participant deafOrMuteParticipant(String conferenceSid, String callSid, Boolean muted, Boolean deaf) throws TelapiException {
+		return returnThrows(conferenceProxy.muteDeafParticipant(conf.getSid(), conferenceSid, callSid, muted, deaf));
+	}
+	
 
 	/**
 	 * @see #hangupMember(String, String)
 	 * @throws TelapiException
 	 */
-	public Conference hangupMember(String accountSid, String conferenceSid,
-			String memberId) throws TelapiException {
-		return returnThrows(conferenceProxy.hangupMember(accountSid,
-				conferenceSid, memberId));
+	public Participant hangupParticipant(String accountSid, String conferenceSid,
+			String callSid) throws TelapiException {
+		return returnThrows(conferenceProxy.hangupParticipant(accountSid, conferenceSid, callSid));
 	}
-
+	
 	/**
-	 * @see #kickMember(String, String)
+	 * Hangup conference members by conference sid and call sid.
+	 * 
+	 * @param conferenceSid
+	 *            The sid of the requested Conference.
+	 * @param callSid
+	 *            Specifies the member to hangup via the call used by the member
+	 *            to enter the conference.
+	 * @return The Participant which was hung up on.
 	 * @throws TelapiException
 	 */
-	public Conference kickMember(String accountSid, String conferenceSid,
-			String memberId) throws TelapiException {
-		return returnThrows(conferenceProxy.kickMember(accountSid,
-				conferenceSid, memberId));
-	}
-
-	/**
-	 * @see #playAudioToConference(String, String, String)
-	 * @throws TelapiException
-	 */
-	public Conference playAudioToConference(String accountSid,
-			String conferenceSid, String memberId, String url)
+	public Participant hangupParticipant(String conferenceSid, String callSid)
 			throws TelapiException {
-		return returnThrows(conferenceProxy.playAudio(accountSid,
-				conferenceSid, memberId, url));
+		return returnThrows(conferenceProxy.hangupParticipant(conf.getSid(),
+				conferenceSid, callSid));
+	}
+
+	/**
+	 * @see #playAudioToParticipant(String, String, String)
+	 * @throws TelapiException
+	 */
+	public Participant playAudioToParticipant(String accountSid,
+			String conferenceSid, String callSid, String url)
+			throws TelapiException {
+		return returnThrows(conferenceProxy.playAudioToParticipant(accountSid,
+				conferenceSid, callSid, url));
 	}
 
 	/**
@@ -771,15 +841,19 @@ public class TelapiConnector {
 	 * conferences in chronological order and includes information on each
 	 * member of the conference.
 	 * 
-	 * @param memberId
-	 *            Used to identify and return conferences only specific members
-	 *            were involved in.
-	 * @param muted
-	 *            Specifies whether only conferences with muted members should
-	 *            be returned.
-	 * @param deafed
-	 *            Specifies whether only conferences with deafed members should
-	 *            be returned.
+	 * @param friendlyName
+	 *            List conferences with the given FriendlyName.
+	 * @param status
+	 *            List conferences with the given status. Allowed values are:
+	 *            init, in-progress, or completed.
+	 * @param dateCreatedGte
+	 *            List conferences created on or after this date.
+	 * @param dateCreatedLt
+	 *            List conferences created before this date.
+	 * @param dateUpdatedGte
+	 *            List conferences updated on or after this date.
+	 * @param dateUpdatedLt
+	 *            List conferences updated before this date.
 	 * @param page
 	 *            Used to return a particular page within the list.
 	 * @param pageSize
@@ -787,10 +861,12 @@ public class TelapiConnector {
 	 * @return A list of Conferences accorded to the specified parameters.s
 	 * @throws TelapiException
 	 */
-	public ConferenceList listConferences(String memberId, Boolean muted,
-			Boolean deafed, Long page, Long pageSize) throws TelapiException {
-		return listConferences(conf.getSid(), memberId, muted, deafed, page,
-				pageSize);
+	public ConferenceList listConferences(String friendlyName, String status, Date dateCreatedGte,
+			Date dateCreatedLt, Date dateUpdatedGte, Date dateUpdatedLt,
+			Long page, Long pageSize) throws TelapiException {
+		return listConferences(conf.getSid(), friendlyName, status,
+				dateCreatedGte, dateCreatedLt, dateUpdatedGte, dateUpdatedLt,
+				page, pageSize);
 	}
 	
 	/**
@@ -803,115 +879,7 @@ public class TelapiConnector {
 	 * @throws TelapiException
 	 */
 	public ConferenceList listConferences() throws TelapiException {
-		return listConferences(conf.getSid(), null, null, null, null,
-				null);
-	}
-
-	/**
-	 * Members of a conference call can be muted through TelAPI using the HTTP
-	 * POST method. Muted members can hear other callers on the conference call
-	 * but can not speak to the other members themselves.
-	 * 
-	 * @param conferenceSid
-	 *            The sid of the requested Conference.
-	 * @param memberId
-	 *            Specifies the member to mute. If more than one member is to be
-	 *            muted, a comma is used to separate each memberID.
-	 * @return The Conference on which this method was called.
-	 * @throws TelapiException
-	 */
-	public Conference muteMember(String conferenceSid, String memberId)
-			throws TelapiException {
-		return muteMember(conf.getSid(), conferenceSid, memberId);
-	}
-
-	/**
-	 * Previously muted conference members can be unmuted just as easily using
-	 * our REST API. Simply specify the conference sid and memberID when calling
-	 * this method.
-	 * 
-	 * @param conferenceSid
-	 *            The sid of the requested Conference.
-	 * @param memberId
-	 *            Specifies the member to unmute. If more than one member is to
-	 *            be muted, a comma is used to separate each memberID.
-	 * @return The Conference on which this method was called.
-	 * @throws TelapiException
-	 */
-	public Conference unMuteMember(String conferenceSid, String memberId)
-			throws TelapiException {
-		return unMuteMember(conf.getSid(), conferenceSid, memberId);
-	}
-
-	/**
-	 * Members of a conference call can be made deaf through TelAPI using this
-	 * method. Deaf members can not hear any of the audio taking place in the
-	 * conference call while they are deaf.
-	 * 
-	 * @param conferenceSid
-	 *            The sid of the requested Conference.
-	 * @param memberId
-	 *            Specifies the member to make deaf. If more than one member is
-	 *            to be made deaf, a comma is used to separate each memberID.
-	 * @return The Conference on which this method was called.
-	 * @throws TelapiException
-	 */
-	public Conference deafMember(String conferenceSid, String memberId)
-			throws TelapiException {
-		return deafMember(conf.getSid(), conferenceSid, memberId);
-	}
-
-	/**
-	 * Previously deaf conference members can made undeaf just as easily using
-	 * our API. Simply specify the conference and memberID when calling this
-	 * method.
-	 * 
-	 * @param conferenceSid
-	 *            The sid of the requested Conference.
-	 * @param memberId
-	 *            Specifies the member to undeaf. If more than one member is to
-	 *            be made undeaf, a comma is used to separate each memberID.
-	 * @return The Conference on which this method was called.
-	 * @throws TelapiException
-	 */
-	public Conference unDeafMember(String conferenceSid, String memberId)
-			throws TelapiException {
-		return unDeafMember(conf.getSid(), conferenceSid, memberId);
-	}
-
-	/**
-	 * Hangup conference members by conference sid. Conference as member/s must
-	 * be registered in order to be hanged up
-	 * 
-	 * @param conferenceSid
-	 *            The sid of the requested Conference.
-	 * @param memberId
-	 *            Specifies the member to hangup. If not set, the call will
-	 *            hangup for all conference members. To hangup on more than one
-	 *            member, a comma is used to separate each memberID.
-	 * @return The Conference on which this method was called.
-	 * @throws TelapiException
-	 */
-	public Conference hangupMember(String conferenceSid, String memberId)
-			throws TelapiException {
-		return hangupMember(conf.getSid(), conferenceSid, memberId);
-	}
-
-	/**
-	 * TelAPI allows you to remove individual conference members.
-	 * 
-	 * @param conferenceSid
-	 *            The sid of the requested Conference.
-	 * @param memberId
-	 *            Specifies the member to be kicked from the conference. To kick
-	 *            more than one member, a comma is used to separate each
-	 *            memberID.
-	 * @return The Conference on which this method was called.
-	 * @throws TelapiException
-	 */
-	public Conference kickMember(String conferenceSid, String memberId)
-			throws TelapiException {
-		return kickMember(conf.getSid(), conferenceSid, memberId);
+		return listConferences(null, null, null, null, null, null, null, null);
 	}
 
 	/**
@@ -919,17 +887,17 @@ public class TelapiConnector {
 	 * 
 	 * @param conferenceSid
 	 *            The sid of the requested Conference.
-	 * @param memberId
-	 *            Specifies the conference member to be spoken to.
-	 * @param url
+	 * @param callSid
+	 *            Specifies the conference member to be spoken to via Call sid.
+	 * @param audioUrl
 	 *            URL containing the audio file to play.
-	 * @return The Conference on which this method was called.
+	 * @return The Participant to which the audio was played.
 	 * @throws TelapiException
 	 */
-	public Conference playAudioToConference(String conferenceSid,
-			String memberId, String url) throws TelapiException {
-		return playAudioToConference(conf.getSid(), conferenceSid, memberId,
-				url);
+	public Participant playAudioToParticipant(String conferenceSid,
+			String callSid, String audioUrl) throws TelapiException {
+		return playAudioToParticipant(conf.getSid(), conferenceSid, callSid,
+				audioUrl);
 	}
 
 	// APPLICATIONS
@@ -1964,7 +1932,17 @@ public class TelapiConnector {
 	 * @see #carrierLookup(String)
 	 * @throws TelapiException
 	 */
-	public CarrierLookup carrierLookup(String accountSid, String phoneNumber)
+	public CarrierLookupList carrierLookup(String accountSid, String phoneNumber)
+			throws TelapiException {
+		return returnThrows(carrierLookupProxy.carrierLookup(accountSid,
+				phoneNumber));
+	}
+	
+	/**
+	 * @see #carrierLookup(List)
+	 * @throws TelapiException
+	 */
+	public CarrierLookupList carrierLookup(String accountSid, List<String> phoneNumber)
 			throws TelapiException {
 		return returnThrows(carrierLookupProxy.carrierLookup(accountSid,
 				phoneNumber));
@@ -2000,7 +1978,21 @@ public class TelapiConnector {
 	 * @return The CarrierLookup information for the requested number.
 	 * @throws TelapiException
 	 */
-	public CarrierLookup carrierLookup(String phoneNumber)
+	public CarrierLookupList carrierLookup(String phoneNumber)
+			throws TelapiException {
+		return carrierLookup(conf.getSid(), phoneNumber);
+	}
+	
+	/**
+	 * Provides a way to look up the carrier of phone numbers.
+	 * 
+	 * @param phoneNumber
+	 *            The phone numbers you are attempting to perform the carrier look
+	 *            up on.
+	 * @return The CarrierLookup information for the requested numbers.
+	 * @throws TelapiException
+	 */
+	public CarrierLookupList carrierLookup(List<String> phoneNumber)
 			throws TelapiException {
 		return carrierLookup(conf.getSid(), phoneNumber);
 	}

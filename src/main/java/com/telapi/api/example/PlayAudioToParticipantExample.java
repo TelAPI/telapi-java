@@ -2,10 +2,10 @@ package com.telapi.api.example;
 
 import com.telapi.api.TelapiConnector;
 import com.telapi.api.configuration.BasicTelapiConfiguration;
-import com.telapi.api.domain.Conference;
+import com.telapi.api.domain.Participant;
 import com.telapi.api.exceptions.TelapiException;
 
-public class KickMemberExample {
+public class PlayAudioToParticipantExample {
 
 	public static void main(String[] args) {
 		BasicTelapiConfiguration conf = new BasicTelapiConfiguration();
@@ -14,8 +14,8 @@ public class KickMemberExample {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			Conference conference = conn.kickMember("{ConferenceSid}", "{MemberId}");
-			System.out.println(conference.getSid());
+			Participant participant = conn.playAudioToParticipant("{ConferenceSid}", "{MemberId}", "{url_to_sound_file}");
+			System.out.println(participant.getCallSid());
 		} catch (TelapiException e) {
 			e.printStackTrace();
 		}

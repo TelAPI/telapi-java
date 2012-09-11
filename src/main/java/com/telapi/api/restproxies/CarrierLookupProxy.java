@@ -10,7 +10,7 @@ import javax.ws.rs.QueryParam;
 
 import org.jboss.resteasy.client.ClientResponse;
 
-import com.telapi.api.domain.CarrierLookup;
+import com.telapi.api.domain.list.CarrierLookupList;
 import com.telapi.api.domain.list.CnamDipList;
 
 public interface CarrierLookupProxy {
@@ -18,9 +18,17 @@ public interface CarrierLookupProxy {
 	@GET
     @Path("Accounts/{AccountSid}/Carrier.json")
     @Produces("application/json")
-    ClientResponse<CarrierLookup> carrierLookup(
+    ClientResponse<CarrierLookupList> carrierLookup(
     		@PathParam("AccountSid") String accountSid, 
     		@QueryParam("PhoneNumber") String phoneNumber
+    		);
+	
+	@GET
+    @Path("Accounts/{AccountSid}/Carrier.json")
+    @Produces("application/json")
+    ClientResponse<CarrierLookupList> carrierLookup(
+    		@PathParam("AccountSid") String accountSid, 
+    		@QueryParam("PhoneNumber") List<String> phoneNumber
     		);
 	
 	@GET

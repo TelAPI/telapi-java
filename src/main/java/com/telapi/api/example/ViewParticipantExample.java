@@ -2,20 +2,20 @@ package com.telapi.api.example;
 
 import com.telapi.api.TelapiConnector;
 import com.telapi.api.configuration.BasicTelapiConfiguration;
-import com.telapi.api.domain.Conference;
+import com.telapi.api.domain.Participant;
 import com.telapi.api.exceptions.TelapiException;
 
-public class PlayAudioToMemberExample {
+public class ViewParticipantExample {
 
 	public static void main(String[] args) {
 		BasicTelapiConfiguration conf = new BasicTelapiConfiguration();
-		conf.setSid("ACbf75172498784edc98406f494ec7abec");
-		conf.setAuthToken("11e457ff63174f3e94bd6cb9b7812021");
+		conf.setSid("{AccountSid}");
+		conf.setAuthToken("{AuthToken}");
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			Conference conference = conn.playAudioToConference("{ConferenceSid}", "{MemberId}", "{url_to_sound_file}");
-			System.out.println(conference.getSid());
+			Participant participant = conn.viewParticipant("{ConferenceSid}", "{CallSid}");
+			System.out.println(participant.getCallSid());
 		} catch (TelapiException e) {
 			e.printStackTrace();
 		}

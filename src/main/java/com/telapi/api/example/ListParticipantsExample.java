@@ -1,11 +1,13 @@
 package com.telapi.api.example;
 
+import java.util.List;
+
 import com.telapi.api.TelapiConnector;
 import com.telapi.api.configuration.BasicTelapiConfiguration;
-import com.telapi.api.domain.Conference;
+import com.telapi.api.domain.Participant;
 import com.telapi.api.exceptions.TelapiException;
 
-public class DeafMemberExample {
+public class ListParticipantsExample {
 
 	public static void main(String[] args) {
 		BasicTelapiConfiguration conf = new BasicTelapiConfiguration();
@@ -14,8 +16,10 @@ public class DeafMemberExample {
 		TelapiConnector conn = new TelapiConnector(conf);
 		
 		try {
-			Conference conference = conn.deafMember("{ConferenceSid}", "{MemberId}");
-			System.out.println(conference.getSid());
+			List<Participant> participantsList = conn.listParticipants("{ConferenceSid}");
+			for(Participant participant : participantsList) {
+				System.out.println(participant.getCallSid());
+			}
 		} catch (TelapiException e) {
 			e.printStackTrace();
 		}

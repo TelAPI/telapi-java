@@ -21,6 +21,12 @@ public class CallTest extends BaseTelapiTest{
 	}
 	
 	@Test
+	public void testViewCall() throws TelapiException {
+		CallList calls = connector.listCalls();
+		connector.viewCall(calls.iterator().next().getSid());
+	}
+	
+	@Test
 	public void makeCall() throws TelapiException {
 		Call call = connector.makeCall(testParameters.getPhone1(), testParameters.getPhone2(), "http://www.telapi.com/ivr/welcome/call", testParameters.getPhone2(), HttpMethod.POST, 
 				"fallbackurl.com", HttpMethod.GET, "statusCallback.com", HttpMethod.POST, "123", 15L, false);

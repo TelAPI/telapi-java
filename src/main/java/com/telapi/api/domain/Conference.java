@@ -1,7 +1,5 @@
 package com.telapi.api.domain;
 
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
@@ -10,24 +8,27 @@ import org.codehaus.jackson.annotate.JsonProperty;
  * resource, simply request it by its ConferenceSid.
  */
 public class Conference extends BaseTelapiObject{
-	private String name;
+	@JsonProperty("friendly_name")
+	private String friendlyName;
 	
 	private String status;
 	
-	@JsonProperty("member_count")
-	private Long memberCount;
+	@JsonProperty("participant_count")
+	private Long participantCount;
 	@JsonProperty("run_time")
 	private Long runTime;
-	private List<ConferenceMember> members;
+	
+	@JsonProperty("subresource_uris")
+	private ConferenceSubresourceUris subresourceUris;
 	
 	/**
 	 * @return User generated name of the conference.
 	 */
-	public String getName() {
-		return name;
+	public String getFriendlyName() {
+		return friendlyName;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setFriendlyName(String friendlyName) {
+		this.friendlyName = friendlyName;
 	}
 	/**
 	 * @return Conference status. Can be 'init', 'in-progress' or 'completed'.
@@ -41,11 +42,11 @@ public class Conference extends BaseTelapiObject{
 	/**
 	 * @return The number of members that participated in the conference.
 	 */
-	public Long getMemberCount() {
-		return memberCount;
+	public Long getParticipantCount() {
+		return participantCount;
 	}
-	public void setMemberCount(Long memberCount) {
-		this.memberCount = memberCount;
+	public void setParticipantCount(Long participantCount) {
+		this.participantCount = participantCount;
 	}
 	/**
 	 * @return Conference duration in seconds.
@@ -56,14 +57,12 @@ public class Conference extends BaseTelapiObject{
 	public void setRunTime(Long runTime) {
 		this.runTime = runTime;
 	}
-	/**
-	 * @return List of members involved in the conference.
-	 */
-	public List<ConferenceMember> getMembers() {
-		return members;
+	
+	public ConferenceSubresourceUris getSubresourceUris() {
+		return subresourceUris;
 	}
-	public void setMembers(List<ConferenceMember> members) {
-		this.members = members;
+	public void setSubresourceUris(ConferenceSubresourceUris subresourceUris) {
+		this.subresourceUris = subresourceUris;
 	}
 	
 }
