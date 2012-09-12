@@ -20,7 +20,7 @@ import com.telapi.api.json.JsonDurationParser;
  * 
  */
 public class Call extends BaseTelapiObject{
-	
+
 	//delete these two when the time comes
 	@SuppressWarnings("unused")
 	@JsonProperty("date_updated>")
@@ -28,7 +28,6 @@ public class Call extends BaseTelapiObject{
 	@SuppressWarnings("unused")
 	@JsonProperty("api_version>")
 	private String apiVersionTemp;
-	
 	
 	@JsonProperty(value="parent_call_sid")
 	private String parentCallSid;
@@ -51,8 +50,6 @@ public class Call extends BaseTelapiObject{
 	private AnsweredBy answeredBy;
 	@JsonProperty(value="forwarded_from")
 	private String forwardedFrom;
-	@JsonProperty(value="p_asserted_identity")
-	private String pAssertedIdentity;
 	@JsonProperty(value="sip_privacy")
 	private String sipPrivacy;	
 	@JsonDeserialize(using = JsonBooleanParser.class)
@@ -61,10 +58,10 @@ public class Call extends BaseTelapiObject{
 	@JsonDeserialize(using = JsonBooleanParser.class)
 	@JsonProperty(value="caller_id_blocked")
 	private Boolean callerIdBlocked;
-	@JsonProperty("caller_name")
-	private String callerName;
 	@JsonProperty(value="subresource_uris")
 	private CallSubresourceUris subresourceUris;
+	@JsonProperty("caller_name")
+	private String callerName;
 	
 	/**
 	 * 
@@ -201,17 +198,6 @@ public class Call extends BaseTelapiObject{
 	
 	/**
 	 * 
-	 * @return 
-	 */
-	public String getpAssertedIdentity() {
-		return pAssertedIdentity;
-	}
-	public void setpAssertedIdentity(String pAssertedIdentity) {
-		this.pAssertedIdentity = pAssertedIdentity;
-	}
-	
-	/**
-	 * 
 	 * @return
 	 */
 	public String getSipPrivacy() {
@@ -234,7 +220,7 @@ public class Call extends BaseTelapiObject{
 	
 	/**
 	 * 
-	 * @return
+	 * @return Specifies whether the caller ID of the inbound phone number was blocked.
 	 */
 	public Boolean getCallerIdBlocked() {
 		return callerIdBlocked;
@@ -253,17 +239,13 @@ public class Call extends BaseTelapiObject{
 	public void setCallSubresourceUris(CallSubresourceUris subresourceUris) {
 		this.subresourceUris = subresourceUris;
 	}
-	
-	/**
-	 * 
-	 * @return
-	 */
 	public String getCallerName() {
 		return callerName;
 	}
 	public void setCallerName(String callerName) {
 		this.callerName = callerName;
 	}
+
 	
 	
 }

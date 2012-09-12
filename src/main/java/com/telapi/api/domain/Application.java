@@ -14,10 +14,7 @@ public class Application extends BaseTelapiObjectWithMethods{
 	@JsonProperty("friendly_name")
 	private String friendlyName;
 	@JsonDeserialize(using = JsonBooleanParser.class)
-	@JsonProperty("voice_caller_id_lookup")
-	private Boolean voiceCallerIdLookup;
 
-	
 	/**
 	 * @return String defining this resource.
 	 */
@@ -27,17 +24,6 @@ public class Application extends BaseTelapiObjectWithMethods{
 	public void setFriendlyName(String friendlyName) {
 		this.friendlyName = friendlyName;
 	}
-	
-	/**
-	 * @return Look up the callers caller ID name from a CNAM database (additional charges apply). Either true or false.
-	 */
-	public Boolean getVoiceCallerIdLookup() {
-		return voiceCallerIdLookup;
-	}
-	public void setVoiceCallerIdLookup(Boolean voiceCallerIdLookup) {
-		this.voiceCallerIdLookup = voiceCallerIdLookup;
-	}
-
 	
 }
 

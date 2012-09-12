@@ -1,5 +1,7 @@
 package com.telapi.api;
 
+import java.util.Date;
+
 import org.junit.Test;
 
 import com.telapi.api.domain.Recording;
@@ -21,7 +23,7 @@ public class TranscriptionTest extends BaseTelapiTest {
 	
 	@Test
 	public void testListTranscriptions() throws TelapiException {
-		TranscriptionList list = connector.listTranscriptions(0L, 10L, TranscriptionStatus.COMPLETED);
+		TranscriptionList list = connector.listTranscriptions(TranscriptionStatus.COMPLETED, new Date(0L), new Date(), 0L, 10L);
 		for (Transcription t : list) {
 			System.out.println(t.getSid());
 		}
@@ -29,14 +31,14 @@ public class TranscriptionTest extends BaseTelapiTest {
 	
 	@Test
 	public void testViewTranscription() throws TelapiException {
-		TranscriptionList list = connector.listTranscriptions(null, null, null);
+		TranscriptionList list = connector.listTranscriptions();
 		Transcription t = list.iterator().next();
 		connector.viewTranscription(t.getSid());
 	}
 	
 	@Test
 	public void testViewTranscriptionText() throws TelapiException {
-		TranscriptionList list = connector.listTranscriptions(null, null, null);
+		TranscriptionList list = connector.listTranscriptions();
 		Transcription t = list.iterator().next();
 		String transcription = connector.viewTranscriptionText(t.getSid());
 		System.out.println(transcription);

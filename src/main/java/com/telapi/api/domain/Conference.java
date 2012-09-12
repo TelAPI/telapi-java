@@ -30,8 +30,11 @@ public class Conference extends BaseTelapiObject{
 	public void setFriendlyName(String friendlyName) {
 		this.friendlyName = friendlyName;
 	}
+
 	/**
 	 * @return Conference status. Can be 'init', 'in-progress' or 'completed'.
+	 *         'init' means the conference has been initialized, but no one has
+	 *         entered yet.
 	 */
 	public String getStatus() {
 		return status;

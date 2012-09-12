@@ -8,15 +8,23 @@ public class CallRequest {
 	private String to = null; 
 	private String from = null;
 	private String url = null;
-	private String forwardedFrom = null;
 	private HttpMethod method = null;
 	private String fallbackUrl = null;
 	private HttpMethod fallbackMethod = null;
 	private String statusCallback = null;
 	private HttpMethod StatusCallbackMethod = null;
+	private String heartbeatUrl = null;
+	private HttpMethod heartbeatMethod = null;
+	private String forwardedFrom = null;
 	private String sendDigits = null;
 	private Long timeout = null;
 	private Boolean hideCallerId = null;
+	private Boolean record = null;
+	private String recordCallback = null;
+	private HttpMethod recordCallbackMethod = null;
+	private Boolean transcribe = null;
+	private String transcribeCallback = null;
+	private HttpMethod transcribeCallbackMethod = null;
 	
 	public String getAccountSid() {
 		return accountSid;
@@ -96,5 +104,54 @@ public class CallRequest {
 	public void setHideCallerId(Boolean hideCallerId) {
 		this.hideCallerId = hideCallerId;
 	}
+	public String getHeartbeatUrl() {
+		return heartbeatUrl;
+	}
+	public void setHeartbeatUrl(String heartbeatUrl) {
+		this.heartbeatUrl = heartbeatUrl;
+	}
+	public HttpMethod getHeartbeatMethod() {
+		return heartbeatMethod;
+	}
+	public void setHeartbeatMethod(HttpMethod heartbeatMethod) {
+		this.heartbeatMethod = heartbeatMethod;
+	}
+	public Boolean getRecord() {
+		return record;
+	}
+	public void setRecord(Boolean record) {
+		this.record = record;
+	}
+	public String getRecordCallback() {
+		return recordCallback;
+	}
+	public void setRecordCallback(String recordCallback) {
+		this.recordCallback = recordCallback;
+	}
+	public HttpMethod getRecordCallbackMethod() {
+		return recordCallbackMethod;
+	}
+	public void setRecordCallbackMethod(HttpMethod recordCallbackMethod) {
+		this.recordCallbackMethod = recordCallbackMethod;
+	}
+	public Boolean getTranscribe() {
+		return transcribe;
+	}
+	public void setTranscribe(Boolean transcribe) {
+		this.transcribe = transcribe;
+	}
+	public String getTranscribeCallback() {
+		return transcribeCallback;
+	}
+	public void setTranscribeCallback(String transcribeCallback) {
+		this.transcribeCallback = transcribeCallback;
+	}
+	public HttpMethod getTranscribeCallbackMethod() {
+		return transcribeCallbackMethod;
+	}
+	public void setTranscribeCallbackMethod(HttpMethod transcribeCallbackMethod) {
+		this.transcribeCallbackMethod = transcribeCallbackMethod;
+	}
+	
 
 }

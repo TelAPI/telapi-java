@@ -18,8 +18,7 @@ public class IncomingPhoneNumber extends BaseTelapiObjectWithMethods{
 	@JsonProperty("voice_application_sid")
 	private String voiceApplicationSid;
 	@JsonDeserialize(using = JsonBooleanParser.class)
-	@JsonProperty("voice_caller_id_lookup")
-	private Boolean voiceCallerIdLookup;
+	
 	@JsonProperty("sms_application_sid")
 	private String smsApplicationSid;
 	private PhoneNumberCapabilities capabilities;
@@ -60,15 +59,6 @@ public class IncomingPhoneNumber extends BaseTelapiObjectWithMethods{
 	}
 	public void setVoiceApplicationSid(String voiceApplicationSid) {
 		this.voiceApplicationSid = voiceApplicationSid;
-	}
-	/**
-	 * @return Look up the callers caller-ID name from the CNAM database (additional charges apply). Either true or false.
-	 */
-	public Boolean getVoiceCallerIdLookup() {
-		return voiceCallerIdLookup;
-	}
-	public void setVoiceCallerIdLookup(Boolean voiceCallerIdLookup) {
-		this.voiceCallerIdLookup = voiceCallerIdLookup;
 	}
 	/**
 	 * @return 

@@ -8,7 +8,7 @@ import org.codehaus.jackson.annotate.JsonCreator;
 import com.telapi.api.domain.enums.util.EnumUtil;
 
 public enum PhoneNumberType {
-	LOCAL, INTERNATIONAL, UNKNOWN;
+	LOCAL, INTERNATIONAL, TOLL_FREE, UNKNOWN;
 	
 	private static Map<PhoneNumberType, String> map;
 	
@@ -16,6 +16,7 @@ public enum PhoneNumberType {
 		map = new HashMap<PhoneNumberType, String>();
 		map.put(LOCAL, "local");
 		map.put(INTERNATIONAL, "international");
+		map.put(TOLL_FREE, "toll-free");
 	}
 	
 	@JsonCreator

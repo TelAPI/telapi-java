@@ -47,15 +47,23 @@ public interface CallProxy {
 			@QueryParam(value = "To") String to,
 			@QueryParam(value = "From") String from,
 			@QueryParam(value = "Url") String url,
-			@QueryParam(value = "ForwardedFrom") String forwardedFrom,
 			@QueryParam(value = "Method") HttpMethod method,
 			@QueryParam(value = "FallbackUrl") String fallbackUrl,
 			@QueryParam(value = "FallbackMethod") HttpMethod fallbackMethod,
 			@QueryParam(value = "StatusCallback") String statusCallback,
 			@QueryParam(value = "StatusCallbackMethod") HttpMethod StatusCallbackMethod,
+			@QueryParam(value = "HeartbeatUrl") String heartbeatUrl,
+			@QueryParam(value = "HeartbeatMethod") HttpMethod heartbeatMethod,
+			@QueryParam(value = "ForwardedFrom") String forwardedFrom,
 			@QueryParam(value = "SendDigits") String sendDigits,
 			@QueryParam(value = "Timeout") Long timeout,
-			@QueryParam(value = "HideCallerId") Boolean hideCallerId
+			@QueryParam(value = "HideCallerId") Boolean hideCallerId,
+			@QueryParam(value = "Record") Boolean record,
+			@QueryParam(value = "RecordCallback") String recordCallback,
+			@QueryParam(value = "RecordCallbackMethod") HttpMethod recordCallbackMethod,
+			@QueryParam(value = "Transcribe") Boolean transcribe,
+			@QueryParam(value = "TranscribeCallback") String transcribeCallback,
+			@QueryParam(value = "TranscribeCallbackMethod") HttpMethod transcribeCallbackMethod
 	);
 	
 	
@@ -95,7 +103,7 @@ public interface CallProxy {
 	ClientResponse<Call> playAudio(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("CallSid") String callSid,
-			@QueryParam("Sounds") String soundsUrl,
+			@QueryParam("AudioUrl") String audioUrl,
 			@QueryParam("Length") Long length,
 			@QueryParam("Legs") Legs legs,
 			@QueryParam("Loop") Boolean loop,

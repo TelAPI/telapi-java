@@ -1,8 +1,10 @@
 package com.telapi.api.domain;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
 import com.telapi.api.domain.enums.HttpMethod;
+import com.telapi.api.json.JsonBooleanParser;
 
 public class BaseTelapiObjectWithMethods extends BaseTelapiObject {
 	
@@ -14,6 +16,9 @@ public class BaseTelapiObjectWithMethods extends BaseTelapiObject {
 	private String voiceFallbackUrl;
 	@JsonProperty("voice_fallback_method")
 	private HttpMethod voiceFallbackMethod;
+	@JsonProperty("voice_caller_id_lookup")
+	@JsonDeserialize(using=JsonBooleanParser.class)
+	private Boolean voiceCallerIdLookup;
 	@JsonProperty("heartbeat_url")
 	private String heartbeatUrl;
 	@JsonProperty("heartbeat_method")
@@ -93,6 +98,15 @@ public class BaseTelapiObjectWithMethods extends BaseTelapiObject {
 	}
 	public void setVoiceFallbackMethod(HttpMethod voiceFallbackMethod) {
 		this.voiceFallbackMethod = voiceFallbackMethod;
+	}
+	/**
+	 * @return Look up the callers caller ID name from a CNAM database (additional charges apply). Either true or false.
+	 */
+	public Boolean getVoiceCallerIdLookup() {
+		return voiceCallerIdLookup;
+	}
+	public void setVoiceCallerIdLookup(Boolean voiceCallerIdLookup) {
+		this.voiceCallerIdLookup = voiceCallerIdLookup;
 	}
 	/**
 	 * @return URL that can be used to monitor the phone number.

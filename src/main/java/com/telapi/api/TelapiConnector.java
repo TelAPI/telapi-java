@@ -371,19 +371,26 @@ public class TelapiConnector {
 	}
 
 	/**
-	 * @see #makeCall(String, String, String, String, HttpMethod, String,
-	 *      HttpMethod, String, HttpMethod, String, Long, Boolean)
+	 * @see #makeCall(String, String, String, HttpMethod, String, HttpMethod,
+	 *      String, HttpMethod, String, HttpMethod, String, String, Long,
+	 *      Boolean, Boolean, String, HttpMethod, Boolean, String, HttpMethod)
 	 * @throws TelapiException
 	 */
 	public Call makeCall(String accountSid, String to, String from, String url,
-			String forwardedFrom, HttpMethod method, String fallbackUrl,
-			HttpMethod fallbackMethod, String statusCallback,
-			HttpMethod statusCallbackMethod, String sendDigits, Long timeout,
-			Boolean hideCallerId) throws TelapiException {
+			HttpMethod method, String fallbackUrl, HttpMethod fallbackMethod,
+			String statusCallback, HttpMethod statusCallbackMethod,
+			String heartbeatUrl, HttpMethod heartbeatMethod,
+			String forwardedFrom, String sendDigits, Long timeout,
+			Boolean hideCallerId, Boolean record, String recordCallback,
+			HttpMethod recordCallbackMethod, Boolean transcribe,
+			String transcribeCallback, HttpMethod transcribeCallbackMethod)
+			throws TelapiException {
 		return returnThrows(callProxy.makeCall(accountSid, to, from, url,
-				forwardedFrom, method, fallbackUrl, fallbackMethod,
-				statusCallback, statusCallbackMethod, sendDigits, timeout,
-				hideCallerId));
+				method, fallbackUrl, fallbackMethod, statusCallback,
+				statusCallbackMethod, heartbeatUrl, heartbeatMethod,
+				forwardedFrom, sendDigits, timeout, hideCallerId, record,
+				recordCallback, recordCallbackMethod, transcribe,
+				transcribeCallback, transcribeCallbackMethod));
 	}
 
 	/**
@@ -396,9 +403,6 @@ public class TelapiConnector {
 	 * @param url
 	 *            The URL requested once the call connects. A set of default
 	 *            parameters will be sent here.
-	 * @param forwardedFrom
-	 *            Specifies the forwarding number to pass to the receiving
-	 *            carrier.
 	 * @param method
 	 *            Specifies the HTTP method used to request the required URL
 	 *            once call connects. Defaults to POST.
@@ -415,6 +419,14 @@ public class TelapiConnector {
 	 * @param statusCallbackMethod
 	 *            Specifies the HTTP method used to request StatusCallbackUrl.
 	 *            Defaults to POST.
+	 * @param heartbeatUrl
+	 *            URL that can be requested every 60 seconds during the call to
+	 *            notify of elapsed time and pass other general information.
+	 * @param heartbeatMethod
+	 *            Specifies the HTTP method used to request the Heartbeat URL.
+	 * @param forwardedFrom
+	 *            Specifies the forwarding number to pass to the receiving
+	 *            carrier.
 	 * @param sendDigits
 	 *            Dials digits once call connects. Can be used to forward
 	 *            callers to different extensions or numbers. Allowed values are
@@ -425,25 +437,48 @@ public class TelapiConnector {
 	 *            seconds but lower times can be set. Defaults to 60.
 	 * @param hideCallerId
 	 *            Specifies if the caller id will be hidden.
+	 * @param record
+	 *            Specifies whether this call should be recorded. Defaults to
+	 *            false.
+	 * @param recordCallback
+	 *            A URL some parameters regarding the recording will be past to
+	 *            once it is completed.
+	 * @param recordCallbackMethod
+	 *            Method used to request the RecordCallback URL.
+	 * @param transcribe
+	 *            Specifies whether this call should be transcribed. Defaults to
+	 *            false.
+	 * @param transcribeCallback
+	 *            A URL some parameters regarding the transcription will be past
+	 *            to once it is completed.
+	 * @param transcribeCallbackMethod
+	 *            Method used to request the TranscribeCallback URL.
 	 * @return The newly made call.
 	 * @throws TelapiException
 	 */
 	public Call makeCall(String to, String from, String url,
-			String forwardedFrom, HttpMethod method, String fallbackUrl,
-			HttpMethod fallbackMethod, String statusCallback,
-			HttpMethod statusCallbackMethod, String sendDigits, Long timeout,
-			Boolean hideCallerId) throws TelapiException {
-		return makeCall(conf.getSid(), to, from, url, forwardedFrom, method,
-				fallbackUrl, fallbackMethod, statusCallback,
-				statusCallbackMethod, sendDigits, timeout, hideCallerId);
+			HttpMethod method, String fallbackUrl, HttpMethod fallbackMethod,
+			String statusCallback, HttpMethod statusCallbackMethod,
+			String heartbeatUrl, HttpMethod heartbeatMethod,
+			String forwardedFrom, String sendDigits, Long timeout,
+			Boolean hideCallerId, Boolean record, String recordCallback,
+			HttpMethod recordCallbackMethod, Boolean transcribe,
+			String transcribeCallback, HttpMethod transcribeCallbackMethod) throws TelapiException {
+		return makeCall(conf.getSid(), to, from, url,
+				method, fallbackUrl, fallbackMethod, statusCallback,
+				statusCallbackMethod, heartbeatUrl, heartbeatMethod,
+				forwardedFrom, sendDigits, timeout, hideCallerId, record,
+				recordCallback, recordCallbackMethod, transcribe,
+				transcribeCallback, transcribeCallbackMethod);
 	}
 
 	/**
 	 * Convenience method which accepts a CallRequest object containing
 	 * parameters.
 	 * 
-	 * @see #makeCall(String, String, String, String, HttpMethod, String,
-	 *      HttpMethod, String, HttpMethod, String, Long, Boolean)
+	 * @see #makeCall(String, String, String, HttpMethod, String, HttpMethod,
+	 *      String, HttpMethod, String, HttpMethod, String, String, Long,
+	 *      Boolean, Boolean, String, HttpMethod, Boolean, String, HttpMethod)
 	 * @return The newly made call.
 	 * @throws TelapiException
 	 */
@@ -453,13 +488,19 @@ public class TelapiConnector {
 			accountSid = callRequest.getAccountSid();
 
 		return makeCall(accountSid, callRequest.getTo(), callRequest.getFrom(),
-				callRequest.getUrl(), callRequest.getForwardedFrom(),
-				callRequest.getMethod(), callRequest.getFallbackUrl(),
-				callRequest.getFallbackMethod(),
+				callRequest.getUrl(), callRequest.getMethod(),
+				callRequest.getFallbackUrl(), callRequest.getFallbackMethod(),
 				callRequest.getStatusCallback(),
 				callRequest.getStatusCallbackMethod(),
-				callRequest.getSendDigits(), callRequest.getTimeout(),
-				callRequest.getHideCallerId());
+				callRequest.getHeartbeatUrl(),
+				callRequest.getHeartbeatMethod(),
+				callRequest.getForwardedFrom(), callRequest.getSendDigits(),
+				callRequest.getTimeout(), callRequest.getHideCallerId(),
+				callRequest.getRecord(), callRequest.getRecordCallback(),
+				callRequest.getRecordCallbackMethod(),
+				callRequest.getTranscribe(),
+				callRequest.getTranscribeCallback(),
+				callRequest.getTranscribeCallbackMethod());
 	}
 
 	/**
@@ -1467,11 +1508,11 @@ public class TelapiConnector {
 	 */
 	public AvailablePhoneNumberList listAvailablePhoneNumbers(
 			String accountSid, String isoCountryCode, String areaCode,
-			String contains, String inRegion, String inPostalCode)
+			String contains, String inRegion, String inPostalCode, Long page, Long pageSize)
 			throws TelapiException {
 		return returnThrows(availablePhoneNumberProxy
 				.listAvailablePhoneNumbers(accountSid, isoCountryCode,
-						areaCode, contains, inRegion, inPostalCode));
+						areaCode, contains, inRegion, inPostalCode, page, pageSize));
 	}
 
 	/**
@@ -1496,15 +1537,19 @@ public class TelapiConnector {
 	 * @param inPostalCode
 	 *            Specifies the desired postal code of the available numbers to
 	 *            be listed.
+	 * @param page
+	 *            Used to return a particular page within the list.
+	 * @param pageSize
+	 *            Used to specify the amount of list items to return per page.
 	 * @return A list of available phone numbers.
 	 * @throws TelapiException
 	 */
 	public AvailablePhoneNumberList listAvailablePhoneNumbers(
 			String isoCountryCode, String areaCode, String contains,
-			String inRegion, String inPostalCode) throws TelapiException {
+			String inRegion, String inPostalCode, Long page, Long pageSize) throws TelapiException {
 		return returnThrows(availablePhoneNumberProxy
 				.listAvailablePhoneNumbers(conf.getSid(), isoCountryCode,
-						areaCode, contains, inRegion, inPostalCode));
+						areaCode, contains, inRegion, inPostalCode, page, pageSize));
 	}
 
 	// RECORDINGS
@@ -1621,8 +1666,10 @@ public class TelapiConnector {
 	 */
 	public String getRecordingUrl(String accountSid, String recordingSid)
 			throws TelapiException {
-		return returnThrows(recordingProxy.getRecording(accountSid,
-				recordingSid));
+		ClientResponse<String> response = recordingProxy.getRecording(accountSid, recordingSid);
+		String retVal = response.getLocation().getHref();
+		returnThrows(response);
+		return retVal;
 	}
 
 	/**
@@ -1756,24 +1803,24 @@ public class TelapiConnector {
 	}
 
 	/**
-	 * @see #listTranscriptions(Long, Long)
+	 * @see #listTranscriptions(TranscriptionStatus, Date, Date, Long, Long)
 	 * @throws TelapiException
 	 */
-	public TranscriptionList listTranscriptions(String accountSid, Long page,
-			Long pageSize, TranscriptionStatus status) throws TelapiException {
-		return returnThrows(transcriptionProxy.listTranscriptions(accountSid,
-				page, pageSize, status));
+	public TranscriptionList listTranscriptions(String accountSid, TranscriptionStatus status, Date dateTranscribedGte, Date dateTranscribedLt, Long page,
+			Long pageSize) throws TelapiException {
+		return returnThrows(transcriptionProxy.listTranscriptions(accountSid, status, getDateString(dateTranscribedGte), getDateString(dateTranscribedLt),
+				page, pageSize));
 	}
 
 	/**
-	 * @see #listRecordingTranscriptions(String, Long, Long)
+	 * @see #listRecordingTranscriptions(String, TranscriptionStatus, Date, Date, Long, Long)
 	 * @throws TelapiException
 	 */
-	public TranscriptionList listRecordingTranscriptions(String accountSid,
-			String recordingSid, Long page, Long pageSize,
-			TranscriptionStatus status) throws TelapiException {
+	public TranscriptionList listRecordingTranscriptions(String accountSid, String recordingSid,
+			TranscriptionStatus status, Date dateTranscribedGte, Date dateTranscribedLt, Long page,
+			Long pageSize) throws TelapiException {
 		return returnThrows(transcriptionProxy.listRecordingTranscriptions(
-				accountSid, recordingSid, page, pageSize, status));
+				accountSid, recordingSid, status, getDateString(dateTranscribedGte), getDateString(dateTranscribedLt), page, pageSize));
 	}
 
 	/**
@@ -1828,19 +1875,26 @@ public class TelapiConnector {
 	/**
 	 * Lists transcriptions belonging to an account.
 	 * 
+	 * @param status
+	 *            Used to only return transcriptions with a given status
+	 *            (completed, in-progress or failed).
+	 * @param dateTranscribedGte
+	 *            Used to only return transcriptions that occurred at or after
+	 *            the given date.
+	 * @param dateTranscribedLt
+	 *            Used to only return transcriptions that occurred at or before
+	 *            the given date.
 	 * @param page
 	 *            Used to return a particular page within the list.
 	 * @param pageSize
 	 *            Used to specify the amount of list items to return per page.
-	 * @param status
-	 *            Used to only return transcriptions with a given status
-	 *            (completed, in-progress or failed).
+	 * 
 	 * @return A list of Transcriptions.
 	 * @throws TelapiException
 	 */
-	public TranscriptionList listTranscriptions(Long page, Long pageSize,
-			TranscriptionStatus status) throws TelapiException {
-		return listTranscriptions(conf.getSid(), page, pageSize, status);
+	public TranscriptionList listTranscriptions(TranscriptionStatus status, Date dateTranscribedGte, Date dateTranscribedLt, Long page,
+			Long pageSize) throws TelapiException {
+		return listTranscriptions(conf.getSid(), status, dateTranscribedGte, dateTranscribedLt, page, pageSize);
 	}
 	
 	/**
@@ -1850,7 +1904,7 @@ public class TelapiConnector {
 	 * @throws TelapiException
 	 */
 	public TranscriptionList listTranscriptions() throws TelapiException {
-		return listTranscriptions(conf.getSid(), null, null, null);
+		return listTranscriptions(conf.getSid(), null, null, null, null, null);
 	}
 
 	/**
@@ -1859,21 +1913,28 @@ public class TelapiConnector {
 	 * @param recordingSid
 	 *            The sid of the Recording for which transcriptions are
 	 *            requested (required).
+	 * @param status
+	 *            Used to only return transcriptions with a given status
+	 *            (completed, in-progress or failed).
+	 * @param dateTranscribedGte
+	 *            Used to only return transcriptions that occurred at or after
+	 *            the given date.
+	 * @param dateTranscribedLt
+	 *            Used to only return transcriptions that occurred at or before
+	 *            the given date.
 	 * @param page
 	 *            Used to return a particular page within the list.
 	 * @param pageSize
 	 *            Used to specify the amount of list items to return per page.
-	 * @param status
-	 *            Used to only return transcriptions with a given status
-	 *            (completed, in-progress or failed).
 	 * @return A list of Transcriptions.
 	 * @throws TelapiException
 	 */
 	public TranscriptionList listRecordingTranscriptions(String recordingSid,
-			Long page, Long pageSize, TranscriptionStatus status)
+			TranscriptionStatus status, Date dateTranscribedGte, Date dateTranscribedLt, Long page,
+			Long pageSize)
 			throws TelapiException {
-		return listRecordingTranscriptions(conf.getSid(), recordingSid, page,
-				pageSize, status);
+		return listRecordingTranscriptions(conf.getSid(), recordingSid, status, dateTranscribedGte, dateTranscribedLt, page,
+				pageSize);
 	}
 
 	/**

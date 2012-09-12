@@ -21,6 +21,8 @@ public interface AvailablePhoneNumberProxy {
 			@QueryParam("AreaCode") String areaCode,
 			@QueryParam("Contains") String contains,
 			@QueryParam("InRegion") String inRegion,
-			@QueryParam("InPostalCode") String inPostalCode
+			@QueryParam("InPostalCode") String inPostalCode, 
+			@QueryParam("Page") Long page, 
+			@QueryParam("PageSize") Long pageSize
 			);
 }

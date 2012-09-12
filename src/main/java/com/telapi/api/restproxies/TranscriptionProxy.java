@@ -38,9 +38,12 @@ public interface TranscriptionProxy {
 	@Produces("application/json")
 	ClientResponse<TranscriptionList> listTranscriptions(
 			@PathParam("AccountSid") String accountSid,
+			@QueryParam(value="Status") TranscriptionStatus status,
+			@QueryParam(value="DateTranscribed>") String dateTranscribedGte,
+			@QueryParam(value="DateTranscribed<") String dateTranscribedLt,
 			@QueryParam(value="Page") Long page,
-    		@QueryParam(value="PageSize") Long pageSize,
-    		@QueryParam(value="Status") TranscriptionStatus status
+    		@QueryParam(value="PageSize") Long pageSize
+    		
 			);
 	
 	@GET
@@ -49,9 +52,11 @@ public interface TranscriptionProxy {
 	ClientResponse<TranscriptionList> listRecordingTranscriptions(
 			@PathParam("AccountSid") String accountSid,
 			@PathParam("RecordingSid") String recordingSid,
+			@QueryParam(value="Status") TranscriptionStatus status,
+			@QueryParam(value="DateTranscribed>") String dateTranscribedGte,
+			@QueryParam(value="DateTranscribed<") String dateTranscribedLt,
 			@QueryParam(value="Page") Long page,
-    		@QueryParam(value="PageSize") Long pageSize,
-    		@QueryParam(value="Status") TranscriptionStatus status
+    		@QueryParam(value="PageSize") Long pageSize
 			);
 	
 	@POST
