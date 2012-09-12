@@ -8,50 +8,80 @@ For more information about TelAPI, please visit:  [telapi.com/features](http://w
 ---
 
 
-### REST Introduction
+Installation
+============
 
-Everything you need to know about how to use the TelAPI Java Helper can be found in the [example directory](https://github.com/TelAPI/telapi-java/tree/master/src/main/java/com/telapi/api/example).
-Examples for using InboundXml can be found [here](https://github.com/TelAPI/telapi-java/tree/master/src/main/java/com/telapi/api/inboundxml/example).
-Just replace the provided example `{AccountSid}` and `{AuthToken}` with the values from your [TelAPI Account Dashboard](https://www.telapi.com/dashboard/).
+Usage
+======
 
-##### Currently available REST API resources
+### REST
 
-* **accounts**                  - Fetch or set account details
-* **notifications**             - View notifications, such as application errors
-* **recordings**                - List recordings
-* **sms_messages**              - Send or view SMS messages
-* **transcriptions**            - View or submit a recording for transcribing to text
-* **calls**                     - View or place calls
-* **carrier**                   - Look up the carrier for a number
-* **cnam**                      - Look up the caller ID for a number
-* **incoming_phone_numbers**    - List or purchase a phone number
-* **available_phone_numbers**   - Search for available phone numbers
-* **conferences**               - List conference details
-* **fraud**                     - Manage destinations and grant/revoke access privileges
-* **applications**              - Automate common number configurations for one or many phone numbers
+[TelAPI REST API documenatation](http://www.telapi.com/docs/api/rest/) 
 
-##### Example usage - Sending an SMS
+##### Send SMS Example
 
 ```java
-BasicTelapiConfiguration conf = new BasicTelapiConfiguration("{your-account-sid}", "{your-auth-token}");
-TelapiConnector conn = new TelapiConnector(conf);
-
-try {
-	SmsMessage smsMessage = conn
-			.sendSmsMessage(
-					"+12233312344",
-					"+12233312345",
-					"Hello world!",
-					null);
-	
-	System.out.println(smsMessage.getStatus());
-	
-} catch (TelapiException e) {
-	e.printStackTrace();
-}
+package com.telapi.api.example;
+ 
+import com.telapi.api.TelapiConnector;
+import com.telapi.api.configuration.BasicTelapiConfiguration;
+import com.telapi.api.domain.SmsMessage;
+import com.telapi.api.exceptions.TelapiException;
+ 
+public class SendSmsExample {
+    public static void main(String[] args) {
+        BasicTelapiConfiguration conf = new BasicTelapiConfiguration();
+        conf.setSid("********************************");
+        conf.setAuthToken("********************************");
+        TelapiConnector conn = new TelapiConnector(conf);
+ 
+        try {
+            SmsMessage smsMessage = conn.sendSmsMessage(
+                "(XXX) XXX-XXXX",
+                "(XXX) XXX-XXXX",
+                "This is an SMS message sent from the TelAPI Java helper! Easy as 1, 2, 3!",
+                null
+            );
+            System.out.println(smsMessage.getSid());
+        } catch (TelapiException e) {
+            e.printStackTrace();
+        }
+    }
+}         
 ```
 
+### InboundXML
 
-For more information such as which properties are available for existing resources, please visit [TelAPI REST Documenatation](http://www.telapi.com/docs/api/rest/)
+InboundXML is an XML dialect which enables you to control phone call flow. For more information please visit the [TelAPI InboundXML documenatation](http://www.telapi.com/docs/api/inboundxml/)
 
-----
+##### <Say> Example
+
+```java
+package com.telapi.api.inboundxml.example;
+ 
+import com.telapi.api.inboundxml.elements.Response;
+import com.telapi.api.inboundxml.elements.enums.Voice;
+ 
+public class SayExample {
+ 
+public static void main(String[] args) {
+ 
+    Response.create()
+        .say("Welcome to TelAPI. This is a sample InboundXML document.", Voice.MAN)
+        .createXml();
+ 
+    }
+ 
+}   
+```
+
+will render
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say voice="man">Welcome to TelAPI. This is a sample InboundXML document.</Say>
+</Response>
+```
+
+---
