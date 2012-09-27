@@ -1,0 +1,16 @@
+com.telapi.api
+com.telapi.api.configuration
+com.telapi.api.domain
+com.telapi.api.domain.enums
+com.telapi.api.domain.enums.util
+com.telapi.api.domain.list
+com.telapi.api.example
+com.telapi.api.exceptions
+com.telapi.api.http
+com.telapi.api.inboundxml.elements
+com.telapi.api.inboundxml.elements.enums
+com.telapi.api.inboundxml.example
+com.telapi.api.inboundxml.parameters
+com.telapi.api.json
+com.telapi.api.requests
+com.telapi.api.restproxies
