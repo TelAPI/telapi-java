@@ -11,20 +11,60 @@
   <description>Java helper library for Telapi REST services</description>
   <url>http://www.telapi.com</url>
 
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <issueManagement>
+    <url>https://github.com/TelAPI/telapi-java/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
+
+  <scm>
+    <url>https://github.com/TelAPI/telapi-java</url>
+    <connection>scm:git:git://github.com/TelAPI/telapi-java.git</connection>
+    <developerConnection>scm:git:git@github.com:TelAPI/telapi-java.git</developerConnection>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>vprenner</id>
+      <name>Vladimir Prenner</name>
+      <email>vladimir.prenner@calyx.hr</email>
+      <organization>Calyx d.o.o</organization>
+      <organizationUrl>http://www.calyx.hr</organizationUrl>
+    </developer>
+  </developers>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <skipTests>true</skipTests>
+    <github.global.server>github</github.global.server>
+
+    <jboss.version>2.3.4.Final</jboss.version>
+    
   </properties>
+
   <dependencies>
 	<dependency>
 		<groupId>org.jboss.resteasy</groupId>
 		<artifactId>resteasy-jaxrs</artifactId>
-		<version>2.3.4.Final</version>
+        <version>${jboss.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.scannotation</groupId>
+            <artifactId>scannotation</artifactId>
+          </exclusion>
+      </exclusions>
 	</dependency>
 	<dependency>
 		<groupId>org.jboss.resteasy</groupId>
 		<artifactId>resteasy-jackson-provider</artifactId>
-		<version>2.3.4.Final</version>
+        <version>${jboss.version}</version>
 	</dependency>        
     <dependency>
       <groupId>junit</groupId>
@@ -83,6 +123,40 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.github</groupId>
+		<artifactId>site-maven-plugin</artifactId>
+		<version>0.7</version>
+		<configuration>
+		  <message>Building site for ${project.version}</message>
+		</configuration>
+		<executions>
+		  <execution>
+		    <goals>
+			  <goal>site</goal>
+			</goals>
+			<phase>site</phase>
+		  </execution>
+		</executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.8</version>
         <configuration>
@@ -95,29 +169,8 @@
           <doctitle><![CDATA[<h1>Telapi Java API</h1>]]></doctitle>
           <bottom><![CDATA[<i>Copyright &#169; 2012 Telapi, Inc. All Rights Reserved.</i>]]></bottom>
         </configuration>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
-  </build>
-  
+  </reporting>
+
 </project>
