@@ -5,11 +5,29 @@ This java library is an open source tool built to simplify interaction with the 
 
 For more information about TelAPI, please visit:  [telapi.com/features](http://www.telapi.com/features) or [telapi.com/docs](http://www.telapi.com/docs)
 
+See http://telapi.github.com/telapi-java/apidocs/ for documentation on all methods available with this library.
+
 ---
 
 
 Installation
 ============
+
+To use this library, include the following dependency:
+```
+<dependency>
+  <groupId>com.telapi.api</groupId>
+  <artifactId>telapi-java</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+Or clone the repo, and install via [telapi.com/features](http://maven.apache.org/download.html):
+```
+$ git clone git@github.com:TelAPI/telapi-java.git
+$ cd telapi-java
+$ mvn install
+```
 
 Usage
 ======
