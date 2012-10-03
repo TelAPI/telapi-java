@@ -22,7 +22,7 @@ To use this library, include the following dependency:
 </dependency>
 ```
 
-Or clone the repo, and install via [telapi.com/features](http://maven.apache.org/download.html):
+Or clone the repo, and install via [maven](http://maven.apache.org/download.html):
 ```
 $ git clone git@github.com:TelAPI/telapi-java.git
 $ cd telapi-java
