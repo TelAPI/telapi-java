@@ -321,7 +321,7 @@ public class TelapiConnector {
 	 */
 	public CallList listCalls(String accountSid, String to, String from,
 			CallStatus status, Date startTimeGte, Date startTimeLt, Long page,
-			Long pageSize) throws TelapiException {
+			Long pageSize, Integer recordingsCount) throws TelapiException {
 		return returnThrows(callProxy.listCalls(accountSid, to, from, status,
 				getDateString(startTimeGte), getDateString(startTimeLt), page,
 				pageSize));
@@ -350,10 +350,10 @@ public class TelapiConnector {
 	 * @throws TelapiException
 	 */
 	public CallList listCalls(String to, String from, CallStatus status,
-			Date startTimeGte, Date startTimeLt, Long page, Long pageSize)
+			Date startTimeGte, Date startTimeLt, Long page, Long pageSize,Integer recordingsCount)
 			throws TelapiException {
 		return listCalls(conf.getSid(), to, from, status, startTimeGte,
-				startTimeLt, page, pageSize);
+				startTimeLt, page, pageSize, recordingsCount);
 	}
 	
 	/**
@@ -367,7 +367,7 @@ public class TelapiConnector {
 	public CallList listCalls()
 			throws TelapiException {
 		return listCalls(conf.getSid(), null, null, null, null,
-				null, null, null);
+				null, null, null, null);
 	}
 
 	/**

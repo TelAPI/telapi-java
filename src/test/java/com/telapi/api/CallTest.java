@@ -27,12 +27,12 @@ public class CallTest extends BaseTelapiTest{
 	
 	@Test
 	public void testListCalls() throws TelapiException {
-		connector.listCalls("1", "1", CallStatus.COMPLETED, new Date(0L), new Date(), 0L, 5L);
+		connector.listCalls("1", "1", CallStatus.COMPLETED, new Date(0L), new Date(), 0L, 5L, null);
 	}
 	
 	@Test
 	public void testViewCall() throws TelapiException {
-		CallList calls = connector.listCalls(null, null, null, null, null, 0L, 5L);
+		CallList calls = connector.listCalls(null, null, null, null, null, 0L, 5L, null);
 		connector.viewCall(calls.iterator().next().getSid());
 	}
 	
@@ -51,7 +51,7 @@ public class CallTest extends BaseTelapiTest{
 	
 	@Test
 	public void hangUpAll() throws TelapiException {
-		CallList list = connector.listCalls(null, null, null, null, null, null, null);
+		CallList list = connector.listCalls(null, null, null, null, null, null, null, null);
 		for (Call c : list) {
 			connector.hangUpCall(c.getSid());
 		}

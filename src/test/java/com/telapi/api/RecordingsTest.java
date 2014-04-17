@@ -21,7 +21,7 @@ public class RecordingsTest extends BaseTelapiTest {
 	
 	@Test
 	public void testListCallRecordings() throws TelapiException {
-		Call c = connector.listCalls(null, null, null, null, null, null, null).iterator().next();
+		Call c = connector.listCalls(null, null, null, null, null, null, null, null).iterator().next();
 		RecordingList list = connector.listCallRecordings(c.getSid(), new Date(0), new Date(), 0L, 10L);
 		
 		for(Recording r : list) {

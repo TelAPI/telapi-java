@@ -24,7 +24,7 @@ public class NotificationTest extends BaseTelapiTest  {
 	public void testListCallNotifications() throws TelapiException {
 		NotificationList list = connector.listNotifications(LogLevel.INFO, 0L, 10L);
 		Notification n = null;
-		Call c = connector.listCalls(null, null, null, null, null, 0L, 1L).iterator().next();
+		Call c = connector.listCalls(null, null, null, null, null, 0L, 1L, null).iterator().next();
 		Iterator<Notification> it = list.iterator();
 		while ((n = it.next()).getCallSid() == null);
 		NotificationList cList = connector.listCallNotifications(c.getSid(), LogLevel.INFO, 0L, 10L);

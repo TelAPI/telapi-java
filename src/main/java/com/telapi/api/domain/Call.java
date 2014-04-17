@@ -62,6 +62,10 @@ public class Call extends BaseTelapiObject{
 	private CallSubresourceUris subresourceUris;
 	@JsonProperty("caller_name")
 	private String callerName;
+	@JsonProperty("recordings_count")
+	private Integer recordingsCount;
+	@JsonProperty("duration_billed")
+	private int durationBilled;
 	
 	/**
 	 * 
@@ -222,11 +226,33 @@ public class Call extends BaseTelapiObject{
 	 * 
 	 * @return Specifies whether the caller ID of the inbound phone number was blocked.
 	 */
+	public int getRecordingsCount() {
+		return recordingsCount;
+	}
+	public void setRecordingsCount(Integer recordingsCount) {
+		this.recordingsCount = recordingsCount;
+	}
+	
+	/**
+	 * 
+	 * @return Specifies the count of the number of recordings 
+	 */
 	public Boolean getCallerIdBlocked() {
 		return callerIdBlocked;
 	}
 	public void setCallerIdBlocked(Boolean callerIdBlocked) {
 		this.callerIdBlocked = callerIdBlocked;
+	}
+	
+	/**
+	 * 
+	 * @return Specifies the count of the number of recordings 
+	 */
+	public int getDurationBilled() {
+		return durationBilled;
+	}
+	public void setDurationBilled(int durationBilled) {
+		this.durationBilled = durationBilled;
 	}
 	
 	/**
